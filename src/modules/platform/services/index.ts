@@ -1,2 +1,7 @@
-// Platform Services - Exportaciones centralizadas (solo Services)
-// export * from './servicesService'; // Servicio eliminado
+/**
+ * Platform Services - Exportaciones centralizadas
+ * Platform Web Frontend - Next.js TypeScript
+ */
+
+export * from './servicesService';
+

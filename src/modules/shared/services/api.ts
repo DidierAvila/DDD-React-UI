@@ -80,6 +80,14 @@ export class ApiError extends Error {
   get isAuthError(): boolean {
     return this.status === 401 || this.status === 403;
   }
+
+  get isUnauthorized(): boolean {
+    return this.status === 401;
+  }
+
+  get isForbidden(): boolean {
+    return this.status === 403;
+  }
 }
 
 /**
@@ -125,9 +133,46 @@ export class ApiService {
    */
   private async parseErrorResponse(response: Response): Promise<Record<string, unknown>> {
     try {
-      return await response.json();
-    } catch {
+      const contentType = response.headers.get('content-type');
+
+      // Si la respuesta es JSON, intentar parsearlo
+      if (contentType?.includes('application/json')) {
+        const errorData = await response.json();
+
+        // Manejar diferentes formatos de respuesta del backend
+        if (typeof errorData === 'string') {
+          return { message: errorData };
+        }
+
+        // Si el backend envía un formato estructurado
+        if (errorData.message || errorData.error || errorData.title) {
+          return {
+            message: errorData.message || errorData.error || errorData.title,
+            errors: errorData.errors || errorData.details,
+            ...errorData
+          };
+        }
+
+        return errorData;
+      }
+
+      // Si no es JSON, intentar obtener el texto plano
+      const textError = await response.text();
+      if (textError.trim()) {
+        return { message: textError };
+      }
+
+      // Fallback al statusText
       return { message: response.statusText };
+    } catch {
+      // Si todo falla, usar mensajes por defecto según el código de estado
+      if (response.status === 403) {
+        return { message: 'No tienes permisos para realizar esta acción.' };
+      } else if (response.status === 401) {
+        return { message: 'Tu sesión ha expirado. Por favor, inicia sesión nuevamente.' };
+      }
+
+      return { message: response.statusText || 'Error desconocido' };
     }
   }
 

@@ -3,10 +3,10 @@
  * SignoSST Web Frontend - Next.js TypeScript
  */
 
-import { useState, useCallback } from 'react';
-import { ApiError } from '../services/api';
 import { useNotificationContext } from '@/modules/shared/components/providers/NotificationProvider';
 import { signOut } from 'next-auth/react';
+import { useCallback, useState } from 'react';
+import { ApiError } from '../services/api';
 
 export interface UseApiErrorReturn {
   error: ApiError | null;
@@ -32,12 +32,17 @@ export function useApiError(): UseApiErrorReturn {
       setError(apiError);
 
       // Manejo específico según el tipo de error
-      if (apiError.isAuthError) {
+      if (apiError.isUnauthorized) {
         showNotification('Sesión expirada. Por favor, inicia sesión nuevamente.', 'error');
         // Redirigir al login después de un breve delay
         setTimeout(() => {
           signOut({ callbackUrl: '/auth/signin' });
         }, 2000);
+      } else if (apiError.isForbidden) {
+        // Error 403 - Sin permisos para realizar la acción
+        const permissionMessage = apiError.message || 'No tienes permisos para realizar esta acción.';
+        showNotification(permissionMessage, 'warning');
+        // No redirigir al login, solo mostrar el mensaje de permisos
       } else if (apiError.isServerError) {
         showNotification('Error del servidor. Por favor, intenta nuevamente más tarde.', 'error');
       } else if (apiError.isNetworkError) {
