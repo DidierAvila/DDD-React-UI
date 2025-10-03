@@ -2,6 +2,8 @@
 
 // export * from './Button';
 // export * from './Modal';
+export * from './ConnectionError';
 export * from './LazyComponents';
+export * from './UserBanner';
 // export * from './NetworkStatus';
 // export * from './PWAInstallPrompt';

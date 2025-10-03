@@ -14,8 +14,10 @@
 
 import { useNotificationContext } from '@/modules/shared/components/providers/NotificationProvider';
 import { useApiError } from '@/modules/shared/hooks/useApiError';
+import { useEnhancedUser } from '@/modules/shared/hooks/useEnhancedUser';
 import { Search as SearchIcon } from '@mui/icons-material';
 import {
+    Autocomplete,
     Box,
     Button,
     Checkbox,
@@ -36,6 +38,8 @@ import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { countriesService, CountryDropdown } from '../../services/countriesService';
 import { servicesService } from '../../services/servicesService';
+import { SupplierDropdown, suppliersService } from '../../services/suppliersService';
+
 import { CreateServiceData, Service, UpdateServiceData } from '../../types/service';
 
 interface ServiceFormProps {
@@ -59,8 +63,11 @@ export function ServiceForm({ open, onClose, onSuccess, service }: ServiceFormPr
   const [countries, setCountries] = useState<CountryDropdown[]>([]);
   const [loadingCountries, setLoadingCountries] = useState(false);
   const [countrySearchTerm, setCountrySearchTerm] = useState('');
+  const [suppliers, setSuppliers] = useState<SupplierDropdown[]>([]);
+  const [loadingSuppliers, setLoadingSuppliers] = useState(false);
   const { handleError } = useApiError();
   const { showNotification } = useNotificationContext();
+  const { user } = useEnhancedUser();
 
   const isEditing = !!service;
 
@@ -80,10 +87,11 @@ export function ServiceForm({ open, onClose, onSuccess, service }: ServiceFormPr
     },
   });
 
-  // Cargar países cuando se abra el modal
+  // Cargar países y proveedores cuando se abra el modal
   useEffect(() => {
     if (open) {
       loadCountries();
+      loadSuppliers();
       setCountrySearchTerm(''); // Reiniciar filtro de búsqueda
     }
   }, [open]);
@@ -129,6 +137,27 @@ export function ServiceForm({ open, onClose, onSuccess, service }: ServiceFormPr
       showNotification('Error al cargar los países', 'error');
     } finally {
       setLoadingCountries(false);
+    }
+  };
+
+  // Cargar todos los proveedores disponibles
+  const loadSuppliers = async () => {
+    console.log('🚀 Cargando proveedores...');
+
+    setLoadingSuppliers(true);
+    try {
+      // Usar el nuevo endpoint simplificado que no requiere parámetros
+      const suppliersData = await suppliersService.getSuppliers();
+
+      setSuppliers(suppliersData);
+      console.log(`✅ ${suppliersData.length} proveedores cargados exitosamente`);
+
+    } catch (error) {
+      console.error('❌ Error al cargar proveedores:', error);
+      handleError(error);
+      showNotification('Error al cargar los proveedores', 'error');
+    } finally {
+      setLoadingSuppliers(false);
     }
   };
 
@@ -316,18 +345,77 @@ export function ServiceForm({ open, onClose, onSuccess, service }: ServiceFormPr
                 <Controller
                   name="supplierId"
                   control={control}
-                  rules={{ required: 'El ID del proveedor es obligatorio' }}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      label="ID del Proveedor"
-                      error={!!errors.supplierId}
-                      helperText={errors.supplierId?.message || 'Ingresa el GUID del proveedor'}
-                      fullWidth
-                      required
-                      placeholder="ej: 123e4567-e89b-12d3-a456-426614174000"
-                    />
-                  )}
+                  rules={{
+                    required: 'Debe seleccionar un proveedor',
+                    validate: (value) => {
+                      if (!value) return 'Debe seleccionar un proveedor';
+                      const isValid = suppliersService.isValidSupplierId(suppliers, value);
+                      return isValid || 'Proveedor seleccionado no válido';
+                    }
+                  }}
+                  render={({ field: { onChange, value, ...field } }) => {
+                    const selectedSupplier = suppliersService.getSupplierById(suppliers, value || '');
+
+                    return (
+                      <Autocomplete
+                        {...field}
+                        value={selectedSupplier}
+                        onChange={(_, newValue) => {
+                          onChange(newValue?.value || '');
+                        }}
+                        options={suppliers}
+                        getOptionLabel={(option) => option.label}
+                        loading={loadingSuppliers}
+                        disabled={loadingSuppliers || suppliers.length === 0}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            label="Proveedor"
+                            placeholder={loadingSuppliers ? "Cargando proveedores..." : "Selecciona un proveedor"}
+                            error={!!errors.supplierId}
+                            helperText={
+                              errors.supplierId?.message ||
+                              (suppliers.length === 0 && !loadingSuppliers ?
+                                'No hay proveedores disponibles para tu tipo de usuario' :
+                                `${suppliers.length} proveedor${suppliers.length !== 1 ? 'es' : ''} disponible${suppliers.length !== 1 ? 's' : ''}`)
+                            }
+                            required
+                            InputProps={{
+                              ...params.InputProps,
+                              endAdornment: (
+                                <>
+                                  {loadingSuppliers ? <CircularProgress color="inherit" size={20} /> : null}
+                                  {params.InputProps.endAdornment}
+                                </>
+                              ),
+                            }}
+                          />
+                        )}
+                        renderOption={(props, option) => {
+                          const { key, ...otherProps } = props;
+                          return (
+                            <Box component="li" key={key} {...otherProps}>
+                              <Box>
+                                <Typography variant="body2" fontWeight="medium">
+                                  {option.label}
+                                </Typography>
+                                <Typography variant="caption" color="text.secondary">
+                                  ID: {option.value}
+                                </Typography>
+                              </Box>
+                            </Box>
+                          );
+                        }}
+                        noOptionsText={
+                          loadingSuppliers ? "Cargando..." :
+                          "No hay proveedores disponibles"
+                        }
+                        filterOptions={(options, { inputValue }) => {
+                          return suppliersService.searchSuppliers(options, inputValue);
+                        }}
+                      />
+                    );
+                  }}
                 />
               </Box>
             </Box>
