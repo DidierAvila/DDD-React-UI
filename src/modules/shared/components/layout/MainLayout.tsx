@@ -1,69 +1,72 @@
 'use client';
+import { ConnectionError } from '@/modules/shared/components/ui/ConnectionError';
 import { useUser } from '@/modules/shared/contexts/UserContext';
 import { useAuth } from '@/modules/shared/hooks/useAuth';
+import { useEnhancedUser } from '@/modules/shared/hooks/useEnhancedUser';
+import { useNetworkStatus } from '@/modules/shared/hooks/useNetworkStatus';
 import { NavigationItem } from '@/modules/shared/types/auth';
 import {
-  AccountCircle,
-  AccountTree,
-  AddBusiness,
-  Analytics,
-  Article,
-  Assessment,
-  AssignmentInd,
-  BarChart,
-  Build,
-  Business,
-  CalendarMonth,
-  ChevronLeft,
-  ChevronRight,
-  Dashboard,
-  Description,
-  DeveloperBoard,
-  Drafts,
-  Engineering,
-  EventAvailable,
-  ExpandLess,
-  ExpandMore,
-  GroupAdd,
-  Hub,
-  Info,
-  LibraryBooks,
-  Logout,
-  Menu as MenuIcon,
-  NavigateNext,
-  Notifications,
-  People,
-  School,
-  Security,
-  Settings,
-  Store,
-  VerifiedUser,
-  Work,
+    AccountCircle,
+    AccountTree,
+    AddBusiness,
+    Analytics,
+    Article,
+    Assessment,
+    AssignmentInd,
+    BarChart,
+    Build,
+    Business,
+    CalendarMonth,
+    ChevronLeft,
+    ChevronRight,
+    Dashboard,
+    Description,
+    DeveloperBoard,
+    Drafts,
+    Engineering,
+    EventAvailable,
+    ExpandLess,
+    ExpandMore,
+    GroupAdd,
+    Hub,
+    Info,
+    LibraryBooks,
+    Logout,
+    Menu as MenuIcon,
+    NavigateNext,
+    Notifications,
+    People,
+    School,
+    Security,
+    Settings,
+    Store,
+    VerifiedUser,
+    Work,
 } from '@mui/icons-material';
 import {
-  AppBar,
-  Avatar,
-  Badge,
-  Box,
-  Breadcrumbs,
-  Chip,
-  CircularProgress,
-  Divider,
-  Drawer,
-  IconButton,
-  Link,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Menu,
-  MenuItem,
-  Toolbar,
-  Tooltip,
-  Typography,
-  useMediaQuery,
-  useTheme,
+    AppBar,
+    Avatar,
+    Badge,
+    Box,
+    Breadcrumbs,
+    Chip,
+    CircularProgress,
+    Divider,
+    Drawer,
+    IconButton,
+    Link,
+    List,
+    ListItem,
+    ListItemButton,
+    ListItemIcon,
+    ListItemText,
+    Menu,
+    MenuItem,
+    Toolbar,
+    Tooltip,
+    Typography,
+    useMediaQuery,
+    useTheme,
 } from '@mui/material';
 import { usePathname, useRouter } from 'next/navigation';
 import React, { ReactNode, useState } from 'react';
@@ -159,11 +162,33 @@ export default function MainLayout({ children }: MainLayoutProps) {
   const [userMenuAnchor, setUserMenuAnchor] = useState<null | HTMLElement>(null);
   const [expandedMenus, setExpandedMenus] = useState<{ [key: string]: boolean }>({});
 
-  // Hook de autenticación
-  const { user, isLoading, logout } = useAuth();
+  // Hook centralizado de usuario (reemplaza useAuth + datos dispersos)
+  const {
+    user: enhancedUser,
+    isLoading,
+    isAuthenticated,
+    meData,
+    meLoading,
+    meError,
+    connectionFailed,
+    retryCount,
+    refreshUserData,
+    resetConnectionState,
+    getDisplayName,
+    getDisplayEmail,
+  } = useEnhancedUser();
+
+  // Hook de estado de red
+  const { isOnline, justReconnected } = useNetworkStatus();
+
+  // Hook de autenticación (mantenido para logout y funciones específicas)
+  const { logout } = useAuth();
 
   // Hook del contexto de usuario para obtener la navegación dinámica
   const { portalConfiguration, getFilteredNavigation } = useUser();
+
+  // Compatibilidad: usar los datos centralizados pero mantener la variable 'user' para el resto del código
+  const user = enhancedUser;
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -622,42 +647,89 @@ export default function MainLayout({ children }: MainLayoutProps) {
               }}
             />
 
-            {/* Perfil de Usuario */}
+            {/* Perfil de Usuario - Datos centralizados con diseño original */}
             {user && (
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 {/* Información del usuario (solo en pantallas grandes) */}
+                {/* OPCIÓN 1: Layout horizontal más espaciado */}
                 <Box
                   sx={{
-                    display: { xs: 'none', md: 'block' },
-                    textAlign: 'right',
-                    minWidth: 120,
+                    display: { xs: 'none', lg: 'flex' },
+                    alignItems: 'center',
+                    gap: 2,
+                    minWidth: 160,
                   }}
                 >
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      fontWeight: 'bold',
-                      fontSize: '0.875rem',
-                      lineHeight: 1.2,
-                      color: 'white',
-                    }}
-                  >
-                    {user.name || 'Usuario'}
-                  </Typography>
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      fontSize: '0.75rem',
-                      color: 'rgba(255,255,255,0.8)',
-                      lineHeight: 1,
-                    }}
-                  >
-                    {user.email}
-                  </Typography>
+                  {/* Información personal */}
+                  <Box sx={{ textAlign: 'right', flexGrow: 1 }}>
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        fontWeight: 'bold',
+                        fontSize: '0.875rem',
+                        color: 'white',
+                        mb: 0.25,
+                      }}
+                    >
+                      {getDisplayName()}
+                    </Typography>
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        fontSize: '0.72rem',
+                        color: 'rgba(255,255,255,0.75)',
+                        display: 'block',
+                      }}
+                    >
+                      {user.displayUserType ? `Tipo Usuario: ${user.displayUserType}` : 'Usuario'}
+                    </Typography>
+                  </Box>
+
+                </Box>
+
+                {/* OPCIÓN 2: Layout compacto para pantallas medianas */}
+                <Box
+                  sx={{
+                    display: { xs: 'none', md: 'flex', lg: 'none' },
+                    flexDirection: 'column',
+                    alignItems: 'flex-end',
+                    minWidth: 150,
+                    gap: 0.5,
+                  }}
+                >
+                  {/* Nombre y tipo de usuario */}
+                  <Box sx={{ textAlign: 'right' }}>
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        fontWeight: 'bold',
+                        fontSize: '0.875rem',
+                        color: 'white',
+                        lineHeight: 1.1,
+                      }}
+                    >
+                      {getDisplayName()}
+                    </Typography>
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        fontSize: '0.7rem',
+                        color: 'rgba(255,255,255,0.7)',
+                        lineHeight: 1,
+                      }}
+                    >
+                      {user.displayUserType ? `Tipo Usuario: ${user.displayUserType}` : 'Usuario'}
+                    </Typography>
+                  </Box>
+
                 </Box>
 
                 {/* Avatar con foto de perfil */}
-                <Tooltip title={`${user.name || 'Usuario'} - Ver perfil`}>
+                <Tooltip
+                  title={
+                    `${getDisplayName()}${user.displayUserType ? ` (${user.displayUserType})` : ''} - Ver perfil`
+                  }
+                >
                   <IconButton
                     onClick={handleUserMenuOpen}
                     sx={{
@@ -669,7 +741,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
                   >
                     <Avatar
                       src={user.avatar || undefined}
-                      alt={user.name || user.email}
+                      alt={getDisplayName()}
                       sx={{
                         width: 40,
                         height: 40,
@@ -685,10 +757,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
                         },
                       }}
                     >
-                      {!user.avatar &&
-                        (user.name
-                          ? user.name.charAt(0).toUpperCase()
-                          : user.email?.charAt(0).toUpperCase())}
+                      {!user.avatar && user.initials}
                     </Avatar>
                   </IconButton>
                 </Tooltip>
@@ -707,6 +776,69 @@ export default function MainLayout({ children }: MainLayoutProps) {
                     zIndex: 1,
                   }}
                 />
+
+                {/* OPCIÓN C: Badge elegante del tipo de usuario */}
+                {user.displayUserType && (
+                  <Tooltip title={`Tipo: ${user.displayUserType}`}>
+                    <Box
+                      sx={{
+                        display: { xs: 'flex', lg: 'none' },
+                        position: 'absolute',
+                        width: 20,
+                        height: 20,
+                        bgcolor: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                        borderRadius: '50%',
+                        border: '2px solid white',
+                        ml: 2,
+                        mt: 2,
+                        zIndex: 3,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease-in-out',
+                        '&:hover': {
+                          transform: 'scale(1.1)',
+                          boxShadow: '0 4px 12px rgba(0,0,0,0.25)',
+                        },
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontSize: '0.7rem',
+                          fontWeight: 'bold',
+                          color: 'white',
+                          lineHeight: 1,
+                        }}
+                      >
+                        {user.displayUserType.charAt(0).toUpperCase()}
+                      </Typography>
+                    </Box>
+                  </Tooltip>
+                )}
+
+                {/* Indicador de carga de datos adicionales */}
+                {meLoading && (
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      width: 8,
+                      height: 8,
+                      bgcolor: '#ff9800',
+                      borderRadius: '50%',
+                      border: '1px solid white',
+                      ml: 3.5,
+                      mt: -3.5,
+                      zIndex: 2,
+                      '@keyframes pulse': {
+                        '0%': { opacity: 1 },
+                        '50%': { opacity: 0.5 },
+                        '100%': { opacity: 1 }
+                      },
+                      animation: 'pulse 2s infinite',
+                    }}
+                  />
+                )}
               </Box>
             )}
           </Box>
@@ -784,6 +916,16 @@ export default function MainLayout({ children }: MainLayoutProps) {
           pt: 2, // Padding superior adicional
         }}
       >
+        {/* Componente para manejar errores de conexión */}
+        <ConnectionError
+          isConnected={isOnline}
+          error={meError}
+          retryCount={retryCount}
+          maxRetries={3}
+          onRetry={refreshUserData}
+          onReset={resetConnectionState}
+        />
+
         {children}
       </Box>
 
