@@ -3,20 +3,20 @@
 import { userTypesService } from '@/modules/admin/services';
 import { UserDynamicFieldsForm } from '@/modules/shared/components/ui';
 import {
-    Alert,
-    Box,
-    Button,
-    Card,
-    CardContent,
-    Container,
-    Divider,
-    FormControl,
-    InputLabel,
-    MenuItem,
-    Paper,
-    Select,
-    SelectChangeEvent,
-    Typography
+  Alert,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Container,
+  Divider,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  SelectChangeEvent,
+  Typography,
 } from '@mui/material';
 import { useState } from 'react';
 
@@ -52,9 +52,13 @@ export default function DynamicFieldsTestPage() {
     try {
       setDebugInfo('Probando conexión con el backend...');
       const userType = await userTypesService.getById('11111111-1111-1111-1111-111111111111');
-      setDebugInfo(`✅ Conexión exitosa! UserType: ${userType.name}\nAdditionalConfig: ${JSON.stringify(userType.additionalConfig, null, 2)}`);
+      setDebugInfo(
+        `✅ Conexión exitosa! UserType: ${userType.name}\nAdditionalConfig: ${JSON.stringify(userType.additionalConfig, null, 2)}`
+      );
     } catch (error) {
-      setDebugInfo(`❌ Error de conexión: ${error instanceof Error ? error.message : 'Error desconocido'}`);
+      setDebugInfo(
+        `❌ Error de conexión: ${error instanceof Error ? error.message : 'Error desconocido'}`
+      );
     }
   };
 
@@ -62,17 +66,17 @@ export default function DynamicFieldsTestPage() {
   const mockUserTypes = [
     { id: '11111111-1111-1111-1111-111111111111', name: 'Administrador' },
     { id: '22222222-2222-2222-2222-222222222222', name: 'Usuario Regular' },
-    { id: '33333333-3333-3333-3333-333333333333', name: 'Moderador' }
+    { id: '33333333-3333-3333-3333-333333333333', name: 'Moderador' },
   ];
 
   // Mock users for testing (these would come from the real user service)
   const mockUsers = [
     { id: 'user-1', name: 'Juan Pérez', userTypeId: '11111111-1111-1111-1111-111111111111' },
     { id: 'user-2', name: 'María García', userTypeId: '22222222-2222-2222-2222-222222222222' },
-    { id: 'user-3', name: 'Carlos López', userTypeId: '33333333-3333-3333-3333-333333333333' }
+    { id: 'user-3', name: 'Carlos López', userTypeId: '33333333-3333-3333-3333-333333333333' },
   ];
 
-  const filteredUsers = mockUsers.filter(user => user.userTypeId === selectedUserType);
+  const filteredUsers = mockUsers.filter((user) => user.userTypeId === selectedUserType);
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
@@ -89,8 +93,8 @@ export default function DynamicFieldsTestPage() {
         <Typography variant="h6" component="div" gutterBottom>
           Página de Desarrollo
         </Typography>
-        Esta página está destinada únicamente para desarrollo y pruebas.
-        No debe ser accesible en producción.
+        Esta página está destinada únicamente para desarrollo y pruebas. No debe ser accesible en
+        producción.
       </Alert>
 
       <Alert severity="info" sx={{ mb: 3 }}>
@@ -99,9 +103,11 @@ export default function DynamicFieldsTestPage() {
         </Typography>
         <Typography component="div">
           Para que aparezcan campos dinámicos:
-          <br />• Primero debes configurar campos dinámicos para el tipo de usuario en la página de gestión
+          <br />• Primero debes configurar campos dinámicos para el tipo de usuario en la página de
+          gestión
           <br />• Los IDs usados aquí son mock, necesitas usar IDs reales del backend
-          <br />• Si ves "No hay campos dinámicos configurados", significa que el tipo de usuario no tiene campos configurados
+          <br />• Si ves "No hay campos dinámicos configurados", significa que el tipo de usuario no
+          tiene campos configurados
         </Typography>
       </Alert>
 
@@ -111,11 +117,7 @@ export default function DynamicFieldsTestPage() {
         </Typography>
 
         <Box sx={{ mb: 3 }}>
-          <Button
-            variant="outlined"
-            onClick={testBackendConnection}
-            sx={{ mb: 2 }}
-          >
+          <Button variant="outlined" onClick={testBackendConnection} sx={{ mb: 2 }}>
             🔌 Probar Conexión Backend
           </Button>
 
@@ -144,11 +146,7 @@ export default function DynamicFieldsTestPage() {
 
           <FormControl fullWidth disabled={!selectedUserType}>
             <InputLabel>Usuario</InputLabel>
-            <Select
-              value={selectedUserId}
-              label="Usuario"
-              onChange={handleUserChange}
-            >
+            <Select value={selectedUserId} label="Usuario" onChange={handleUserChange}>
               {filteredUsers.map((user) => (
                 <MenuItem key={user.id} value={user.id}>
                   {user.name}
@@ -165,8 +163,10 @@ export default function DynamicFieldsTestPage() {
             Formulario de Campos Dinámicos
           </Typography>
           <Alert severity="info" sx={{ mb: 2 }}>
-            <strong>Información de Debug:</strong><br />
-            UserType ID: {selectedUserType}<br />
+            <strong>Información de Debug:</strong>
+            <br />
+            UserType ID: {selectedUserType}
+            <br />
             User ID: {selectedUserId}
           </Alert>
           <Divider sx={{ mb: 3 }} />

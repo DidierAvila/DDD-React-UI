@@ -1,41 +1,41 @@
 'use client';
 
 import {
-    Add as AddIcon,
-    Delete as DeleteIcon,
-    FileCopy as DuplicateIcon,
-    Edit as EditIcon,
-    MoreVert as MoreVertIcon,
-    Visibility as VisibilityIcon,
-    VisibilityOff as VisibilityOffIcon
+  Add as AddIcon,
+  Delete as DeleteIcon,
+  FileCopy as DuplicateIcon,
+  Edit as EditIcon,
+  MoreVert as MoreVertIcon,
+  Visibility as VisibilityIcon,
+  VisibilityOff as VisibilityOffIcon,
 } from '@mui/icons-material';
 import {
-    Alert,
-    Box,
-    Button,
-    Card,
-    CardContent,
-    Chip,
-    CircularProgress,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    Divider,
-    Fab,
-    FormControlLabel,
-    IconButton,
-    List,
-    ListItem,
-    ListItemSecondaryAction,
-    ListItemText,
-    Menu,
-    MenuItem,
-    Paper,
-    Stack,
-    Switch,
-    Tooltip,
-    Typography
+  Alert,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Chip,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Divider,
+  Fab,
+  FormControlLabel,
+  IconButton,
+  List,
+  ListItem,
+  ListItemSecondaryAction,
+  ListItemText,
+  Menu,
+  MenuItem,
+  Paper,
+  Stack,
+  Switch,
+  Tooltip,
+  Typography,
 } from '@mui/material';
 import React, { useState } from 'react';
 
@@ -55,7 +55,9 @@ export function UserFieldsManager({ userId }: UserFieldsManagerProps) {
   const [formMode, setFormMode] = useState<'create' | 'edit'>('create');
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [fieldToDelete, setFieldToDelete] = useState<UserField | null>(null);
-  const [menuAnchor, setMenuAnchor] = useState<{ element: HTMLElement; field: UserField } | null>(null);
+  const [menuAnchor, setMenuAnchor] = useState<{ element: HTMLElement; field: UserField } | null>(
+    null
+  );
 
   // Si no hay userId, mostrar mensaje informativo
   if (!userId) {
@@ -86,7 +88,7 @@ export function UserFieldsManager({ userId }: UserFieldsManagerProps) {
     duplicateField,
     reorderFields,
     refresh,
-    clearError
+    clearError,
   } = useUserFields(userId);
 
   // Campos a mostrar (activos o todos)
@@ -190,13 +192,21 @@ export function UserFieldsManager({ userId }: UserFieldsManagerProps) {
       <Card>
         <CardContent>
           {/* Header */}
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 3 }}>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'flex-start',
+              mb: 3,
+            }}
+          >
             <Box>
               <Typography variant="h5" gutterBottom>
                 Campos Dinámicos del Usuario
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Gestiona los campos personalizados para el usuario: <strong>{config?.userName || userId}</strong>
+                Gestiona los campos personalizados para el usuario:{' '}
+                <strong>{config?.userName || userId}</strong>
               </Typography>
               {config?.userEmail && (
                 <Typography variant="body2" color="text.secondary">
@@ -206,28 +216,12 @@ export function UserFieldsManager({ userId }: UserFieldsManagerProps) {
 
               {/* Estadísticas */}
               <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
-                <Chip
-                  label={`${stats.total} campos`}
-                  size="small"
-                  color="default"
-                />
-                <Chip
-                  label={`${stats.active} activos`}
-                  size="small"
-                  color="success"
-                />
+                <Chip label={`${stats.total} campos`} size="small" color="default" />
+                <Chip label={`${stats.active} activos`} size="small" color="success" />
                 {stats.inactive > 0 && (
-                  <Chip
-                    label={`${stats.inactive} inactivos`}
-                    size="small"
-                    color="warning"
-                  />
+                  <Chip label={`${stats.inactive} inactivos`} size="small" color="warning" />
                 )}
-                <Chip
-                  label={`${stats.required} requeridos`}
-                  size="small"
-                  color="primary"
-                />
+                <Chip label={`${stats.required} requeridos`} size="small" color="primary" />
               </Stack>
             </Box>
 
@@ -250,7 +244,9 @@ export function UserFieldsManager({ userId }: UserFieldsManagerProps) {
           )}
 
           {/* Controles */}
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+          <Box
+            sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}
+          >
             <FormControlLabel
               control={
                 <Switch
@@ -261,11 +257,7 @@ export function UserFieldsManager({ userId }: UserFieldsManagerProps) {
               label="Mostrar campos inactivos"
             />
 
-            <Button
-              variant="outlined"
-              onClick={refresh}
-              disabled={isUpdating}
-            >
+            <Button variant="outlined" onClick={refresh} disabled={isUpdating}>
               Actualizar
             </Button>
           </Box>
@@ -279,14 +271,9 @@ export function UserFieldsManager({ userId }: UserFieldsManagerProps) {
               <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
                 {showInactive
                   ? 'Este usuario no tiene campos dinámicos configurados.'
-                  : 'No hay campos activos. Activa "Mostrar campos inactivos" para ver todos los campos.'
-                }
+                  : 'No hay campos activos. Activa "Mostrar campos inactivos" para ver todos los campos.'}
               </Typography>
-              <Button
-                variant="contained"
-                startIcon={<AddIcon />}
-                onClick={handleOpenCreateForm}
-              >
+              <Button variant="contained" startIcon={<AddIcon />} onClick={handleOpenCreateForm}>
                 Crear Primer Campo
               </Button>
             </Paper>
@@ -297,28 +284,19 @@ export function UserFieldsManager({ userId }: UserFieldsManagerProps) {
                   <ListItem>
                     <ListItemText
                       primary={
-                        <Box component="span" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <Box
+                          component="span"
+                          sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
+                        >
                           <Typography variant="subtitle1" component="span">
                             {field.label}
                           </Typography>
-                          <Chip
-                            label={field.type}
-                            size="small"
-                            variant="outlined"
-                          />
+                          <Chip label={field.type} size="small" variant="outlined" />
                           {field.validation?.required && (
-                            <Chip
-                              label="Requerido"
-                              size="small"
-                              color="primary"
-                            />
+                            <Chip label="Requerido" size="small" color="primary" />
                           )}
                           {!field.isActive && (
-                            <Chip
-                              label="Inactivo"
-                              size="small"
-                              color="warning"
-                            />
+                            <Chip label="Inactivo" size="small" color="warning" />
                           )}
                         </Box>
                       }
@@ -328,7 +306,12 @@ export function UserFieldsManager({ userId }: UserFieldsManagerProps) {
                             Nombre técnico: {field.name}
                           </Typography>
                           {field.description && (
-                            <Typography variant="body2" color="text.secondary" component="span" sx={{ display: 'block', mt: 0.5 }}>
+                            <Typography
+                              variant="body2"
+                              color="text.secondary"
+                              component="span"
+                              sx={{ display: 'block', mt: 0.5 }}
+                            >
                               {field.description}
                             </Typography>
                           )}
@@ -337,10 +320,7 @@ export function UserFieldsManager({ userId }: UserFieldsManagerProps) {
                     />
                     <ListItemSecondaryAction>
                       <Tooltip title="Más opciones">
-                        <IconButton
-                          edge="end"
-                          onClick={(e) => handleMenuClick(e, field)}
-                        >
+                        <IconButton edge="end" onClick={(e) => handleMenuClick(e, field)}>
                           <MoreVertIcon />
                         </IconButton>
                       </Tooltip>
@@ -364,18 +344,14 @@ export function UserFieldsManager({ userId }: UserFieldsManagerProps) {
           position: 'fixed',
           bottom: 16,
           right: 16,
-          zIndex: 1000
+          zIndex: 1000,
         }}
       >
         <AddIcon />
       </Fab>
 
       {/* Menú contextual */}
-      <Menu
-        anchorEl={menuAnchor?.element}
-        open={Boolean(menuAnchor)}
-        onClose={handleMenuClose}
-      >
+      <Menu anchorEl={menuAnchor?.element} open={Boolean(menuAnchor)} onClose={handleMenuClose}>
         <MenuItem onClick={() => menuAnchor && handleOpenEditForm(menuAnchor.field)}>
           <EditIcon sx={{ mr: 1 }} />
           Editar
@@ -419,9 +395,7 @@ export function UserFieldsManager({ userId }: UserFieldsManagerProps) {
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setDeleteDialogOpen(false)}>
-            Cancelar
-          </Button>
+          <Button onClick={() => setDeleteDialogOpen(false)}>Cancelar</Button>
           <Button
             onClick={handleConfirmDelete}
             color="error"

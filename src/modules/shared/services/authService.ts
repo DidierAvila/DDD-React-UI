@@ -1,6 +1,6 @@
 /**
  * Servicio de Autenticación
- * SignoSST Web Frontend - Next.js TypeScript
+ * Platform Web Frontend - Next.js TypeScript
  */
 
 import { UserConfigurationData, UserConfigurationResponse } from '../types/auth';

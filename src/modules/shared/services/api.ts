@@ -1,6 +1,6 @@
 /**
  * API Service - Configuración base para comunicación con el backend
- * SignoSST Web Frontend - Next.js TypeScript
+ * Platform Web Frontend - Next.js TypeScript
  */
 
 import { fetchWithSSL } from '@/lib/ssl-config';
@@ -149,7 +149,7 @@ export class ApiService {
           return {
             message: errorData.message || errorData.error || errorData.title,
             errors: errorData.errors || errorData.details,
-            ...errorData
+            ...errorData,
           };
         }
 
@@ -385,7 +385,6 @@ export class AuthService {
       });
 
       // Respuesta recibida del servidor de autenticación
-      console.log('🔐 [AUTH] Respuesta recibida, status:', response.status);
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -412,14 +411,11 @@ export class AuthService {
 
       // Obtener el texto de la respuesta
       const responseText = await response.text();
-      console.log('🔐 [AUTH] Respuesta del servidor:', responseText.substring(0, 100) + '...');
 
       // El backend devuelve el token directamente como texto
       if (responseText && responseText.startsWith('eyJ')) {
         // Decodificar el token JWT para extraer información del usuario
         const tokenPayload = this.decodeJWT(responseText);
-
-        console.log('🔐 [AUTH] Token payload completo:', tokenPayload);
 
         // Mapear userTypeName a un rol del sistema
         let userRole = 'employee';

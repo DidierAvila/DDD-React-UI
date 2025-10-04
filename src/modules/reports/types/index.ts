@@ -1,6 +1,6 @@
 /**
  * Tipos para el módulo de reportes
- * SignoSST Web Frontend - Next.js TypeScript
+ * Platform Web Frontend - Next.js TypeScript
  */
 
 // Estructura de datos para un elemento del gráfico circular

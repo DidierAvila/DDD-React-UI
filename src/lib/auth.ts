@@ -1,6 +1,6 @@
 /**
  * NextAuth.js Configuration - Configuración de autenticación OAuth Multi-Provider
- * SignoSST Web Frontend - Next.js TypeScript
+ * Platform Web Frontend - Next.js TypeScript
  */
 
 import { authService } from '@/modules/shared/services/api';

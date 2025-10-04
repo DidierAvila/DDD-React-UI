@@ -1,5 +1,5 @@
 /**
- * Utilidades para manejo de cookies - SignoSST Web
+ * Utilidades para manejo de cookies - Platform Web
  * Funciones para limpiar cookies problemáticas
  */
 

@@ -53,15 +53,6 @@ export default function DashboardPage() {
 
   useEffect(() => {}, []);
 
-  // Debug logs cuando cambian los estados
-  useEffect(() => {
-    console.log('🔄 Dashboard: Cambio en autenticación:', { isAuthenticated, authUser });
-  }, [isAuthenticated, authUser]);
-
-  useEffect(() => {
-    console.log('🔄 Dashboard: Cambio en UserContext:', { user, isLoading, error });
-  }, [user, isLoading, error]);
-
   const stats = [
     {
       title: 'Empresas Activas',

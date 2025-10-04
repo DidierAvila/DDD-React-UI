@@ -1,13 +1,13 @@
 /**
  * NetworkStatus Component - Indicador de estado de red
- * SignoSST Web Frontend - Next.js TypeScript
+ * Platform Web Frontend - Next.js TypeScript
  */
 
 'use client';
-import { Snackbar, Alert, Typography, Box } from '@mui/material';
-import { WifiOff as OfflineIcon, Wifi as OnlineIcon } from '@mui/icons-material';
 import { usePWA } from '@/modules/shared/hooks/usePWA';
-import { useState, useEffect } from 'react';
+import { WifiOff as OfflineIcon, Wifi as OnlineIcon } from '@mui/icons-material';
+import { Alert, Box, Snackbar, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
 
 export default function NetworkStatus() {
   const { isOnline } = usePWA();

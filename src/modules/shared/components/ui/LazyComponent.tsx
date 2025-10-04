@@ -1,11 +1,11 @@
 /**
  * LazyComponent - Higher Order Component para lazy loading
- * SignoSST Web Frontend - Next.js TypeScript
+ * Platform Web Frontend - Next.js TypeScript
  */
 
 'use client';
-import React, { Suspense, ComponentType, lazy, ReactNode } from 'react';
-import { CircularProgress, Typography, Paper } from '@mui/material';
+import { CircularProgress, Paper, Typography } from '@mui/material';
+import React, { ComponentType, lazy, ReactNode, Suspense } from 'react';
 
 interface LazyLoaderProps {
   title?: string;

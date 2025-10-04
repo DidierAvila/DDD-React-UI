@@ -1,29 +1,27 @@
 'use client';
 
+import { DynamicFieldDefinition } from '@/modules/shared/types/dynamic-fields';
 import {
-    DynamicFieldDefinition
-} from '@/modules/shared/types/dynamic-fields';
-import {
-    CalendarToday as CalendarIcon,
-    AttachFile as FileIcon,
-    Link as LinkIcon
+  CalendarToday as CalendarIcon,
+  AttachFile as FileIcon,
+  Link as LinkIcon,
 } from '@mui/icons-material';
 import {
-    Box,
-    Checkbox,
-    Chip,
-    FormControl,
-    FormControlLabel,
-    FormHelperText,
-    FormLabel,
-    IconButton,
-    InputAdornment,
-    MenuItem,
-    Radio,
-    RadioGroup,
-    Select,
-    TextField,
-    Typography
+  Box,
+  Checkbox,
+  Chip,
+  FormControl,
+  FormControlLabel,
+  FormHelperText,
+  FormLabel,
+  IconButton,
+  InputAdornment,
+  MenuItem,
+  Radio,
+  RadioGroup,
+  Select,
+  TextField,
+  Typography,
 } from '@mui/material';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -64,7 +62,7 @@ export const DynamicFieldRenderer: React.FC<DynamicFieldRendererProps> = ({
   variant = 'outlined',
   size = 'medium',
   fullWidth = true,
-  compact = false
+  compact = false,
 }) => {
   const [showPassword, setShowPassword] = React.useState(false);
   const hasError = Array.isArray(error) ? error.length > 0 : !!error;
@@ -76,7 +74,7 @@ export const DynamicFieldRenderer: React.FC<DynamicFieldRendererProps> = ({
     variant,
     size,
     error: hasError,
-    onBlur
+    onBlur,
   };
 
   const renderLabel = () => {
@@ -88,11 +86,7 @@ export const DynamicFieldRenderer: React.FC<DynamicFieldRendererProps> = ({
     if (!showDescription || !field.description || compact) return null;
 
     return (
-      <Typography
-        variant="caption"
-        color="text.secondary"
-        sx={{ display: 'block', mt: 0.5 }}
-      >
+      <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 0.5 }}>
         {field.description}
       </Typography>
     );
@@ -121,8 +115,8 @@ export const DynamicFieldRenderer: React.FC<DynamicFieldRendererProps> = ({
               readOnly,
               inputProps: {
                 maxLength: field.validation?.maxLength,
-                minLength: field.validation?.minLength
-              }
+                minLength: field.validation?.minLength,
+              },
             }}
           />
           {renderDescription()}
@@ -145,8 +139,8 @@ export const DynamicFieldRenderer: React.FC<DynamicFieldRendererProps> = ({
               readOnly,
               inputProps: {
                 maxLength: field.validation?.maxLength,
-                minLength: field.validation?.minLength
-              }
+                minLength: field.validation?.minLength,
+              },
             }}
           />
           {renderDescription()}
@@ -169,8 +163,8 @@ export const DynamicFieldRenderer: React.FC<DynamicFieldRendererProps> = ({
               inputProps: {
                 min: field.validation?.min,
                 max: field.validation?.max,
-                step: 'any'
-              }
+                step: 'any',
+              },
             }}
           />
           {renderDescription()}
@@ -189,7 +183,7 @@ export const DynamicFieldRenderer: React.FC<DynamicFieldRendererProps> = ({
             placeholder={field.placeholder || 'ejemplo@correo.com'}
             helperText={errorMessage}
             InputProps={{
-              readOnly
+              readOnly,
             }}
           />
           {renderDescription()}
@@ -208,7 +202,7 @@ export const DynamicFieldRenderer: React.FC<DynamicFieldRendererProps> = ({
             placeholder={field.placeholder || '+1 (555) 123-4567'}
             helperText={errorMessage}
             InputProps={{
-              readOnly
+              readOnly,
             }}
           />
           {renderDescription()}
@@ -238,7 +232,7 @@ export const DynamicFieldRenderer: React.FC<DynamicFieldRendererProps> = ({
                     <LinkIcon />
                   </IconButton>
                 </InputAdornment>
-              )
+              ),
             }}
           />
           {renderDescription()}
@@ -263,9 +257,9 @@ export const DynamicFieldRenderer: React.FC<DynamicFieldRendererProps> = ({
                       <InputAdornment position="end">
                         <CalendarIcon />
                       </InputAdornment>
-                    )
-                  }
-                }
+                    ),
+                  },
+                },
               }}
             />
             {renderDescription()}
@@ -285,8 +279,8 @@ export const DynamicFieldRenderer: React.FC<DynamicFieldRendererProps> = ({
               slotProps={{
                 textField: {
                   ...commonProps,
-                  helperText: errorMessage
-                }
+                  helperText: errorMessage,
+                },
               }}
             />
             {renderDescription()}
@@ -309,11 +303,7 @@ export const DynamicFieldRenderer: React.FC<DynamicFieldRendererProps> = ({
                 <em>Seleccionar...</em>
               </MenuItem>
               {field.options?.map((option) => (
-                <MenuItem
-                  key={option.value}
-                  value={option.value}
-                  disabled={option.disabled}
-                >
+                <MenuItem key={option.value} value={option.value} disabled={option.disabled}>
                   {option.label}
                 </MenuItem>
               ))}
@@ -342,24 +332,14 @@ export const DynamicFieldRenderer: React.FC<DynamicFieldRendererProps> = ({
               renderValue={(selected) => (
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                   {(selected as any[]).map((val) => {
-                    const option = field.options?.find(opt => opt.value === val);
-                    return (
-                      <Chip
-                        key={val}
-                        label={option?.label || val}
-                        size="small"
-                      />
-                    );
+                    const option = field.options?.find((opt) => opt.value === val);
+                    return <Chip key={val} label={option?.label || val} size="small" />;
                   })}
                 </Box>
               )}
             >
               {field.options?.map((option) => (
-                <MenuItem
-                  key={option.value}
-                  value={option.value}
-                  disabled={option.disabled}
-                >
+                <MenuItem key={option.value} value={option.value} disabled={option.disabled}>
                   {option.label}
                 </MenuItem>
               ))}
@@ -432,7 +412,7 @@ export const DynamicFieldRenderer: React.FC<DynamicFieldRendererProps> = ({
                   <InputAdornment position="start">
                     <FileIcon />
                   </InputAdornment>
-                )
+                ),
               }}
             />
             {renderHelperText()}

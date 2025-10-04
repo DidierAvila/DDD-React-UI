@@ -27,7 +27,7 @@ export const ConnectionError: React.FC<ConnectionErrorProps> = ({
   retryCount,
   maxRetries,
   onRetry,
-  onReset
+  onReset,
 }) => {
   // No mostrar nada si no hay error
   if (!error) return null;
@@ -41,14 +41,12 @@ export const ConnectionError: React.FC<ConnectionErrorProps> = ({
       sx={{
         mb: 2,
         '& .MuiAlert-icon': {
-          fontSize: 24
-        }
+          fontSize: 24,
+        },
       }}
       icon={isNetworkError ? <WifiOff /> : undefined}
     >
-      <AlertTitle>
-        {isNetworkError ? 'Error de Conexión' : 'Error del Sistema'}
-      </AlertTitle>
+      <AlertTitle>{isNetworkError ? 'Error de Conexión' : 'Error del Sistema'}</AlertTitle>
 
       <Typography variant="body2" sx={{ mb: 2 }}>
         {error}

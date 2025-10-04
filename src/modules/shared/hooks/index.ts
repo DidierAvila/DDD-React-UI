@@ -12,4 +12,3 @@ export * from './usePWA';
 export * from './useDynamicFields';
 export * from './useUserPersonalFields';
 export * from './useUserTypeFields';
-

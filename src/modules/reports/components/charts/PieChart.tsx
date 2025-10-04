@@ -2,17 +2,17 @@
 
 /**
  * Componente de gráfico circular usando SVG
- * SignoSST Web Frontend - Next.js TypeScript
+ * Platform Web Frontend - Next.js TypeScript
  */
 
+import { PieChartProps } from '@/modules/reports/types';
+import { Box, Card, CardContent, Typography, useTheme } from '@mui/material';
 import React from 'react';
-import { Box, Typography, Card, CardContent, useTheme } from '@mui/material';
-import { PieChartProps } from '../../types';
 
 const PieChart: React.FC<PieChartProps> = ({
   data,
   title = 'Gráfico Circular',
-  showLegend = true
+  showLegend = true,
 }) => {
   const theme = useTheme();
   const size = 300;
@@ -47,7 +47,7 @@ const PieChart: React.FC<PieChartProps> = ({
       `M ${center} ${center}`, // Mover al centro
       `L ${x1} ${y1}`, // Línea al inicio del arco
       `A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x2} ${y2}`, // Arco
-      'Z' // Cerrar path
+      'Z', // Cerrar path
     ].join(' ');
 
     return {
@@ -55,7 +55,7 @@ const PieChart: React.FC<PieChartProps> = ({
       pathData,
       startAngle,
       endAngle,
-      midAngle: startAngle + angle / 2
+      midAngle: startAngle + angle / 2,
     };
   });
 
@@ -67,7 +67,7 @@ const PieChart: React.FC<PieChartProps> = ({
             {title}
           </Typography>
         )}
-        
+
         <Box display="flex" flexDirection={{ xs: 'column', md: 'row' }} alignItems="center" gap={2}>
           {/* Gráfico SVG */}
           <Box flexShrink={0}>
@@ -81,14 +81,14 @@ const PieChart: React.FC<PieChartProps> = ({
                     strokeWidth={2}
                     style={{
                       filter: `drop-shadow(0px 2px 4px rgba(0,0,0,0.1))`,
-                      transition: 'all 0.3s ease'
+                      transition: 'all 0.3s ease',
                     }}
                   />
                   {/* Etiqueta de porcentaje en el centro del segmento */}
                   {segment.percentage >= 5 && (
                     <text
-                      x={center + (radius * 0.7) * Math.cos((segment.midAngle * Math.PI) / 180)}
-                      y={center + (radius * 0.7) * Math.sin((segment.midAngle * Math.PI) / 180)}
+                      x={center + radius * 0.7 * Math.cos((segment.midAngle * Math.PI) / 180)}
+                      y={center + radius * 0.7 * Math.sin((segment.midAngle * Math.PI) / 180)}
                       textAnchor="middle"
                       dominantBaseline="central"
                       fill="#fff"

@@ -1,6 +1,6 @@
 /**
  * Contexto de Usuario
- * SignoSST Web Frontend - Next.js TypeScript
+ * Platform Web Frontend - Next.js TypeScript
  */
 
 'use client';
@@ -225,7 +225,10 @@ export function UserProvider({ children }: UserProviderProps) {
   const getFilteredNavigation = useCallback(
     (navigation: NavigationItem[], requiredPermission = 'read'): NavigationItem[] => {
       // Usamos el tipo correcto para la función del servicio
-      return AuthService.filterNavigationByPermissions(navigation as any, requiredPermission) as any;
+      return AuthService.filterNavigationByPermissions(
+        navigation as any,
+        requiredPermission
+      ) as any;
     },
     []
   );

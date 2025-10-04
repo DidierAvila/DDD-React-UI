@@ -1,6 +1,6 @@
 /**
  * Users Components - Exportaciones centralizadas
- * SignoSST Web Frontend
+ * Platform Web Frontend
  */
 
 export { UserFieldForm } from './UserFieldForm';

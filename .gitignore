@@ -1,4 +1,4 @@
-# SignoSST Web Frontend - Next.js TypeScript
+# Platform Web Frontend - Next.js TypeScript
 # Archivo .gitignore completo para desarrollo y producción
 
 # ====================================
@@ -139,7 +139,7 @@ lerna-debug.log*
 .firebase/
 
 # ====================================
-# SignoSST Specific / Específico de SignoSST
+# Platform Specific / Específico de Platform
 # ====================================
 # Archivos de backup
 *.backup

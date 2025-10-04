@@ -1,8 +1,4 @@
-import {
-    DynamicFieldDefinition,
-    FieldType,
-    FieldValidation
-} from '../types/dynamic-fields';
+import { DynamicFieldDefinition, FieldType, FieldValidation } from '../types/dynamic-fields';
 
 /**
  * Utilidades para validación de campos dinámicos
@@ -78,15 +74,14 @@ export function validateFieldValue(
     const regex = new RegExp(validation.pattern);
     if (!regex.test(value)) {
       errors.push(
-        validation.customMessage ||
-        `${label || name} no cumple con el formato requerido`
+        validation.customMessage || `${label || name} no cumple con el formato requerido`
       );
     }
   }
 
   return {
     isValid: errors.length === 0,
-    errors
+    errors,
   };
 }
 
@@ -209,8 +204,8 @@ function validateSelectValue(
   }
 
   const validValues = fieldDefinition.options
-    .filter(option => !option.disabled)
-    .map(option => option.value);
+    .filter((option) => !option.disabled)
+    .map((option) => option.value);
 
   if (!validValues.includes(value)) {
     errors.push(`${fieldName} debe ser una opción válida`);
@@ -233,10 +228,10 @@ function validateMultiSelectValue(
   }
 
   const validValues = fieldDefinition.options
-    .filter(option => !option.disabled)
-    .map(option => option.value);
+    .filter((option) => !option.disabled)
+    .map((option) => option.value);
 
-  const invalidValues = value.filter(v => !validValues.includes(v));
+  const invalidValues = value.filter((v) => !validValues.includes(v));
   if (invalidValues.length > 0) {
     errors.push(`${fieldName} contiene opciones inválidas: ${invalidValues.join(', ')}`);
   }
@@ -262,7 +257,7 @@ export function validateFieldValues(
 ): Record<string, ValidationResult> {
   const results: Record<string, ValidationResult> = {};
 
-  fieldDefinitions.forEach(fieldDef => {
+  fieldDefinitions.forEach((fieldDef) => {
     const value = values[fieldDef.name];
     results[fieldDef.name] = validateFieldValue(value, fieldDef);
   });
@@ -273,10 +268,8 @@ export function validateFieldValues(
 /**
  * Verifica si todos los valores son válidos
  */
-export function areAllFieldsValid(
-  validationResults: Record<string, ValidationResult>
-): boolean {
-  return Object.values(validationResults).every(result => result.isValid);
+export function areAllFieldsValid(validationResults: Record<string, ValidationResult>): boolean {
+  return Object.values(validationResults).every((result) => result.isValid);
 }
 
 /**
@@ -285,8 +278,7 @@ export function areAllFieldsValid(
 export function getAllValidationErrors(
   validationResults: Record<string, ValidationResult>
 ): string[] {
-  return Object.values(validationResults)
-    .flatMap(result => result.errors);
+  return Object.values(validationResults).flatMap((result) => result.errors);
 }
 
 /**
@@ -304,14 +296,14 @@ export function formatFieldValueForDisplay(
   switch (fieldType) {
     case 'select':
     case 'radio':
-      const option = options?.find(opt => opt.value === value);
+      const option = options?.find((opt) => opt.value === value);
       return option ? option.label : String(value);
 
     case 'multiselect':
       if (!Array.isArray(value)) return String(value);
       return value
-        .map(v => {
-          const opt = options?.find(opt => opt.value === v);
+        .map((v) => {
+          const opt = options?.find((opt) => opt.value === v);
           return opt ? opt.label : String(v);
         })
         .join(', ');
@@ -336,10 +328,7 @@ export function formatFieldValueForDisplay(
 /**
  * Convierte un valor de string a su tipo correspondiente
  */
-export function parseFieldValue(
-  stringValue: string,
-  fieldType: FieldType
-): any {
+export function parseFieldValue(stringValue: string, fieldType: FieldType): any {
   if (!stringValue) return null;
 
   switch (fieldType) {
@@ -359,7 +348,7 @@ export function parseFieldValue(
       try {
         return JSON.parse(stringValue);
       } catch {
-        return stringValue.split(',').map(s => s.trim());
+        return stringValue.split(',').map((s) => s.trim());
       }
 
     default:

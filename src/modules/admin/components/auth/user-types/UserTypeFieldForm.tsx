@@ -1,39 +1,39 @@
 'use client';
 
 import {
-    CreateUserTypeFieldDto,
-    FieldOption,
-    FieldType,
-    FieldValidation,
-    UpdateUserTypeFieldDto
+  CreateUserTypeFieldDto,
+  FieldOption,
+  FieldType,
+  FieldValidation,
+  UpdateUserTypeFieldDto,
 } from '@/modules/shared/types/dynamic-fields';
 import {
-    Add as AddIcon,
-    ExpandMore as ExpandMoreIcon,
-    Remove as RemoveIcon
+  Add as AddIcon,
+  ExpandMore as ExpandMoreIcon,
+  Remove as RemoveIcon,
 } from '@mui/icons-material';
 import {
-    Accordion,
-    AccordionDetails,
-    AccordionSummary,
-    Alert,
-    Box,
-    Button,
-    Chip,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    Divider,
-    FormControl,
-    FormControlLabel,
-    IconButton,
-    MenuItem,
-    Select,
-    Stack,
-    Switch,
-    TextField,
-    Typography
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Alert,
+  Box,
+  Button,
+  Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Divider,
+  FormControl,
+  FormControlLabel,
+  IconButton,
+  MenuItem,
+  Select,
+  Stack,
+  Switch,
+  TextField,
+  Typography,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
@@ -47,20 +47,60 @@ interface UserTypeFieldFormProps {
   mode: 'create' | 'edit';
 }
 
-const FIELD_TYPES: { value: FieldType; label: string; description: string; needsOptions: boolean }[] = [
+const FIELD_TYPES: {
+  value: FieldType;
+  label: string;
+  description: string;
+  needsOptions: boolean;
+}[] = [
   { value: 'text', label: 'Texto', description: 'Campo de texto simple', needsOptions: false },
-  { value: 'textarea', label: 'Área de texto', description: 'Campo de texto multilínea', needsOptions: false },
+  {
+    value: 'textarea',
+    label: 'Área de texto',
+    description: 'Campo de texto multilínea',
+    needsOptions: false,
+  },
   { value: 'number', label: 'Número', description: 'Campo numérico', needsOptions: false },
-  { value: 'email', label: 'Email', description: 'Dirección de correo electrónico', needsOptions: false },
+  {
+    value: 'email',
+    label: 'Email',
+    description: 'Dirección de correo electrónico',
+    needsOptions: false,
+  },
   { value: 'phone', label: 'Teléfono', description: 'Número telefónico', needsOptions: false },
   { value: 'url', label: 'URL', description: 'Dirección web', needsOptions: false },
   { value: 'date', label: 'Fecha', description: 'Selector de fecha', needsOptions: false },
-  { value: 'datetime', label: 'Fecha y Hora', description: 'Selector de fecha y hora', needsOptions: false },
-  { value: 'select', label: 'Selección única', description: 'Lista desplegable', needsOptions: true },
-  { value: 'multiselect', label: 'Selección múltiple', description: 'Lista de opciones múltiples', needsOptions: true },
-  { value: 'radio', label: 'Botones de opción', description: 'Selección única con botones', needsOptions: true },
-  { value: 'checkbox', label: 'Casilla de verificación', description: 'Verdadero/Falso', needsOptions: false },
-  { value: 'file', label: 'Archivo', description: 'Carga de archivos', needsOptions: false }
+  {
+    value: 'datetime',
+    label: 'Fecha y Hora',
+    description: 'Selector de fecha y hora',
+    needsOptions: false,
+  },
+  {
+    value: 'select',
+    label: 'Selección única',
+    description: 'Lista desplegable',
+    needsOptions: true,
+  },
+  {
+    value: 'multiselect',
+    label: 'Selección múltiple',
+    description: 'Lista de opciones múltiples',
+    needsOptions: true,
+  },
+  {
+    value: 'radio',
+    label: 'Botones de opción',
+    description: 'Selección única con botones',
+    needsOptions: true,
+  },
+  {
+    value: 'checkbox',
+    label: 'Casilla de verificación',
+    description: 'Verdadero/Falso',
+    needsOptions: false,
+  },
+  { value: 'file', label: 'Archivo', description: 'Carga de archivos', needsOptions: false },
 ];
 
 export const UserTypeFieldForm: React.FC<UserTypeFieldFormProps> = ({
@@ -70,7 +110,7 @@ export const UserTypeFieldForm: React.FC<UserTypeFieldFormProps> = ({
   userTypeId,
   userTypeName,
   initialData,
-  mode
+  mode,
 }) => {
   const [formData, setFormData] = useState<CreateUserTypeFieldDto | UpdateUserTypeFieldDto>(() => ({
     ...(mode === 'edit' && initialData ? initialData : {}),
@@ -81,7 +121,7 @@ export const UserTypeFieldForm: React.FC<UserTypeFieldFormProps> = ({
     type: initialData?.type || 'text',
     validation: {
       required: false,
-      ...initialData?.validation
+      ...initialData?.validation,
     },
     options: initialData?.options || [],
     defaultValue: initialData?.defaultValue || '',
@@ -89,7 +129,7 @@ export const UserTypeFieldForm: React.FC<UserTypeFieldFormProps> = ({
     isInheritable: initialData?.isInheritable ?? true,
     order: initialData?.order || 0,
     metadata: initialData?.metadata || {},
-    isActive: initialData?.isActive ?? true
+    isActive: initialData?.isActive ?? true,
   }));
 
   const [isSaving, setIsSaving] = useState(false);
@@ -107,7 +147,7 @@ export const UserTypeFieldForm: React.FC<UserTypeFieldFormProps> = ({
         type: initialData?.type || 'text',
         validation: {
           required: false,
-          ...initialData?.validation
+          ...initialData?.validation,
         },
         options: initialData?.options || [],
         defaultValue: initialData?.defaultValue || '',
@@ -115,13 +155,13 @@ export const UserTypeFieldForm: React.FC<UserTypeFieldFormProps> = ({
         isInheritable: initialData?.isInheritable ?? true,
         order: initialData?.order || 0,
         metadata: initialData?.metadata || {},
-        isActive: initialData?.isActive ?? true
+        isActive: initialData?.isActive ?? true,
       });
       setErrors({});
     }
   }, [initialData, mode, open, userTypeId]);
 
-  const selectedFieldType = FIELD_TYPES.find(ft => ft.value === formData.type);
+  const selectedFieldType = FIELD_TYPES.find((ft) => ft.value === formData.type);
 
   // Validar formulario
   const validateForm = (): boolean => {
@@ -130,7 +170,8 @@ export const UserTypeFieldForm: React.FC<UserTypeFieldFormProps> = ({
     if (!formData.name?.trim()) {
       newErrors.name = 'El nombre es requerido';
     } else if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(formData.name)) {
-      newErrors.name = 'El nombre debe ser un identificador válido (solo letras, números y guiones bajos)';
+      newErrors.name =
+        'El nombre debe ser un identificador válido (solo letras, números y guiones bajos)';
     }
 
     if (!formData.label?.trim()) {
@@ -172,14 +213,14 @@ export const UserTypeFieldForm: React.FC<UserTypeFieldFormProps> = ({
   };
 
   const handleFieldChange = (field: string, value: any) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
 
     // Limpiar error del campo si existe
     if (errors[field]) {
-      setErrors(prev => {
+      setErrors((prev) => {
         const newErrors = { ...prev };
         delete newErrors[field];
         return newErrors;
@@ -188,12 +229,12 @@ export const UserTypeFieldForm: React.FC<UserTypeFieldFormProps> = ({
   };
 
   const handleValidationChange = (field: keyof FieldValidation, value: any) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       validation: {
         ...prev.validation,
-        [field]: value
-      }
+        [field]: value,
+      },
     }));
   };
 
@@ -201,28 +242,28 @@ export const UserTypeFieldForm: React.FC<UserTypeFieldFormProps> = ({
     const newOption: FieldOption = {
       value: '',
       label: '',
-      disabled: false
+      disabled: false,
     };
 
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      options: [...(prev.options || []), newOption]
+      options: [...(prev.options || []), newOption],
     }));
   };
 
   const handleRemoveOption = (index: number) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      options: prev.options?.filter((_, i) => i !== index) || []
+      options: prev.options?.filter((_, i) => i !== index) || [],
     }));
   };
 
   const handleOptionChange = (index: number, field: keyof FieldOption, value: any) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      options: prev.options?.map((option, i) =>
-        i === index ? { ...option, [field]: value } : option
-      ) || []
+      options:
+        prev.options?.map((option, i) => (i === index ? { ...option, [field]: value } : option)) ||
+        [],
     }));
   };
 
@@ -236,9 +277,7 @@ export const UserTypeFieldForm: React.FC<UserTypeFieldFormProps> = ({
     >
       <DialogTitle>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Typography variant="h6">
-            {mode === 'create' ? 'Crear Campo' : 'Editar Campo'}
-          </Typography>
+          <Typography variant="h6">{mode === 'create' ? 'Crear Campo' : 'Editar Campo'}</Typography>
           <Chip
             label={userTypeName || userTypeId}
             size="small"
@@ -249,8 +288,7 @@ export const UserTypeFieldForm: React.FC<UserTypeFieldFormProps> = ({
         <Typography variant="body2" color="text.secondary">
           {mode === 'create'
             ? 'Configure un nuevo campo dinámico para este tipo de usuario'
-            : 'Modifique la configuración del campo dinámico'
-          }
+            : 'Modifique la configuración del campo dinámico'}
         </Typography>
       </DialogTitle>
 
@@ -269,7 +307,9 @@ export const UserTypeFieldForm: React.FC<UserTypeFieldFormProps> = ({
                 value={formData.name || ''}
                 onChange={(e) => handleFieldChange('name', e.target.value)}
                 error={!!errors.name}
-                helperText={errors.name || 'Identificador único del campo (no se puede cambiar después)'}
+                helperText={
+                  errors.name || 'Identificador único del campo (no se puede cambiar después)'
+                }
                 disabled={mode === 'edit'} // No permitir cambiar nombre en edición
                 placeholder="ej: numero_identificacion"
               />
@@ -357,11 +397,7 @@ export const UserTypeFieldForm: React.FC<UserTypeFieldFormProps> = ({
               <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                 <Typography variant="subtitle1">
                   Opciones de Selección
-                  <Chip
-                    label={formData.options?.length || 0}
-                    size="small"
-                    sx={{ ml: 1 }}
-                  />
+                  <Chip label={formData.options?.length || 0} size="small" sx={{ ml: 1 }} />
                 </Typography>
               </AccordionSummary>
               <AccordionDetails>
@@ -376,7 +412,7 @@ export const UserTypeFieldForm: React.FC<UserTypeFieldFormProps> = ({
                         p: 2,
                         border: '1px solid',
                         borderColor: 'divider',
-                        borderRadius: 1
+                        borderRadius: 1,
                       }}
                     >
                       <TextField
@@ -397,7 +433,9 @@ export const UserTypeFieldForm: React.FC<UserTypeFieldFormProps> = ({
                         control={
                           <Switch
                             checked={!option.disabled}
-                            onChange={(e) => handleOptionChange(index, 'disabled', !e.target.checked)}
+                            onChange={(e) =>
+                              handleOptionChange(index, 'disabled', !e.target.checked)
+                            }
                             size="small"
                           />
                         }
@@ -423,11 +461,7 @@ export const UserTypeFieldForm: React.FC<UserTypeFieldFormProps> = ({
                     Agregar Opción
                   </Button>
 
-                  {errors.options && (
-                    <Alert severity="error">
-                      {errors.options}
-                    </Alert>
-                  )}
+                  {errors.options && <Alert severity="error">{errors.options}</Alert>}
                 </Stack>
               </AccordionDetails>
             </Accordion>
@@ -446,23 +480,23 @@ export const UserTypeFieldForm: React.FC<UserTypeFieldFormProps> = ({
                       type="number"
                       label="Valor mínimo"
                       value={formData.validation?.min || ''}
-                      onChange={(e) => handleValidationChange('min', Number(e.target.value) || undefined)}
+                      onChange={(e) =>
+                        handleValidationChange('min', Number(e.target.value) || undefined)
+                      }
                       sx={{ flex: 1 }}
                     />
                     <TextField
                       type="number"
                       label="Valor máximo"
                       value={formData.validation?.max || ''}
-                      onChange={(e) => handleValidationChange('max', Number(e.target.value) || undefined)}
+                      onChange={(e) =>
+                        handleValidationChange('max', Number(e.target.value) || undefined)
+                      }
                       sx={{ flex: 1 }}
                     />
                   </Box>
 
-                  {errors.validation && (
-                    <Alert severity="error">
-                      {errors.validation}
-                    </Alert>
-                  )}
+                  {errors.validation && <Alert severity="error">{errors.validation}</Alert>}
                 </Stack>
               </AccordionDetails>
             </Accordion>
@@ -499,8 +533,6 @@ export const UserTypeFieldForm: React.FC<UserTypeFieldFormProps> = ({
                   helperText="Los campos se ordenan de menor a mayor"
                 />
 
-
-
                 {mode === 'edit' && (
                   <FormControlLabel
                     control={
@@ -522,11 +554,7 @@ export const UserTypeFieldForm: React.FC<UserTypeFieldFormProps> = ({
         <Button onClick={onClose} disabled={isSaving}>
           Cancelar
         </Button>
-        <Button
-          variant="contained"
-          onClick={handleSave}
-          disabled={isSaving}
-        >
+        <Button variant="contained" onClick={handleSave} disabled={isSaving}>
           {isSaving ? 'Guardando...' : mode === 'create' ? 'Crear Campo' : 'Guardar Cambios'}
         </Button>
       </DialogActions>

@@ -1,9 +1,9 @@
 /**
  * useNotifications Hook - Hook para manejo de notificaciones
- * SignoSST Web Frontend
+ * Platform Web Frontend
  */
 
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
 /**
  * Hook personalizado para manejo de notificaciones/snackbars

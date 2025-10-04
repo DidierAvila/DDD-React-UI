@@ -1,6 +1,6 @@
 /**
  * Hook para manejo centralizado de errores de API
- * SignoSST Web Frontend - Next.js TypeScript
+ * Platform Web Frontend - Next.js TypeScript
  */
 
 import { useNotificationContext } from '@/modules/shared/components/providers/NotificationProvider';
@@ -40,7 +40,8 @@ export function useApiError(): UseApiErrorReturn {
         }, 2000);
       } else if (apiError.isForbidden) {
         // Error 403 - Sin permisos para realizar la acción
-        const permissionMessage = apiError.message || 'No tienes permisos para realizar esta acción.';
+        const permissionMessage =
+          apiError.message || 'No tienes permisos para realizar esta acción.';
         showNotification(permissionMessage, 'warning');
         // No redirigir al login, solo mostrar el mensaje de permisos
       } else if (apiError.isServerError) {

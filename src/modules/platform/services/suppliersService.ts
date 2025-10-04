@@ -22,36 +22,30 @@ export const suppliersService = {
    */
   getSuppliersByUserType: async (userTypeId: string): Promise<SupplierDropdown[]> => {
     try {
-      console.log('🔍 Cargando proveedores para userTypeId:', userTypeId);
-
-      const response = await api.get<SupplierDropdown[]>(`/Api/Auth/Users/dropdown/bytype/${userTypeId}`);
+      const response = await api.get<SupplierDropdown[]>(
+        `/Api/Auth/Users/dropdown/bytype/${userTypeId}`
+      );
 
       // Validar estructura de respuesta
       if (!Array.isArray(response)) {
-        console.error('❌ Respuesta inválida del servicio de proveedores:', response);
         throw new Error('Formato de respuesta inválido del servidor');
       }
 
       // Validar que cada elemento tenga la estructura esperada
       const validSuppliers = response.filter((supplier: any) => {
-        const isValid = supplier &&
-                       typeof supplier.value === 'string' &&
-                       typeof supplier.label === 'string' &&
-                       supplier.value.trim() !== '' &&
-                       supplier.label.trim() !== '';
-
-        if (!isValid) {
-          console.warn('⚠️ Proveedor con formato inválido filtrado:', supplier);
-        }
+        const isValid =
+          supplier &&
+          typeof supplier.value === 'string' &&
+          typeof supplier.label === 'string' &&
+          supplier.value.trim() !== '' &&
+          supplier.label.trim() !== '';
 
         return isValid;
       });
 
-      console.log(`✅ ${validSuppliers.length} proveedores cargados exitosamente`);
       return validSuppliers;
-
     } catch (error) {
-      console.error('❌ Error al cargar proveedores:', error);
+      console.error('Error al cargar proveedores:', error);
 
       // Re-lanzar con mensaje más descriptivo
       if (error instanceof Error) {
@@ -75,9 +69,9 @@ export const suppliersService = {
 
     const term = searchTerm.toLowerCase().trim();
 
-    return suppliers.filter(supplier =>
-      supplier.label.toLowerCase().includes(term) ||
-      supplier.value.toLowerCase().includes(term)
+    return suppliers.filter(
+      (supplier) =>
+        supplier.label.toLowerCase().includes(term) || supplier.value.toLowerCase().includes(term)
     );
   },
 
@@ -88,7 +82,7 @@ export const suppliersService = {
    * @returns Proveedor encontrado o null
    */
   getSupplierById: (suppliers: SupplierDropdown[], supplierId: string): SupplierDropdown | null => {
-    return suppliers.find(supplier => supplier.value === supplierId) || null;
+    return suppliers.find((supplier) => supplier.value === supplierId) || null;
   },
 
   /**
@@ -98,7 +92,7 @@ export const suppliersService = {
    * @returns true si el proveedor existe
    */
   isValidSupplierId: (suppliers: SupplierDropdown[], supplierId: string): boolean => {
-    return suppliers.some(supplier => supplier.value === supplierId);
+    return suppliers.some((supplier) => supplier.value === supplierId);
   },
 
   /**
@@ -107,36 +101,28 @@ export const suppliersService = {
    */
   getSuppliers: async (): Promise<SupplierDropdown[]> => {
     try {
-      console.log('🔄 Cargando proveedores desde endpoint simplificado...');
-
       const response = await api.get<SupplierDropdown[]>('/Api/Auth/Users/dropdown/suppliers');
 
       // Validar estructura de respuesta
       if (!Array.isArray(response)) {
-        console.error('❌ Respuesta inválida del servicio de proveedores:', response);
         throw new Error('Formato de respuesta inválido del servidor');
       }
 
       // Validar que cada elemento tenga la estructura esperada
       const validSuppliers = response.filter((supplier: any) => {
-        const isValid = supplier &&
-                       typeof supplier.value === 'string' &&
-                       typeof supplier.label === 'string' &&
-                       supplier.value.trim() !== '' &&
-                       supplier.label.trim() !== '';
-
-        if (!isValid) {
-          console.warn('⚠️ Proveedor con formato inválido filtrado:', supplier);
-        }
+        const isValid =
+          supplier &&
+          typeof supplier.value === 'string' &&
+          typeof supplier.label === 'string' &&
+          supplier.value.trim() !== '' &&
+          supplier.label.trim() !== '';
 
         return isValid;
       });
 
-      console.log(`✅ ${validSuppliers.length} proveedores cargados exitosamente`);
       return validSuppliers;
-
     } catch (error) {
-      console.error('❌ Error al cargar proveedores:', error);
+      console.error('Error al cargar proveedores:', error);
 
       // Re-lanzar con mensaje más descriptivo
       if (error instanceof Error) {
@@ -145,7 +131,7 @@ export const suppliersService = {
 
       throw new Error('Error desconocido al cargar proveedores');
     }
-  }
+  },
 };
 
 export default suppliersService;

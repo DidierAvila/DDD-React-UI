@@ -1,58 +1,60 @@
 'use client';
 
 import {
-    Add as AddIcon,
-    ContentCopy as CopyIcon,
-    Delete as DeleteIcon,
-    DragIndicator as DragIcon,
-    Edit as EditIcon,
-    MoreVert as MoreVertIcon,
-    Refresh as RefreshIcon,
-    Visibility as VisibilityIcon,
-    VisibilityOff as VisibilityOffIcon
+  Add as AddIcon,
+  ContentCopy as CopyIcon,
+  Delete as DeleteIcon,
+  DragIndicator as DragIcon,
+  Edit as EditIcon,
+  MoreVert as MoreVertIcon,
+  Refresh as RefreshIcon,
+  Visibility as VisibilityIcon,
+  VisibilityOff as VisibilityOffIcon,
 } from '@mui/icons-material';
 import {
-    Alert,
-    Box,
-    Button,
-    Card,
-    CardContent,
-    Chip,
-    CircularProgress,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    Fab,
-    FormControlLabel,
-    IconButton,
-    Menu,
-    MenuItem,
-    Paper,
-    Stack,
-    Switch,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Tooltip,
-    Typography
+  Alert,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Chip,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Fab,
+  FormControlLabel,
+  IconButton,
+  Menu,
+  MenuItem,
+  Paper,
+  Stack,
+  Switch,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Tooltip,
+  Typography,
 } from '@mui/material';
 import React, { useState } from 'react';
 // import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
 import { useUserTypeFields } from '@/modules/shared/hooks';
-import { CreateUserTypeFieldDto, UpdateUserTypeFieldDto, UserTypeField } from '@/modules/shared/types/dynamic-fields';
+import {
+  CreateUserTypeFieldDto,
+  UpdateUserTypeFieldDto,
+  UserTypeField,
+} from '@/modules/shared/types/dynamic-fields';
 import { UserTypeFieldForm } from './UserTypeFieldForm';
 
 interface UserTypeFieldsManagerProps {
   userTypeId?: string;
 }
 
-export const UserTypeFieldsManager: React.FC<UserTypeFieldsManagerProps> = ({
-  userTypeId
-}) => {
+export const UserTypeFieldsManager: React.FC<UserTypeFieldsManagerProps> = ({ userTypeId }) => {
   // Estados del componente
   const [showInactive, setShowInactive] = useState(false);
   const [selectedField, setSelectedField] = useState<UserTypeField | null>(null);
@@ -60,7 +62,10 @@ export const UserTypeFieldsManager: React.FC<UserTypeFieldsManagerProps> = ({
   const [formMode, setFormMode] = useState<'create' | 'edit'>('create');
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [fieldToDelete, setFieldToDelete] = useState<UserTypeField | null>(null);
-  const [menuAnchor, setMenuAnchor] = useState<{ element: HTMLElement; field: UserTypeField } | null>(null);
+  const [menuAnchor, setMenuAnchor] = useState<{
+    element: HTMLElement;
+    field: UserTypeField;
+  } | null>(null);
 
   // Si no hay userTypeId, mostrar mensaje informativo
   if (!userTypeId) {
@@ -91,7 +96,7 @@ export const UserTypeFieldsManager: React.FC<UserTypeFieldsManagerProps> = ({
     duplicateField,
     reorderFields,
     refresh,
-    clearError
+    clearError,
   } = useUserTypeFields(userTypeId);
 
   // Campos a mostrar (activos o todos)
@@ -160,7 +165,7 @@ export const UserTypeFieldsManager: React.FC<UserTypeFieldsManagerProps> = ({
 
   // Manejo de reordenamiento
   const handleMoveField = async (field: UserTypeField, direction: 'up' | 'down') => {
-    const currentIndex = displayFields.findIndex(f => f.id === field.id);
+    const currentIndex = displayFields.findIndex((f) => f.id === field.id);
     const newIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
 
     if (newIndex < 0 || newIndex >= displayFields.length) return;
@@ -214,7 +219,14 @@ export const UserTypeFieldsManager: React.FC<UserTypeFieldsManagerProps> = ({
       <Alert
         severity="error"
         action={
-          <Button color="inherit" size="small" onClick={() => { clearError(); refresh(); }}>
+          <Button
+            color="inherit"
+            size="small"
+            onClick={() => {
+              clearError();
+              refresh();
+            }}
+          >
             Reintentar
           </Button>
         }
@@ -229,22 +241,26 @@ export const UserTypeFieldsManager: React.FC<UserTypeFieldsManagerProps> = ({
       <Card>
         <CardContent>
           {/* Header */}
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 3 }}>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'flex-start',
+              mb: 3,
+            }}
+          >
             <Box>
               <Typography variant="h5" gutterBottom>
                 Campos Dinámicos
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Gestiona los campos personalizados para el tipo de usuario: <strong>{config?.userTypeName || userTypeId}</strong>
+                Gestiona los campos personalizados para el tipo de usuario:{' '}
+                <strong>{config?.userTypeName || userTypeId}</strong>
               </Typography>
 
               {/* Estadísticas */}
               <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
-                <Chip
-                  label={`${stats.total} campos`}
-                  size="small"
-                  color="default"
-                />
+                <Chip label={`${stats.total} campos`} size="small" color="default" />
                 <Chip
                   label={`${stats.active} activos`}
                   size="small"
@@ -305,8 +321,7 @@ export const UserTypeFieldsManager: React.FC<UserTypeFieldsManagerProps> = ({
               <Typography variant="body2" color="text.secondary" paragraph>
                 {showInactive
                   ? 'No se encontraron campos (activos o inactivos)'
-                  : 'No hay campos activos. Crea el primer campo o activa campos existentes.'
-                }
+                  : 'No hay campos activos. Crea el primer campo o activa campos existentes.'}
               </Typography>
               <Button
                 variant="contained"
@@ -335,7 +350,7 @@ export const UserTypeFieldsManager: React.FC<UserTypeFieldsManagerProps> = ({
                     <TableRow
                       key={field.id}
                       sx={{
-                        opacity: field.isActive ? 1 : 0.6
+                        opacity: field.isActive ? 1 : 0.6,
                       }}
                     >
                       <TableCell>
@@ -364,9 +379,7 @@ export const UserTypeFieldsManager: React.FC<UserTypeFieldsManagerProps> = ({
 
                       <TableCell>
                         <Box>
-                          <Typography variant="subtitle2">
-                            {field.label}
-                          </Typography>
+                          <Typography variant="subtitle2">{field.label}</Typography>
                           <Typography variant="caption" color="text.secondary">
                             {field.name}
                           </Typography>
@@ -386,7 +399,11 @@ export const UserTypeFieldsManager: React.FC<UserTypeFieldsManagerProps> = ({
                           color={field.type === 'text' ? 'default' : 'primary'}
                         />
                         {field.options && field.options.length > 0 && (
-                          <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 0.5 }}>
+                          <Typography
+                            variant="caption"
+                            color="text.secondary"
+                            sx={{ display: 'block', mt: 0.5 }}
+                          >
                             {field.options.length} opciones
                           </Typography>
                         )}
@@ -431,16 +448,10 @@ export const UserTypeFieldsManager: React.FC<UserTypeFieldsManagerProps> = ({
 
                       <TableCell>
                         <Stack direction="row" spacing={0.5} alignItems="center">
-                          <IconButton
-                            size="small"
-                            onClick={() => handleOpenEditForm(field)}
-                          >
+                          <IconButton size="small" onClick={() => handleOpenEditForm(field)}>
                             <EditIcon />
                           </IconButton>
-                          <IconButton
-                            size="small"
-                            onClick={(e) => handleMenuClick(e, field)}
-                          >
+                          <IconButton size="small" onClick={(e) => handleMenuClick(e, field)}>
                             <MoreVertIcon />
                           </IconButton>
                         </Stack>
@@ -462,7 +473,7 @@ export const UserTypeFieldsManager: React.FC<UserTypeFieldsManagerProps> = ({
           position: 'fixed',
           bottom: 16,
           right: 16,
-          zIndex: 1000
+          zIndex: 1000,
         }}
         onClick={handleOpenCreateForm}
       >
@@ -477,7 +488,12 @@ export const UserTypeFieldsManager: React.FC<UserTypeFieldsManagerProps> = ({
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem onClick={() => { handleOpenEditForm(menuAnchor!.field); handleMenuClose(); }}>
+        <MenuItem
+          onClick={() => {
+            handleOpenEditForm(menuAnchor!.field);
+            handleMenuClose();
+          }}
+        >
           <EditIcon sx={{ mr: 1 }} />
           Editar
         </MenuItem>
@@ -488,7 +504,11 @@ export const UserTypeFieldsManager: React.FC<UserTypeFieldsManagerProps> = ({
         </MenuItem>
 
         <MenuItem onClick={() => handleToggleStatus(menuAnchor!.field)}>
-          {menuAnchor?.field.isActive ? <VisibilityOffIcon sx={{ mr: 1 }} /> : <VisibilityIcon sx={{ mr: 1 }} />}
+          {menuAnchor?.field.isActive ? (
+            <VisibilityOffIcon sx={{ mr: 1 }} />
+          ) : (
+            <VisibilityIcon sx={{ mr: 1 }} />
+          )}
           {menuAnchor?.field.isActive ? 'Desactivar' : 'Activar'}
         </MenuItem>
 
@@ -505,22 +525,26 @@ export const UserTypeFieldsManager: React.FC<UserTypeFieldsManagerProps> = ({
         onSave={handleSaveField}
         userTypeId={userTypeId!}
         userTypeName={userTypeId}
-        initialData={selectedField ? {
-          id: selectedField.id,
-          userTypeId: selectedField.userTypeId,
-          name: selectedField.name,
-          label: selectedField.label,
-          description: selectedField.description,
-          type: selectedField.type,
-          validation: selectedField.validation,
-          options: selectedField.options,
-          defaultValue: selectedField.defaultValue,
-          placeholder: selectedField.placeholder,
-          isInheritable: selectedField.isInheritable,
-          order: selectedField.order,
-          metadata: selectedField.metadata,
-          isActive: selectedField.isActive
-        } : undefined}
+        initialData={
+          selectedField
+            ? {
+                id: selectedField.id,
+                userTypeId: selectedField.userTypeId,
+                name: selectedField.name,
+                label: selectedField.label,
+                description: selectedField.description,
+                type: selectedField.type,
+                validation: selectedField.validation,
+                options: selectedField.options,
+                defaultValue: selectedField.defaultValue,
+                placeholder: selectedField.placeholder,
+                isInheritable: selectedField.isInheritable,
+                order: selectedField.order,
+                metadata: selectedField.metadata,
+                isActive: selectedField.isActive,
+              }
+            : undefined
+        }
         mode={formMode}
       />
 
@@ -536,9 +560,7 @@ export const UserTypeFieldsManager: React.FC<UserTypeFieldsManagerProps> = ({
           </Alert>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setDeleteDialogOpen(false)}>
-            Cancelar
-          </Button>
+          <Button onClick={() => setDeleteDialogOpen(false)}>Cancelar</Button>
           <Button onClick={handleConfirmDelete} color="error" variant="contained">
             Eliminar
           </Button>

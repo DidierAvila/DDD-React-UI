@@ -1,6 +1,6 @@
 /**
  * UserTypes Service - Servicio para gestión de tipos de usuario
- * SignoSST Web Frontend - Next.js TypeScript
+ * Platform Web Frontend - Next.js TypeScript
  */
 
 import { backendApiService, PaginatedResponse } from '@/modules/shared/services/api';

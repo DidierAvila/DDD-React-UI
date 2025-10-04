@@ -1,13 +1,13 @@
 /**
  * Componente para cargar la configuración del usuario después del login
- * SignoSST Web Frontend - Next.js TypeScript
+ * Platform Web Frontend - Next.js TypeScript
  */
 
 'use client';
 
+import { Box, CircularProgress, Typography } from '@mui/material';
 import { useSession } from 'next-auth/react';
 import { useUser } from '../../contexts/UserContext';
-import { Box, CircularProgress, Typography } from '@mui/material';
 
 interface UserConfigLoaderProps {
   children: React.ReactNode;

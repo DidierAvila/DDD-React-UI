@@ -1,9 +1,9 @@
 'use client';
 
 import {
-    UserType as ServiceUserType,
-    UserTypeFilters,
-    userTypesService,
+  UserType as ServiceUserType,
+  UserTypeFilters,
+  userTypesService,
 } from '@/modules/admin/services/userTypesService';
 import { useApiAuth } from '@/modules/shared/hooks/useApiAuth';
 import { useSnackbar } from 'notistack';
@@ -32,58 +32,58 @@ function TabPanel(props: TabPanelProps) {
 }
 
 import {
-    AdminPanelSettings,
-    Assignment,
-    Business,
-    Cancel,
-    CheckCircle,
-    Delete,
-    Edit,
-    FilterList,
-    Group,
-    MoreVert,
-    People,
-    PersonAdd,
-    Search,
-    Security,
-    Shield,
-    SupervisorAccount,
-    Visibility,
+  AdminPanelSettings,
+  Assignment,
+  Business,
+  Cancel,
+  CheckCircle,
+  Delete,
+  Edit,
+  FilterList,
+  Group,
+  MoreVert,
+  People,
+  PersonAdd,
+  Search,
+  Security,
+  Shield,
+  SupervisorAccount,
+  Visibility,
 } from '@mui/icons-material';
 import {
-    Alert,
-    Avatar,
-    Box,
-    Button,
-    Card,
-    CardContent,
-    Chip,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    FormControl,
-    FormControlLabel,
-    GridLegacy as Grid,
-    IconButton,
-    InputAdornment,
-    InputLabel,
-    Menu,
-    MenuItem,
-    Pagination,
-    Select,
-    Switch,
-    Tab,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Tabs,
-    TextField,
-    Tooltip,
-    Typography,
+  Alert,
+  Avatar,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  FormControl,
+  FormControlLabel,
+  GridLegacy as Grid,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  Menu,
+  MenuItem,
+  Pagination,
+  Select,
+  Switch,
+  Tab,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Tabs,
+  TextField,
+  Tooltip,
+  Typography,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
@@ -290,12 +290,12 @@ const UserTypesManagement: React.FC = () => {
   };
 
   const handleDynamicFieldsUpdate = (updatedFields: Record<string, any>) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       additionalConfig: {
         ...prev.additionalConfig,
-        dynamicFields: updatedFields
-      }
+        dynamicFields: updatedFields,
+      },
     }));
   };
 
@@ -626,7 +626,11 @@ const UserTypesManagement: React.FC = () => {
         </DialogTitle>
         <DialogContent sx={{ p: 0 }}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            <Tabs value={dialogTab} onChange={handleTabChange} aria-label="user type configuration tabs">
+            <Tabs
+              value={dialogTab}
+              onChange={handleTabChange}
+              aria-label="user type configuration tabs"
+            >
               <Tab label="Información General" />
               <Tab label="Campos Dinámicos" disabled={dialogMode === 'create'} />
             </Tabs>

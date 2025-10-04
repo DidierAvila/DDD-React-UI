@@ -1,11 +1,11 @@
 import { ApiResponse, backendApiService } from '@/modules/shared/services/api';
 import {
-    CreateUserPersonalFieldDto,
-    UpdateFieldValuesDto,
-    UpdateUserPersonalFieldDto,
-    UserAdditionalData,
-    UserPersonalField,
-    UserPersonalFieldsConfig
+  CreateUserPersonalFieldDto,
+  UpdateFieldValuesDto,
+  UpdateUserPersonalFieldDto,
+  UserAdditionalData,
+  UserPersonalField,
+  UserPersonalFieldsConfig,
 } from '../../shared/types/dynamic-fields';
 
 /**
@@ -18,9 +18,7 @@ export class UserPersonalFieldsService {
    * Obtiene todos los campos personales de un usuario
    */
   static async getUserPersonalFields(userId: string): Promise<UserPersonalField[]> {
-    return backendApiService.get<UserPersonalField[]>(
-      `/Api/Auth/Users/${userId}/personal-fields`
-    );
+    return backendApiService.get<UserPersonalField[]>(`/Api/Auth/Users/${userId}/personal-fields`);
   }
 
   /**
@@ -38,9 +36,7 @@ export class UserPersonalFieldsService {
    * Incluye valores de campos heredados y personales
    */
   static async getUserAdditionalData(userId: string): Promise<UserAdditionalData> {
-    return backendApiService.get<UserAdditionalData>(
-      `/Api/Auth/Users/${userId}/additional-data`
-    );
+    return backendApiService.get<UserAdditionalData>(`/Api/Auth/Users/${userId}/additional-data`);
   }
 
   /**
@@ -178,14 +174,14 @@ export class UserPersonalFieldsService {
   static async exportUserAdditionalData(
     userId: string,
     format: 'json' | 'csv' = 'json',
-    includeInheritedFields: boolean = true
+    includeInheritedFields = true
   ): Promise<Blob> {
     return backendApiService.get<Blob>(
       `/Api/Auth/Users/${userId}/additional-data/export?format=${format}&includeInherited=${includeInheritedFields}`,
       {
         headers: {
-          'Accept': format === 'csv' ? 'text/csv' : 'application/json'
-        }
+          Accept: format === 'csv' ? 'text/csv' : 'application/json',
+        },
       }
     );
   }
@@ -200,13 +196,15 @@ export class UserPersonalFieldsService {
       overwriteExisting?: boolean;
       validateOnly?: boolean;
     } = {}
-  ): Promise<ApiResponse<{
-    imported: number;
-    updated: number;
-    skipped: number;
-    errors: string[];
-    warnings: string[];
-  }>> {
+  ): Promise<
+    ApiResponse<{
+      imported: number;
+      updated: number;
+      skipped: number;
+      errors: string[];
+      warnings: string[];
+    }>
+  > {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('overwriteExisting', String(options.overwriteExisting ?? false));
@@ -229,20 +227,22 @@ export class UserPersonalFieldsService {
       toDate?: string;
       limit?: number;
     } = {}
-  ): Promise<{
-    fieldId: string;
-    fieldName: string;
-    oldValue: any;
-    newValue: any;
-    changedAt: string;
-    changedBy: string;
-    changeType: 'create' | 'update' | 'delete';
-  }[]> {
+  ): Promise<
+    {
+      fieldId: string;
+      fieldName: string;
+      oldValue: any;
+      newValue: any;
+      changedAt: string;
+      changedBy: string;
+      changeType: 'create' | 'update' | 'delete';
+    }[]
+  > {
     const params = {
       fieldId: options.fieldId,
       fromDate: options.fromDate,
       toDate: options.toDate,
-      limit: options.limit
+      limit: options.limit,
     };
 
     const cleanParams = Object.fromEntries(
@@ -267,10 +267,9 @@ export class UserPersonalFieldsService {
     globalErrors: string[];
     warnings: string[];
   }> {
-    return backendApiService.post<any>(
-      `/Api/Auth/Users/${userId}/validate-field-values`,
-      { values } as unknown as Record<string, unknown>
-    );
+    return backendApiService.post<any>(`/Api/Auth/Users/${userId}/validate-field-values`, {
+      values,
+    } as unknown as Record<string, unknown>);
   }
 
   /**
@@ -280,12 +279,14 @@ export class UserPersonalFieldsService {
     userId: string,
     fieldId: string,
     partialValue?: string
-  ): Promise<{
-    value: any;
-    label: string;
-    frequency: number;
-    lastUsed: string;
-  }[]> {
+  ): Promise<
+    {
+      value: any;
+      label: string;
+      frequency: number;
+      lastUsed: string;
+    }[]
+  > {
     const params = partialValue ? { q: partialValue } : {};
 
     return backendApiService.getWithParams<any[]>(
@@ -304,18 +305,20 @@ export class UserPersonalFieldsService {
       updateModifiedFields?: boolean;
       removeDeletedFields?: boolean;
     } = {}
-  ): Promise<ApiResponse<{
-    added: number;
-    updated: number;
-    removed: number;
-    conflicts: {
-      fieldId: string;
-      fieldName: string;
-      conflictType: string;
-      userValue: any;
-      userTypeValue: any;
-    }[];
-  }>> {
+  ): Promise<
+    ApiResponse<{
+      added: number;
+      updated: number;
+      removed: number;
+      conflicts: {
+        fieldId: string;
+        fieldName: string;
+        conflictType: string;
+        userValue: any;
+        userTypeValue: any;
+      }[];
+    }>
+  > {
     return backendApiService.post<ApiResponse<any>>(
       `/Api/Auth/Users/${userId}/sync-usertype-fields`,
       options as unknown as Record<string, unknown>
@@ -345,7 +348,7 @@ export function createFieldOverrideDto(
     label: overrides.label || '',
     type: 'text', // Se determinará del campo padre
     parentFieldId,
-    ...overrides
+    ...overrides,
   };
 }
 
@@ -374,7 +377,7 @@ export function createPersonalFieldDto(
     validation: options.validation,
     defaultValue: options.defaultValue,
     placeholder: options.placeholder,
-    order: options.order
+    order: options.order,
     // parentFieldId se omite para campos completamente nuevos
   };
 }
@@ -390,7 +393,7 @@ export function createFieldValuesUpdateDto(
     userId,
     values: Object.entries(fieldValues).map(([fieldId, value]) => ({
       fieldId,
-      value
-    }))
+      value,
+    })),
   };
 }

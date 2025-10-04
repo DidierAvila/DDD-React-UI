@@ -1,6 +1,6 @@
 /**
  * Lazy Components - Componentes con carga diferida
- * SignoSST Web Frontend - Next.js TypeScript
+ * Platform Web Frontend - Next.js TypeScript
  */
 
 import { withLazyLoading } from './LazyComponent';

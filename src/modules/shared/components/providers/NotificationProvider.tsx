@@ -1,6 +1,6 @@
 /**
  * NotificationProvider - Proveedor de contexto para notificaciones
- * SignoSST Web Frontend - Next.js TypeScript
+ * Platform Web Frontend - Next.js TypeScript
  */
 
 'use client';

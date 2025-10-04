@@ -1,6 +1,6 @@
 /**
  * PageContainer - Contenedor base para páginas
- * SignoSST Web Frontend - Next.js TypeScript
+ * Platform Web Frontend - Next.js TypeScript
  */
 
 'use client';

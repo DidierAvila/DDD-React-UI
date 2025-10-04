@@ -1,6 +1,4 @@
-import {
-    DynamicFieldDefinition
-} from '@/modules/shared/types/dynamic-fields';
+import { DynamicFieldDefinition } from '@/modules/shared/types/dynamic-fields';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useUserPersonalFields } from './useUserPersonalFields';
 import { useUserTypeFields } from './useUserTypeFields';
@@ -35,15 +33,16 @@ export function useDynamicFields(userTypeId?: string, userId?: string) {
 
     // Crear mapa de campos personales para quick lookup
     const personalMap = new Map(
-      personal.map(field => [field.parentFieldId || field.name, field])
+      personal.map((field) => [field.parentFieldId || field.name, field])
     );
 
     // Combinar campos con precedencia de personales
     const combined: DynamicFieldDefinition[] = [];
 
     // Agregar campos de UserType, reemplazando con personales si existen
-    inherited.forEach(inheritedField => {
-      const personalOverride = personalMap.get(inheritedField.id) || personalMap.get(inheritedField.name);
+    inherited.forEach((inheritedField) => {
+      const personalOverride =
+        personalMap.get(inheritedField.id) || personalMap.get(inheritedField.name);
       if (personalOverride) {
         combined.push(personalOverride);
         personalMap.delete(personalOverride.parentFieldId || personalOverride.name);
@@ -53,7 +52,7 @@ export function useDynamicFields(userTypeId?: string, userId?: string) {
     });
 
     // Agregar campos personales restantes (que no sobrescriben campos heredados)
-    personalMap.forEach(personalField => {
+    personalMap.forEach((personalField) => {
       if (!personalField.parentFieldId) {
         combined.push(personalField);
       }
@@ -85,99 +84,119 @@ export function useDynamicFields(userTypeId?: string, userId?: string) {
   /**
    * Guardar valores de campos
    */
-  const saveValues = useCallback(async (values: Record<string, any>) => {
-    if (!hasValidParams) return false;
+  const saveValues = useCallback(
+    async (values: Record<string, any>) => {
+      if (!hasValidParams) return false;
 
-    setIsLoading(true);
-    setError(null);
+      setIsLoading(true);
+      setError(null);
 
-    try {
-      // Guardar valores individuales
-      const promises = Object.entries(values).map(([fieldName, value]) =>
-        personalFields.saveFieldValue(fieldName, value)
-      );
+      try {
+        // Guardar valores individuales
+        const promises = Object.entries(values).map(([fieldName, value]) =>
+          personalFields.saveFieldValue(fieldName, value)
+        );
 
-      await Promise.all(promises);
-      setFieldValues(prev => ({ ...prev, ...values }));
-      return true;
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al guardar valores');
-      return false;
-    } finally {
-      setIsLoading(false);
-    }
-  }, [hasValidParams, personalFields]);
+        await Promise.all(promises);
+        setFieldValues((prev) => ({ ...prev, ...values }));
+        return true;
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Error al guardar valores');
+        return false;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [hasValidParams, personalFields]
+  );
 
   /**
    * Guardar valor de un campo individual
    */
-  const saveFieldValue = useCallback(async (fieldName: string, value: any) => {
-    return saveValues({ [fieldName]: value });
-  }, [saveValues]);
+  const saveFieldValue = useCallback(
+    async (fieldName: string, value: any) => {
+      return saveValues({ [fieldName]: value });
+    },
+    [saveValues]
+  );
 
   /**
    * Validar un campo individual
    */
-  const validateField = useCallback((fieldName: string, value: any): string | null => {
-    const field = combinedFields.find(f => f.name === fieldName);
-    if (!field) return null;
+  const validateField = useCallback(
+    (fieldName: string, value: any): string | null => {
+      const field = combinedFields.find((f) => f.name === fieldName);
+      if (!field) return null;
 
-    // Validación requerida
-    if (field.validation?.required && (value === null || value === undefined || value === '')) {
-      return `${field.label} es requerido`;
-    }
-
-    // Validaciones por tipo
-    if (field.validation) {
-      const validation = field.validation;
-
-      // Validación de longitud mínima
-      if (validation.minLength !== undefined && typeof value === 'string' && value.length < validation.minLength) {
-        return `${field.label} debe tener al menos ${validation.minLength} caracteres`;
+      // Validación requerida
+      if (field.validation?.required && (value === null || value === undefined || value === '')) {
+        return `${field.label} es requerido`;
       }
 
-      // Validación de longitud máxima
-      if (validation.maxLength !== undefined && typeof value === 'string' && value.length > validation.maxLength) {
-        return `${field.label} no puede tener más de ${validation.maxLength} caracteres`;
-      }
+      // Validaciones por tipo
+      if (field.validation) {
+        const validation = field.validation;
 
-      // Validación de valor mínimo
-      if (validation.min !== undefined && typeof value === 'number' && value < validation.min) {
-        return `${field.label} debe ser mayor o igual a ${validation.min}`;
-      }
+        // Validación de longitud mínima
+        if (
+          validation.minLength !== undefined &&
+          typeof value === 'string' &&
+          value.length < validation.minLength
+        ) {
+          return `${field.label} debe tener al menos ${validation.minLength} caracteres`;
+        }
 
-      // Validación de valor máximo
-      if (validation.max !== undefined && typeof value === 'number' && value > validation.max) {
-        return `${field.label} debe ser menor o igual a ${validation.max}`;
-      }
+        // Validación de longitud máxima
+        if (
+          validation.maxLength !== undefined &&
+          typeof value === 'string' &&
+          value.length > validation.maxLength
+        ) {
+          return `${field.label} no puede tener más de ${validation.maxLength} caracteres`;
+        }
 
-      // Validación de patrón
-      if (validation.pattern && typeof value === 'string') {
-        const regex = new RegExp(validation.pattern);
-        if (!regex.test(value)) {
-          return validation.customMessage || `${field.label} no tiene el formato correcto`;
+        // Validación de valor mínimo
+        if (validation.min !== undefined && typeof value === 'number' && value < validation.min) {
+          return `${field.label} debe ser mayor o igual a ${validation.min}`;
+        }
+
+        // Validación de valor máximo
+        if (validation.max !== undefined && typeof value === 'number' && value > validation.max) {
+          return `${field.label} debe ser menor o igual a ${validation.max}`;
+        }
+
+        // Validación de patrón
+        if (validation.pattern && typeof value === 'string') {
+          const regex = new RegExp(validation.pattern);
+          if (!regex.test(value)) {
+            return validation.customMessage || `${field.label} no tiene el formato correcto`;
+          }
         }
       }
-    }
 
-    return null;
-  }, [combinedFields]);
+      return null;
+    },
+    [combinedFields]
+  );
 
   /**
    * Validar todos los campos
    */
-  const validateAll = useCallback((values: Record<string, any>): Record<string, string> => {
-    const errors: Record<string, string> = {};
+  const validateAll = useCallback(
+    (values: Record<string, any>): Record<string, string> => {
+      const errors: Record<string, string> = {};
 
-    combinedFields.forEach(field => {
-      const error = validateField(field.name, values[field.name]);
-      if (error) {
-        errors[field.name] = error;
-      }
-    });
+      combinedFields.forEach((field) => {
+        const error = validateField(field.name, values[field.name]);
+        if (error) {
+          errors[field.name] = error;
+        }
+      });
 
-    return errors;
-  }, [combinedFields, validateField]);
+      return errors;
+    },
+    [combinedFields, validateField]
+  );
 
   // Cargar valores iniciales
   useEffect(() => {
@@ -217,6 +236,6 @@ export function useDynamicFields(userTypeId?: string, userId?: string) {
       loadFieldValues();
       userTypeFields.refresh();
       personalFields.refresh();
-    }
+    },
   };
 }

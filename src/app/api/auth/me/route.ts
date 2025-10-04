@@ -1,11 +1,11 @@
 /**
  * API para configuración del usuario - /Auth/me
- * SignoSST Web Frontend - Next.js TypeScript
+ * Platform Web Frontend - Next.js TypeScript
  * Redirige las peticiones al backend real
  */
 
-import { NextRequest, NextResponse } from 'next/server';
 import { getToken } from 'next-auth/jwt';
+import { NextRequest, NextResponse } from 'next/server';
 
 import { Agent } from 'https';
 
@@ -28,7 +28,10 @@ export async function GET(request: NextRequest) {
     }
 
     // Para usuarios OAuth (Google, Facebook, etc.), devolver información del token
-    if (!token.accessToken || (typeof token.accessToken === 'string' && token.accessToken.startsWith('oauth-temp-'))) {
+    if (
+      !token.accessToken ||
+      (typeof token.accessToken === 'string' && token.accessToken.startsWith('oauth-temp-'))
+    ) {
       return NextResponse.json({
         success: true,
         data: {

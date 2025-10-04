@@ -1,8 +1,8 @@
 import { ApiResponse, backendApiService } from '@/modules/shared/services/api';
 import {
-    CreateUserPersonalFieldDto,
-    UpdateUserPersonalFieldDto,
-    UserPersonalField
+  CreateUserPersonalFieldDto,
+  UpdateUserPersonalFieldDto,
+  UserPersonalField,
 } from '@/modules/shared/types/dynamic-fields';
 
 /**
@@ -27,14 +27,14 @@ export class UserPersonalFieldsService {
       return {
         success: true,
         data: response,
-        message: 'Campos personales obtenidos exitosamente'
+        message: 'Campos personales obtenidos exitosamente',
       };
     } catch (error) {
       console.error('Error fetching user personal fields:', error);
       return {
         success: false,
         data: [],
-        message: 'Error al obtener los campos personales del usuario'
+        message: 'Error al obtener los campos personales del usuario',
       };
     }
   }
@@ -42,7 +42,9 @@ export class UserPersonalFieldsService {
   /**
    * Get a specific personal field by ID
    */
-  static async getPersonalFieldById(fieldId: string): Promise<ApiResponse<UserPersonalField | null>> {
+  static async getPersonalFieldById(
+    fieldId: string
+  ): Promise<ApiResponse<UserPersonalField | null>> {
     try {
       const response = await backendApiService.get<UserPersonalField>(
         `${this.BASE_URL}/${fieldId}`
@@ -51,14 +53,14 @@ export class UserPersonalFieldsService {
       return {
         success: true,
         data: response,
-        message: 'Campo personal obtenido exitosamente'
+        message: 'Campo personal obtenido exitosamente',
       };
     } catch (error) {
       console.error('Error fetching personal field:', error);
       return {
         success: false,
         data: null,
-        message: 'Error al obtener el campo personal'
+        message: 'Error al obtener el campo personal',
       };
     }
   }
@@ -78,14 +80,14 @@ export class UserPersonalFieldsService {
       return {
         success: true,
         data: response,
-        message: 'Campo personal creado exitosamente'
+        message: 'Campo personal creado exitosamente',
       };
     } catch (error) {
       console.error('Error creating personal field:', error);
       return {
         success: false,
         data: null,
-        message: 'Error al crear el campo personal'
+        message: 'Error al crear el campo personal',
       };
     }
   }
@@ -106,14 +108,14 @@ export class UserPersonalFieldsService {
       return {
         success: true,
         data: null,
-        message: 'Campo personal actualizado exitosamente'
+        message: 'Campo personal actualizado exitosamente',
       };
     } catch (error) {
       console.error('Error updating personal field:', error);
       return {
         success: false,
         data: null,
-        message: 'Error al actualizar el campo personal'
+        message: 'Error al actualizar el campo personal',
       };
     }
   }
@@ -128,14 +130,14 @@ export class UserPersonalFieldsService {
       return {
         success: true,
         data: true,
-        message: 'Campo personal eliminado exitosamente'
+        message: 'Campo personal eliminado exitosamente',
       };
     } catch (error) {
       console.error('Error deleting personal field:', error);
       return {
         success: false,
         data: false,
-        message: 'Error al eliminar el campo personal'
+        message: 'Error al eliminar el campo personal',
       };
     }
   }
@@ -152,25 +154,22 @@ export class UserPersonalFieldsService {
       const payload = {
         userId,
         fieldName,
-        value: JSON.stringify(value)
+        value: JSON.stringify(value),
       };
 
-      await backendApiService.post(
-        `${this.BASE_URL}/save-value`,
-        payload
-      );
+      await backendApiService.post(`${this.BASE_URL}/save-value`, payload);
 
       return {
         success: true,
         data: true,
-        message: 'Valor del campo guardado exitosamente'
+        message: 'Valor del campo guardado exitosamente',
       };
     } catch (error) {
       console.error('Error saving field value:', error);
       return {
         success: false,
         data: false,
-        message: 'Error al guardar el valor del campo'
+        message: 'Error al guardar el valor del campo',
       };
     }
   }
@@ -187,14 +186,14 @@ export class UserPersonalFieldsService {
       return {
         success: true,
         data: response || {},
-        message: 'Valores de campos obtenidos exitosamente'
+        message: 'Valores de campos obtenidos exitosamente',
       };
     } catch (error) {
       console.error('Error fetching user field values:', error);
       return {
         success: false,
         data: {},
-        message: 'Error al obtener los valores de los campos'
+        message: 'Error al obtener los valores de los campos',
       };
     }
   }
@@ -209,25 +208,22 @@ export class UserPersonalFieldsService {
     try {
       const payload = {
         userId,
-        values: fieldValues
+        values: fieldValues,
       };
 
-      await backendApiService.post(
-        `${this.BASE_URL}/save-multiple-values`,
-        payload
-      );
+      await backendApiService.post(`${this.BASE_URL}/save-multiple-values`, payload);
 
       return {
         success: true,
         data: true,
-        message: 'Valores de campos guardados exitosamente'
+        message: 'Valores de campos guardados exitosamente',
       };
     } catch (error) {
       console.error('Error saving multiple field values:', error);
       return {
         success: false,
         data: false,
-        message: 'Error al guardar los valores de los campos'
+        message: 'Error al guardar los valores de los campos',
       };
     }
   }
@@ -242,25 +238,22 @@ export class UserPersonalFieldsService {
     try {
       const payload = {
         sourceUserId,
-        targetUserId
+        targetUserId,
       };
 
-      await backendApiService.post(
-        `${this.BASE_URL}/clone`,
-        payload
-      );
+      await backendApiService.post(`${this.BASE_URL}/clone`, payload);
 
       return {
         success: true,
         data: true,
-        message: 'Campos personales clonados exitosamente'
+        message: 'Campos personales clonados exitosamente',
       };
     } catch (error) {
       console.error('Error cloning personal fields:', error);
       return {
         success: false,
         data: false,
-        message: 'Error al clonar los campos personales'
+        message: 'Error al clonar los campos personales',
       };
     }
   }
@@ -275,14 +268,14 @@ export class UserPersonalFieldsService {
       return {
         success: true,
         data: true,
-        message: 'Campos personales reiniciados exitosamente'
+        message: 'Campos personales reiniciados exitosamente',
       };
     } catch (error) {
       console.error('Error resetting personal fields:', error);
       return {
         success: false,
         data: false,
-        message: 'Error al reiniciar los campos personales'
+        message: 'Error al reiniciar los campos personales',
       };
     }
   }

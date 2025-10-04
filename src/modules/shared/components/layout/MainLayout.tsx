@@ -6,67 +6,67 @@ import { useEnhancedUser } from '@/modules/shared/hooks/useEnhancedUser';
 import { useNetworkStatus } from '@/modules/shared/hooks/useNetworkStatus';
 import { NavigationItem } from '@/modules/shared/types/auth';
 import {
-    AccountCircle,
-    AccountTree,
-    AddBusiness,
-    Analytics,
-    Article,
-    Assessment,
-    AssignmentInd,
-    BarChart,
-    Build,
-    Business,
-    CalendarMonth,
-    ChevronLeft,
-    ChevronRight,
-    Dashboard,
-    Description,
-    DeveloperBoard,
-    Drafts,
-    Engineering,
-    EventAvailable,
-    ExpandLess,
-    ExpandMore,
-    GroupAdd,
-    Hub,
-    Info,
-    LibraryBooks,
-    Logout,
-    Menu as MenuIcon,
-    NavigateNext,
-    Notifications,
-    People,
-    School,
-    Security,
-    Settings,
-    Store,
-    VerifiedUser,
-    Work,
+  AccountCircle,
+  AccountTree,
+  AddBusiness,
+  Analytics,
+  Article,
+  Assessment,
+  AssignmentInd,
+  BarChart,
+  Build,
+  Business,
+  CalendarMonth,
+  ChevronLeft,
+  ChevronRight,
+  Dashboard,
+  Description,
+  DeveloperBoard,
+  Drafts,
+  Engineering,
+  EventAvailable,
+  ExpandLess,
+  ExpandMore,
+  GroupAdd,
+  Hub,
+  Info,
+  LibraryBooks,
+  Logout,
+  Menu as MenuIcon,
+  NavigateNext,
+  Notifications,
+  People,
+  School,
+  Security,
+  Settings,
+  Store,
+  VerifiedUser,
+  Work,
 } from '@mui/icons-material';
 import {
-    AppBar,
-    Avatar,
-    Badge,
-    Box,
-    Breadcrumbs,
-    Chip,
-    CircularProgress,
-    Divider,
-    Drawer,
-    IconButton,
-    Link,
-    List,
-    ListItem,
-    ListItemButton,
-    ListItemIcon,
-    ListItemText,
-    Menu,
-    MenuItem,
-    Toolbar,
-    Tooltip,
-    Typography,
-    useMediaQuery,
-    useTheme,
+  AppBar,
+  Avatar,
+  Badge,
+  Box,
+  Breadcrumbs,
+  Chip,
+  CircularProgress,
+  Divider,
+  Drawer,
+  IconButton,
+  Link,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+  Toolbar,
+  Tooltip,
+  Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import { usePathname, useRouter } from 'next/navigation';
 import React, { ReactNode, useState } from 'react';
@@ -684,7 +684,6 @@ export default function MainLayout({ children }: MainLayoutProps) {
                       {user.displayUserType ? `Tipo Usuario: ${user.displayUserType}` : 'Usuario'}
                     </Typography>
                   </Box>
-
                 </Box>
 
                 {/* OPCIÓN 2: Layout compacto para pantallas medianas */}
@@ -721,14 +720,11 @@ export default function MainLayout({ children }: MainLayoutProps) {
                       {user.displayUserType ? `Tipo Usuario: ${user.displayUserType}` : 'Usuario'}
                     </Typography>
                   </Box>
-
                 </Box>
 
                 {/* Avatar con foto de perfil */}
                 <Tooltip
-                  title={
-                    `${getDisplayName()}${user.displayUserType ? ` (${user.displayUserType})` : ''} - Ver perfil`
-                  }
+                  title={`${getDisplayName()}${user.displayUserType ? ` (${user.displayUserType})` : ''} - Ver perfil`}
                 >
                   <IconButton
                     onClick={handleUserMenuOpen}
@@ -833,7 +829,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
                       '@keyframes pulse': {
                         '0%': { opacity: 1 },
                         '50%': { opacity: 0.5 },
-                        '100%': { opacity: 1 }
+                        '100%': { opacity: 1 },
                       },
                       animation: 'pulse 2s infinite',
                     }}
@@ -1007,10 +1003,12 @@ export default function MainLayout({ children }: MainLayoutProps) {
         )}
 
         {/* Opciones del menú */}
-        <MenuItem onClick={() => {
-          handleUserMenuClose();
-          window.location.href = '/profile';
-        }}>
+        <MenuItem
+          onClick={() => {
+            handleUserMenuClose();
+            window.location.href = '/profile';
+          }}
+        >
           <ListItemIcon>
             <AccountCircle fontSize="small" />
           </ListItemIcon>

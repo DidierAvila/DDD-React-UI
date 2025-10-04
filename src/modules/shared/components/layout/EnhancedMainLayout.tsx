@@ -6,21 +6,17 @@
 
 'use client';
 
+import { Menu as MenuIcon, NavigateNext, Notifications } from '@mui/icons-material';
 import {
-    Menu as MenuIcon,
-    NavigateNext,
-    Notifications,
-} from '@mui/icons-material';
-import {
-    AppBar,
-    Box,
-    Breadcrumbs,
-    IconButton,
-    Link,
-    Toolbar,
-    Typography,
-    useMediaQuery,
-    useTheme,
+  AppBar,
+  Box,
+  Breadcrumbs,
+  IconButton,
+  Link,
+  Toolbar,
+  Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import { usePathname } from 'next/navigation';
 import React from 'react';
@@ -56,7 +52,7 @@ export function EnhancedMainLayout({ children }: EnhancedMainLayoutProps) {
   const generateBreadcrumbs = () => {
     const pathSegments = pathname.split('/').filter(Boolean);
     const breadcrumbs: { label: string; href?: string }[] = [
-      { label: 'Inicio', href: '/dashboard' }
+      { label: 'Inicio', href: '/dashboard' },
     ];
 
     let currentPath = '';
@@ -66,7 +62,7 @@ export function EnhancedMainLayout({ children }: EnhancedMainLayoutProps) {
       const isLast = index === pathSegments.length - 1;
       breadcrumbs.push({
         label,
-        ...(isLast ? {} : { href: currentPath })
+        ...(isLast ? {} : { href: currentPath }),
       });
     });
 
@@ -112,14 +108,9 @@ export function EnhancedMainLayout({ children }: EnhancedMainLayoutProps) {
                 aria-label="breadcrumb"
                 sx={{ color: 'text.secondary' }}
               >
-                {breadcrumbs.map((crumb, index) => (
+                {breadcrumbs.map((crumb, index) =>
                   crumb.href ? (
-                    <Link
-                      key={index}
-                      underline="hover"
-                      color="inherit"
-                      href={crumb.href}
-                    >
+                    <Link key={index} underline="hover" color="inherit" href={crumb.href}>
                       {crumb.label}
                     </Link>
                   ) : (
@@ -127,7 +118,7 @@ export function EnhancedMainLayout({ children }: EnhancedMainLayoutProps) {
                       {crumb.label}
                     </Typography>
                   )
-                ))}
+                )}
               </Breadcrumbs>
             </Box>
           )}
@@ -158,7 +149,7 @@ export function EnhancedMainLayout({ children }: EnhancedMainLayoutProps) {
             bgcolor: 'info.light',
             color: 'info.contrastText',
             p: 1,
-            fontSize: '0.75rem'
+            fontSize: '0.75rem',
           }}
         >
           <Typography variant="caption">
@@ -184,7 +175,7 @@ export function EnhancedMainLayout({ children }: EnhancedMainLayoutProps) {
           borderTop: '1px solid',
           borderColor: 'divider',
           p: 2,
-          mt: 'auto'
+          mt: 'auto',
         }}
       >
         <Typography variant="body2" color="text.secondary" align="center">

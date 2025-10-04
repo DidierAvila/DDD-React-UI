@@ -2,45 +2,44 @@
 
 /**
  * Página principal de reportes - Usuarios por Tipo
- * SignoSST Web Frontend - Next.js TypeScript
+ * Platform Web Frontend - Next.js TypeScript
  */
 
-import React, { useState, useEffect } from 'react';
 import {
-  Box,
-  Container,
-  Typography,
+  Assessment as AssessmentIcon,
+  ExpandMore as ExpandMoreIcon,
+  Person as PersonIcon,
+} from '@mui/icons-material';
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Alert,
-  Grid,
+  Avatar,
+  Box,
   Card,
   CardContent,
+  Chip,
+  CircularProgress,
+  Container,
+  Paper,
+  Skeleton,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
-  Chip,
-  Avatar,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  CircularProgress,
-  Skeleton
+  Typography,
 } from '@mui/material';
-import {
-  ExpandMore as ExpandMoreIcon,
-  Person as PersonIcon,
-  Assessment as AssessmentIcon
-} from '@mui/icons-material';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import React, { useEffect, useState } from 'react';
 
+import { ReportsService } from '@/modules/reports/services/reportsService';
+import { ReportUser, UsersByTypeFilters, UsersByTypeReportDto } from '@/modules/reports/types';
 import { PieChart } from './charts';
 import ReportFilters from './ReportFilters';
-import { UsersByTypeReportDto, UsersByTypeFilters, ReportUser } from '@/modules/reports/types';
-import { ReportsService } from '@/modules/reports/services/reportsService';
 
 const UsersByTypeReport: React.FC = () => {
   const [reportData, setReportData] = useState<UsersByTypeReportDto | null>(null);
@@ -57,7 +56,7 @@ const UsersByTypeReport: React.FC = () => {
     try {
       setLoading(true);
       setError(null);
-      
+
       const data = await ReportsService.getUsersByTypeReport(appliedFilters);
       setReportData(data);
     } catch (err) {
@@ -124,38 +123,38 @@ const UsersByTypeReport: React.FC = () => {
 
       {/* Loading skeleton */}
       {loading && !reportData && (
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={6}>
+        <Box display="flex" gap={3} flexWrap="wrap">
+          <Box flex={1} minWidth={300}>
             <Skeleton variant="rectangular" height={400} />
-          </Grid>
-          <Grid item xs={12} md={6}>
+          </Box>
+          <Box flex={1} minWidth={300}>
             <Skeleton variant="rectangular" height={400} />
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
       )}
 
       {/* Contenido del reporte */}
       {reportData && (
         <>
           {/* Resumen y gráfico */}
-          <Grid container spacing={3} mb={3}>
+          <Box display="flex" gap={3} mb={3} flexWrap="wrap">
             {/* Gráfico circular */}
-            <Grid item xs={12} lg={8}>
+            <Box flex={2} minWidth={400}>
               <PieChart
                 data={reportData.pieChartData}
                 title="Distribución de Usuarios por Tipo"
                 showLegend={true}
               />
-            </Grid>
+            </Box>
 
             {/* Resumen estadístico */}
-            <Grid item xs={12} lg={4}>
+            <Box flex={1} minWidth={300}>
               <Card elevation={2}>
                 <CardContent>
                   <Typography variant="h6" gutterBottom>
                     Resumen Estadístico
                   </Typography>
-                  
+
                   <Box mb={2}>
                     <Typography variant="h3" color="primary.main" fontWeight="bold">
                       {reportData.totalUsers}
@@ -178,14 +177,12 @@ const UsersByTypeReport: React.FC = () => {
                     <Typography variant="body2" color="text.secondary">
                       Generado el:
                     </Typography>
-                    <Typography variant="body2">
-                      {formatDate(reportData.generatedAt)}
-                    </Typography>
+                    <Typography variant="body2">{formatDate(reportData.generatedAt)}</Typography>
                   </Box>
                 </CardContent>
               </Card>
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
 
           {/* Detalles por tipo de usuario */}
           <Typography variant="h5" gutterBottom sx={{ mt: 4, mb: 2 }}>
@@ -208,7 +205,7 @@ const UsersByTypeReport: React.FC = () => {
                   />
                 </Box>
               </AccordionSummary>
-              
+
               <AccordionDetails>
                 <TableContainer component={Paper} variant="outlined">
                   <Table size="small">
@@ -236,9 +233,7 @@ const UsersByTypeReport: React.FC = () => {
                             <Typography variant="body2">{user.email}</Typography>
                           </TableCell>
                           <TableCell>
-                            <Typography variant="body2">
-                              {formatDate(user.createdAt)}
-                            </Typography>
+                            <Typography variant="body2">{formatDate(user.createdAt)}</Typography>
                           </TableCell>
                           <TableCell>
                             <Typography variant="body2">
@@ -263,7 +258,7 @@ const UsersByTypeReport: React.FC = () => {
           ))}
         </>
       )}
-      
+
       {/* Loading overlay */}
       {loading && reportData && (
         <Box

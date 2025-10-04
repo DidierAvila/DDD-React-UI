@@ -1,6 +1,6 @@
 /**
  * Tipos para la respuesta del servicio /api/Auth/me
- * SignoSST Web Frontend - Next.js TypeScript
+ * Platform Web Frontend - Next.js TypeScript
  */
 
 export interface User {
