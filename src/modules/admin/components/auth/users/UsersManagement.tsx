@@ -1,62 +1,88 @@
 'use client';
 
 import {
-  User as ServiceUser,
-  UpdateUserData,
-  usersService,
+    User as ServiceUser,
+    UpdateUserData,
+    usersService,
 } from '@/modules/admin/services/usersService';
 import { useApiAuth } from '@/modules/shared/hooks/useApiAuth';
 import {
-  Cancel,
-  CheckCircle,
-  Delete,
-  Edit,
-  Email,
-  FilterList,
-  MoreVert,
-  PersonAdd,
-  Phone,
-  Search,
-  Visibility,
+    Cancel,
+    CheckCircle,
+    Delete,
+    Edit,
+    Email,
+    FilterList,
+    MoreVert,
+    PersonAdd,
+    Phone,
+    Search,
+    Visibility
 } from '@mui/icons-material';
 import {
-  Alert,
-  Avatar,
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Chip,
-  CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  FormControl,
-  FormControlLabel,
-  FormHelperText,
-  Grid,
-  IconButton,
-  InputAdornment,
-  InputLabel,
-  Menu,
-  MenuItem,
-  Pagination,
-  Paper,
-  Select,
-  Switch,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TextField,
-  Tooltip,
-  Typography,
+    Alert,
+    Avatar,
+    Box,
+    Button,
+    Card,
+    CardContent,
+    Chip,
+    CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    FormControl,
+    FormControlLabel,
+    FormHelperText,
+    Grid,
+    IconButton,
+    InputAdornment,
+    InputLabel,
+    Menu,
+    MenuItem,
+    Pagination,
+    Paper,
+    Select,
+    Switch,
+    Tab,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Tabs,
+    TextField,
+    Tooltip,
+    Typography,
 } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
+import { UserFieldsManager } from './UserFieldsManager';
+
+// Componente TabPanel para manejar contenido de tabs
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`user-tabpanel-${index}`}
+      aria-labelledby={`user-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+    </div>
+  );
+}
 
 // Usar el tipo del servicio y mapear los estados
 type User = ServiceUser & {
@@ -109,6 +135,9 @@ const UsersManagement: React.FC = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [dialogMode, setDialogMode] = useState<'create' | 'edit' | 'view'>('create');
+
+  // Estados para el diálogo con pestañas
+  const [dialogTab, setDialogTab] = useState(0);
   const [formData, setFormData] = useState<UserFormData>({
     name: '',
     email: '',
@@ -131,6 +160,8 @@ const UsersManagement: React.FC = () => {
   const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
   const [userCreatedSuccessfully, setUserCreatedSuccessfully] = useState(false);
   const statuses = ['Activo', 'Inactivo'];
+
+
 
   // Cargar usuarios del backend
   useEffect(() => {
@@ -481,6 +512,11 @@ const UsersManagement: React.FC = () => {
     setSelectedUser(null);
   };
 
+  // Manejador para cambio de tabs en el modal
+  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    setDialogTab(newValue);
+  };
+
   const handleOpenDialog = async (mode: 'create' | 'edit' | 'view', user?: User) => {
     setDialogMode(mode);
     setFormErrors({}); // Limpiar errores de validación
@@ -692,6 +728,7 @@ const UsersManagement: React.FC = () => {
         },
       });
     }
+    setDialogTab(0); // Reset to first tab
     setOpenDialog(true);
     setAnchorEl(null); // Solo cerrar el menú, no limpiar selectedUser
   };
@@ -705,6 +742,7 @@ const UsersManagement: React.FC = () => {
     setOpenDialog(false);
     setSelectedUser(null);
     setUserCreatedSuccessfully(false); // Resetear el estado para la próxima vez
+    setDialogTab(0); // Reset to first tab
   };
 
   const validateForm = (): boolean => {
@@ -790,14 +828,15 @@ const UsersManagement: React.FC = () => {
         Gestiona los usuarios del sistema, sus roles y permisos de acceso.
       </Alert>
 
-      {/* Mostrar errores */}
-      {error && (
-        <Alert severity="error" sx={{ mb: 3 }} onClose={() => setError(null)}>
-          {error}
-        </Alert>
-      )}
 
-      {/* Filtros y búsqueda */}
+          {/* Mostrar errores */}
+          {error && (
+            <Alert severity="error" sx={{ mb: 3 }} onClose={() => setError(null)}>
+              {error}
+            </Alert>
+          )}
+
+          {/* Filtros y búsqueda */}
       <Card sx={{ mb: 3 }}>
         <CardContent>
           <Grid container spacing={2} alignItems="center">
@@ -1058,19 +1097,28 @@ const UsersManagement: React.FC = () => {
         <MenuItem onClick={() => handleOpenDialog('edit', selectedUser!)}>
           <Edit sx={{ mr: 1 }} /> Editar
         </MenuItem>
+
         <MenuItem onClick={handleOpenDeleteDialog} sx={{ color: 'error.main' }}>
           <Delete sx={{ mr: 1 }} /> Eliminar
         </MenuItem>
       </Menu>
 
       {/* Dialog para crear/editar/ver usuario */}
-      <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="md" fullWidth>
+      <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="lg" fullWidth>
         <DialogTitle>
           {dialogMode === 'create' && 'Nuevo Usuario'}
           {dialogMode === 'edit' && 'Editar Usuario'}
           {dialogMode === 'view' && 'Detalles del Usuario'}
         </DialogTitle>
-        <DialogContent>
+        <DialogContent sx={{ p: 0 }}>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Tabs value={dialogTab} onChange={handleTabChange} aria-label="user configuration tabs">
+              <Tab label="Información General" />
+              <Tab label="Campos Dinámicos" disabled={dialogMode === 'create'} />
+            </Tabs>
+          </Box>
+
+          <TabPanel value={dialogTab} index={0}>
           <Grid container spacing={2} sx={{ mt: 1 }}>
             <Grid size={{ xs: 12, md: 6 }}>
               <TextField
@@ -1258,68 +1306,14 @@ const UsersManagement: React.FC = () => {
                 )}
               </Box>
             </Grid>
-
-            {/* Campos adicionales */}
-            <Grid size={12}>
-              <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>
-                Información Adicional (Opcional)
-              </Typography>
-            </Grid>
-            <Grid size={{ xs: 12, md: 4 }}>
-              <TextField
-                fullWidth
-                label="Información Adicional 1"
-                value={formData.additionalData.additionalProp1}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    additionalData: {
-                      ...formData.additionalData,
-                      additionalProp1: e.target.value,
-                    },
-                  })
-                }
-                disabled={dialogMode === 'view'}
-                placeholder="Departamento, área, etc."
-              />
-            </Grid>
-            <Grid size={{ xs: 12, md: 4 }}>
-              <TextField
-                fullWidth
-                label="Información Adicional 2"
-                value={formData.additionalData.additionalProp2}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    additionalData: {
-                      ...formData.additionalData,
-                      additionalProp2: e.target.value,
-                    },
-                  })
-                }
-                disabled={dialogMode === 'view'}
-                placeholder="Cargo, posición, etc."
-              />
-            </Grid>
-            <Grid size={{ xs: 12, md: 4 }}>
-              <TextField
-                fullWidth
-                label="Información Adicional 3"
-                value={formData.additionalData.additionalProp3}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    additionalData: {
-                      ...formData.additionalData,
-                      additionalProp3: e.target.value,
-                    },
-                  })
-                }
-                disabled={dialogMode === 'view'}
-                placeholder="Notas, observaciones, etc."
-              />
-            </Grid>
           </Grid>
+          </TabPanel>
+
+          <TabPanel value={dialogTab} index={1}>
+            {selectedUser && (
+              <UserFieldsManager userId={selectedUser.id} />
+            )}
+          </TabPanel>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog}>Cancelar</Button>

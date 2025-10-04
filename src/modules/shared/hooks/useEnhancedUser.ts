@@ -271,7 +271,7 @@ export function useEnhancedUser(): UseEnhancedUserReturn {
 
         try {
           console.log('🔄 Cargando configuración del usuario desde /me...');
-          const data = await AuthPermissionService.getCurrentUserConfiguration();
+          const data = await AuthPermissionService.getCurrentUserConfiguration(session?.accessToken);
           setMeData(data);
           setConnectionFailed(false);
           setRetryCount(0);

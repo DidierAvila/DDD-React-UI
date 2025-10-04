@@ -6,8 +6,8 @@
 
 import { usePathname } from 'next/navigation';
 import { ReactNode } from 'react';
-import MainLayout from './MainLayout';
 import UserConfigLoader from '../auth/UserConfigLoader';
+import MainLayout from './MainLayout';
 
 interface ConditionalLayoutProps {
   children: ReactNode;

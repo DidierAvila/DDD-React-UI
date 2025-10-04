@@ -7,27 +7,29 @@
 'use client';
 
 import {
-    Email as EmailIcon,
-    Logout as LogoutIcon,
-    Person as PersonIcon,
-    Refresh as RefreshIcon,
-    Settings as SettingsIcon
+  AccountCircle as AccountCircleIcon,
+  Email as EmailIcon,
+  Logout as LogoutIcon,
+  Person as PersonIcon,
+  Refresh as RefreshIcon,
+  Settings as SettingsIcon
 } from '@mui/icons-material';
 import {
-    Avatar,
-    Box,
-    Chip,
-    Divider,
-    IconButton,
-    ListItemIcon,
-    ListItemText,
-    Menu,
-    MenuItem,
-    Skeleton,
-    Tooltip,
-    Typography,
+  Avatar,
+  Box,
+  Chip,
+  Divider,
+  IconButton,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+  Skeleton,
+  Tooltip,
+  Typography,
 } from '@mui/material';
 import { signOut } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 import { useEnhancedUser } from '../../hooks/useEnhancedUser';
 
@@ -51,6 +53,7 @@ export function UserBanner({
   showRefresh = false,
   className,
 }: UserBannerProps) {
+  const router = useRouter();
   const {
     user,
     isLoading,
@@ -79,6 +82,17 @@ export function UserBanner({
     await signOut({ callbackUrl: '/auth/signin' });
   };
 
+  const handleProfile = () => {
+    handleMenuClose();
+    router.push('/profile');
+  };  // Helper para validar URLs de avatar
+  const getValidAvatarSrc = (avatarUrl: string | undefined) => {
+    if (!avatarUrl) return undefined;
+    if (avatarUrl.includes('default.jpg')) return undefined;
+    if (avatarUrl.startsWith('http')) return avatarUrl;
+    return undefined;
+  };
+
   const handleRefresh = async () => {
     handleMenuClose();
     await refreshUserData();
@@ -102,9 +116,12 @@ export function UserBanner({
     return (
       <Box className={className}>
         <Tooltip title={`${displayName} (${displayEmail})`}>
-          <IconButton onClick={showActions ? handleMenuClick : undefined} size="small">
+          <IconButton 
+            onClick={showActions ? handleMenuClick : undefined} 
+            size="small"
+          >
             <Avatar
-              src={user.avatar}
+              src={getValidAvatarSrc(user.avatar)}
               sx={{ width: 32, height: 32, fontSize: '0.875rem' }}
             >
               {initials}
@@ -118,6 +135,7 @@ export function UserBanner({
             open={menuOpen}
             onClose={handleMenuClose}
             onLogout={handleLogout}
+            onProfile={handleProfile}
             onRefresh={showRefresh ? handleRefresh : undefined}
             user={user}
             meLoading={meLoading}
@@ -141,7 +159,7 @@ export function UserBanner({
         }}
       >
         <Avatar
-          src={user.avatar}
+          src={getValidAvatarSrc(user.avatar)}
           onClick={showActions ? handleMenuClick : undefined}
           sx={{
             width: 64,
@@ -196,6 +214,7 @@ export function UserBanner({
             open={menuOpen}
             onClose={handleMenuClose}
             onLogout={handleLogout}
+            onProfile={handleProfile}
             onRefresh={showRefresh ? handleRefresh : undefined}
             user={user}
             meLoading={meLoading}
@@ -216,7 +235,7 @@ export function UserBanner({
       }}
     >
       <Avatar
-        src={user.avatar}
+        src={getValidAvatarSrc(user.avatar)}
         onClick={showActions ? handleMenuClick : undefined}
         sx={{
           width: 40,
@@ -275,6 +294,7 @@ export function UserBanner({
           open={menuOpen}
           onClose={handleMenuClose}
           onLogout={handleLogout}
+          onProfile={handleProfile}
           onRefresh={showRefresh ? handleRefresh : undefined}
           user={user}
           meLoading={meLoading}
@@ -323,6 +343,7 @@ interface UserBannerMenuProps {
   open: boolean;
   onClose: () => void;
   onLogout: () => void;
+  onProfile: () => void;
   onRefresh?: () => void;
   user: any;
   meLoading: boolean;
@@ -333,6 +354,7 @@ function UserBannerMenu({
   open,
   onClose,
   onLogout,
+  onProfile,
   onRefresh,
   user,
   meLoading,
@@ -342,7 +364,6 @@ function UserBannerMenu({
       anchorEl={anchorEl}
       open={open}
       onClose={onClose}
-      onClick={onClose}
       transformOrigin={{ horizontal: 'right', vertical: 'top' }}
       anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
     >
@@ -364,6 +385,13 @@ function UserBannerMenu({
       </MenuItem>
 
       <Divider />
+
+      <MenuItem onClick={onProfile}>
+        <ListItemIcon>
+          <AccountCircleIcon fontSize="small" />
+        </ListItemIcon>
+        <ListItemText primary="Mi perfil" />
+      </MenuItem>
 
       <MenuItem onClick={onClose}>
         <ListItemIcon>

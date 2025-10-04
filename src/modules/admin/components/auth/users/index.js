@@ -3,6 +3,8 @@
  * SignoSST Web Frontend
  */
 
+export { UserFieldForm } from './UserFieldForm';
+export { UserFieldsManager } from './UserFieldsManager';
 export { default as UsersList } from './UsersList';
 export { default as UsersManagement } from './UsersManagement';
 

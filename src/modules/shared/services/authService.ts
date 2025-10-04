@@ -3,8 +3,8 @@
  * SignoSST Web Frontend - Next.js TypeScript
  */
 
-import { api } from './api';
-import { UserConfigurationResponse, UserConfigurationData } from '../types/auth';
+import { UserConfigurationData, UserConfigurationResponse } from '../types/auth';
+import { backendApiService } from './api';
 
 // Tipos para elementos de navegación
 interface NavigationItem {
@@ -17,10 +17,16 @@ interface NavigationItem {
 export class AuthPermissionService {
   /**
    * Obtiene la configuración del usuario actual
+   * @param token - Token de autenticación
    * @returns Promise con la configuración del usuario
    */
-  static async getCurrentUserConfiguration(): Promise<UserConfigurationData> {
-    const response = await api.get<UserConfigurationResponse>('/Api/Auth/me');
+  static async getCurrentUserConfiguration(token?: string): Promise<UserConfigurationData> {
+    // Configurar el token si se proporciona
+    if (token) {
+      backendApiService.setAuthToken(token);
+    }
+
+    const response = await backendApiService.get<UserConfigurationResponse>('/Api/Auth/me');
     return response.data;
   }
 
@@ -81,6 +87,23 @@ export class AuthPermissionService {
       }
       return true; // Si no tiene permisos definidos, permitir acceso
     });
+  }
+
+  /**
+   * Actualiza el perfil del usuario actual
+   * @param profileData - Datos del perfil a actualizar
+   * @returns Promise con la respuesta del servidor
+   */
+  static async updateUserProfile(profileData: {
+    email: string;
+    name: string;
+    image?: string;
+    phone?: string;
+    userTypeId: string;
+    address?: string;
+    additionalData?: Record<string, any>;
+  }) {
+    return backendApiService.put('/Api/Auth/me/update', profileData);
   }
 }
 
