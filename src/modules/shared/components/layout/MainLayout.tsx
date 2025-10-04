@@ -1007,7 +1007,10 @@ export default function MainLayout({ children }: MainLayoutProps) {
         )}
 
         {/* Opciones del menú */}
-        <MenuItem onClick={handleUserMenuClose}>
+        <MenuItem onClick={() => {
+          handleUserMenuClose();
+          window.location.href = '/profile';
+        }}>
           <ListItemIcon>
             <AccountCircle fontSize="small" />
           </ListItemIcon>

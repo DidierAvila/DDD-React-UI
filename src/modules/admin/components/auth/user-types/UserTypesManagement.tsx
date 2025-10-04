@@ -1,63 +1,89 @@
 'use client';
 
 import {
-  UserType as ServiceUserType,
-  UserTypeFilters,
-  userTypesService,
+    UserType as ServiceUserType,
+    UserTypeFilters,
+    userTypesService,
 } from '@/modules/admin/services/userTypesService';
 import { useApiAuth } from '@/modules/shared/hooks/useApiAuth';
 import { useSnackbar } from 'notistack';
+import { UserTypeFieldsManager } from './UserTypeFieldsManager';
+
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`user-type-tabpanel-${index}`}
+      aria-labelledby={`user-type-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+    </div>
+  );
+}
+
 import {
-  AdminPanelSettings,
-  Assignment,
-  Business,
-  Cancel,
-  CheckCircle,
-  Delete,
-  Edit,
-  FilterList,
-  Group,
-  MoreVert,
-  People,
-  PersonAdd,
-  Search,
-  Security,
-  Shield,
-  SupervisorAccount,
-  Visibility,
+    AdminPanelSettings,
+    Assignment,
+    Business,
+    Cancel,
+    CheckCircle,
+    Delete,
+    Edit,
+    FilterList,
+    Group,
+    MoreVert,
+    People,
+    PersonAdd,
+    Search,
+    Security,
+    Shield,
+    SupervisorAccount,
+    Visibility,
 } from '@mui/icons-material';
 import {
-  Alert,
-  Avatar,
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Chip,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  FormControl,
-  FormControlLabel,
-  GridLegacy as Grid,
-  IconButton,
-  InputAdornment,
-  InputLabel,
-  Menu,
-  MenuItem,
-  Pagination,
-  Select,
-  Switch,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TextField,
-  Tooltip,
-  Typography,
+    Alert,
+    Avatar,
+    Box,
+    Button,
+    Card,
+    CardContent,
+    Chip,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    FormControl,
+    FormControlLabel,
+    GridLegacy as Grid,
+    IconButton,
+    InputAdornment,
+    InputLabel,
+    Menu,
+    MenuItem,
+    Pagination,
+    Select,
+    Switch,
+    Tab,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Tabs,
+    TextField,
+    Tooltip,
+    Typography,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
@@ -77,6 +103,7 @@ type UserType = Omit<ServiceUserType, 'status'> & {
   portalConfig?: PortalConfig;
   userCount?: number;
   isDefault?: boolean;
+  additionalConfig?: Record<string, any>;
 };
 
 interface UserTypeFormData {
@@ -85,6 +112,7 @@ interface UserTypeFormData {
   portalConfig: PortalConfig;
   status: 'Activo' | 'Inactivo';
   isDefault: boolean;
+  additionalConfig?: Record<string, any>;
 }
 
 const UserTypesManagement: React.FC = () => {
@@ -105,6 +133,10 @@ const UserTypesManagement: React.FC = () => {
   const [rowsPerPage] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
+
+  // Estados para el diálogo con pestañas
+  const [dialogTab, setDialogTab] = useState(0);
+  const [selectedUserTypeForFields, setSelectedUserTypeForFields] = useState<UserType | null>(null);
 
   // Función para cargar tipos de usuario
   const loadUserTypes = async () => {
@@ -181,6 +213,7 @@ const UserTypesManagement: React.FC = () => {
     },
     status: 'Activo',
     isDefault: false,
+    additionalConfig: {},
   });
 
   const themes = ['default', 'admin', 'supervisor', 'consultant', 'client', 'auditor', 'guest'];
@@ -207,6 +240,7 @@ const UserTypesManagement: React.FC = () => {
 
   const handleOpenDialog = (mode: 'create' | 'edit' | 'view', userType?: UserType) => {
     setDialogMode(mode);
+    setDialogTab(0); // Reset to first tab
     if (userType) {
       setFormData({
         name: userType.name,
@@ -218,8 +252,10 @@ const UserTypesManagement: React.FC = () => {
         },
         status: userType.status,
         isDefault: userType.isDefault || false,
+        additionalConfig: userType.additionalConfig || {},
       });
       setSelectedUserType(userType);
+      setSelectedUserTypeForFields(userType);
     } else {
       setFormData({
         name: '',
@@ -231,8 +267,10 @@ const UserTypesManagement: React.FC = () => {
         },
         status: 'Activo',
         isDefault: false,
+        additionalConfig: {},
       });
       setSelectedUserType(null);
+      setSelectedUserTypeForFields(null);
     }
     setOpenDialog(true);
     // Solo cerrar el menú, no limpiar selectedUserType
@@ -242,7 +280,23 @@ const UserTypesManagement: React.FC = () => {
   const handleCloseDialog = () => {
     setOpenDialog(false);
     setSelectedUserType(null);
+    setSelectedUserTypeForFields(null);
+    setDialogTab(0);
     setError(null); // Limpiar errores al cerrar
+  };
+
+  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    setDialogTab(newValue);
+  };
+
+  const handleDynamicFieldsUpdate = (updatedFields: Record<string, any>) => {
+    setFormData(prev => ({
+      ...prev,
+      additionalConfig: {
+        ...prev.additionalConfig,
+        dynamicFields: updatedFields
+      }
+    }));
   };
 
   const handleSaveUserType = async () => {
@@ -255,6 +309,7 @@ const UserTypesManagement: React.FC = () => {
         name: formData.name.trim(),
         description: formData.description.trim(),
         status: formData.status === 'Activo', // Convertir string a boolean
+        additionalConfig: formData.additionalConfig || {},
       };
 
       if (dialogMode === 'create') {
@@ -569,170 +624,185 @@ const UserTypesManagement: React.FC = () => {
           {dialogMode === 'edit' && 'Editar Tipo de Usuario'}
           {dialogMode === 'view' && 'Detalles del Tipo de Usuario'}
         </DialogTitle>
-        <DialogContent>
-          <Grid container spacing={3} sx={{ mt: 1 }}>
-            <Grid item xs={12} md={6} component="div">
-              <Typography variant="h6" gutterBottom>
-                Información General
-              </Typography>
-              <TextField
-                fullWidth
-                label="Nombre del tipo de usuario"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                disabled={dialogMode === 'view'}
-                sx={{ mb: 2 }}
-              />
-              <TextField
-                fullWidth
-                label="Descripción"
-                multiline
-                rows={3}
-                value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                disabled={dialogMode === 'view'}
-                sx={{ mb: 2 }}
-              />
-              <FormControl fullWidth sx={{ mb: 2 }} disabled={dialogMode === 'view'}>
-                <InputLabel>Estado</InputLabel>
-                <Select
-                  value={formData.status}
-                  label="Estado"
-                  onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
-                >
-                  {statuses.map((status) => (
-                    <MenuItem key={status} value={status}>
-                      {status}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={formData.isDefault}
-                    onChange={(e) => setFormData({ ...formData, isDefault: e.target.checked })}
-                    disabled={dialogMode === 'view'}
-                  />
-                }
-                label="Tipo de usuario por defecto"
-              />
+        <DialogContent sx={{ p: 0 }}>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Tabs value={dialogTab} onChange={handleTabChange} aria-label="user type configuration tabs">
+              <Tab label="Información General" />
+              <Tab label="Campos Dinámicos" disabled={dialogMode === 'create'} />
+            </Tabs>
+          </Box>
+
+          <TabPanel value={dialogTab} index={0}>
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={6} component="div">
+                <Typography variant="h6" gutterBottom>
+                  Información General
+                </Typography>
+                <TextField
+                  fullWidth
+                  label="Nombre del tipo de usuario"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  disabled={dialogMode === 'view'}
+                  sx={{ mb: 2 }}
+                />
+                <TextField
+                  fullWidth
+                  label="Descripción"
+                  multiline
+                  rows={3}
+                  value={formData.description}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  disabled={dialogMode === 'view'}
+                  sx={{ mb: 2 }}
+                />
+                <FormControl fullWidth sx={{ mb: 2 }} disabled={dialogMode === 'view'}>
+                  <InputLabel>Estado</InputLabel>
+                  <Select
+                    value={formData.status}
+                    label="Estado"
+                    onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
+                  >
+                    {statuses.map((status) => (
+                      <MenuItem key={status} value={status}>
+                        {status}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={formData.isDefault}
+                      onChange={(e) => setFormData({ ...formData, isDefault: e.target.checked })}
+                      disabled={dialogMode === 'view'}
+                    />
+                  }
+                  label="Tipo de usuario por defecto"
+                />
+              </Grid>
+              <Grid item xs={12} md={6} component="div">
+                <Typography variant="h6" gutterBottom>
+                  Configuración del Portal
+                </Typography>
+                <FormControl fullWidth sx={{ mb: 2 }} disabled={dialogMode === 'view'}>
+                  <InputLabel>Tema</InputLabel>
+                  <Select
+                    value={formData.portalConfig.theme}
+                    label="Tema"
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        portalConfig: { ...formData.portalConfig, theme: e.target.value },
+                      })
+                    }
+                  >
+                    {themes.map((theme) => (
+                      <MenuItem key={theme} value={theme}>
+                        <Box display="flex" alignItems="center">
+                          <Box
+                            sx={{
+                              width: 16,
+                              height: 16,
+                              bgcolor: getThemeColor(theme),
+                              borderRadius: '50%',
+                              mr: 1,
+                            }}
+                          />
+                          {theme.charAt(0).toUpperCase() + theme.slice(1)}
+                        </Box>
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <FormControl fullWidth sx={{ mb: 2 }} disabled={dialogMode === 'view'}>
+                  <InputLabel>Página de inicio</InputLabel>
+                  <Select
+                    value={formData.portalConfig.defaultLandingPage}
+                    label="Página de inicio"
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        portalConfig: {
+                          ...formData.portalConfig,
+                          defaultLandingPage: e.target.value,
+                        },
+                      })
+                    }
+                  >
+                    {landingPages.map((page) => (
+                      <MenuItem key={page} value={page}>
+                        {page}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <FormControl fullWidth sx={{ mb: 2 }} disabled={dialogMode === 'view'}>
+                  <InputLabel>Idioma</InputLabel>
+                  <Select
+                    value={formData.portalConfig.language}
+                    label="Idioma"
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        portalConfig: { ...formData.portalConfig, language: e.target.value },
+                      })
+                    }
+                  >
+                    {languages.map((lang) => (
+                      <MenuItem key={lang} value={lang}>
+                        {lang.toUpperCase()}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <TextField
+                  fullWidth
+                  label="Etiqueta personalizada (opcional)"
+                  value={formData.portalConfig.customLabel || ''}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      portalConfig: { ...formData.portalConfig, customLabel: e.target.value },
+                    })
+                  }
+                  disabled={dialogMode === 'view'}
+                  sx={{ mb: 2 }}
+                />
+                <TextField
+                  fullWidth
+                  label="Icono personalizado (opcional)"
+                  value={formData.portalConfig.customIcon || ''}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      portalConfig: { ...formData.portalConfig, customIcon: e.target.value },
+                    })
+                  }
+                  disabled={dialogMode === 'view'}
+                  sx={{ mb: 2 }}
+                />
+                <TextField
+                  fullWidth
+                  label="URL del logo (opcional)"
+                  value={formData.portalConfig.logoUrl || ''}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      portalConfig: { ...formData.portalConfig, logoUrl: e.target.value },
+                    })
+                  }
+                  disabled={dialogMode === 'view'}
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={12} md={6} component="div">
-              <Typography variant="h6" gutterBottom>
-                Configuración del Portal
-              </Typography>
-              <FormControl fullWidth sx={{ mb: 2 }} disabled={dialogMode === 'view'}>
-                <InputLabel>Tema</InputLabel>
-                <Select
-                  value={formData.portalConfig.theme}
-                  label="Tema"
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      portalConfig: { ...formData.portalConfig, theme: e.target.value },
-                    })
-                  }
-                >
-                  {themes.map((theme) => (
-                    <MenuItem key={theme} value={theme}>
-                      <Box display="flex" alignItems="center">
-                        <Box
-                          sx={{
-                            width: 16,
-                            height: 16,
-                            bgcolor: getThemeColor(theme),
-                            borderRadius: '50%',
-                            mr: 1,
-                          }}
-                        />
-                        {theme.charAt(0).toUpperCase() + theme.slice(1)}
-                      </Box>
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <FormControl fullWidth sx={{ mb: 2 }} disabled={dialogMode === 'view'}>
-                <InputLabel>Página de inicio</InputLabel>
-                <Select
-                  value={formData.portalConfig.defaultLandingPage}
-                  label="Página de inicio"
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      portalConfig: {
-                        ...formData.portalConfig,
-                        defaultLandingPage: e.target.value,
-                      },
-                    })
-                  }
-                >
-                  {landingPages.map((page) => (
-                    <MenuItem key={page} value={page}>
-                      {page}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <FormControl fullWidth sx={{ mb: 2 }} disabled={dialogMode === 'view'}>
-                <InputLabel>Idioma</InputLabel>
-                <Select
-                  value={formData.portalConfig.language}
-                  label="Idioma"
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      portalConfig: { ...formData.portalConfig, language: e.target.value },
-                    })
-                  }
-                >
-                  {languages.map((lang) => (
-                    <MenuItem key={lang} value={lang}>
-                      {lang.toUpperCase()}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <TextField
-                fullWidth
-                label="Etiqueta personalizada (opcional)"
-                value={formData.portalConfig.customLabel || ''}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    portalConfig: { ...formData.portalConfig, customLabel: e.target.value },
-                  })
-                }
-                disabled={dialogMode === 'view'}
-                sx={{ mb: 2 }}
-              />
-              <TextField
-                fullWidth
-                label="Icono personalizado (opcional)"
-                value={formData.portalConfig.customIcon || ''}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    portalConfig: { ...formData.portalConfig, customIcon: e.target.value },
-                  })
-                }
-                disabled={dialogMode === 'view'}
-                sx={{ mb: 2 }}
-              />
-              <TextField
-                fullWidth
-                label="URL del logo (opcional)"
-                value={formData.portalConfig.logoUrl || ''}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    portalConfig: { ...formData.portalConfig, logoUrl: e.target.value },
-                  })
-                }
-                disabled={dialogMode === 'view'}
-              />
-            </Grid>
-          </Grid>
+          </TabPanel>
+
+          <TabPanel value={dialogTab} index={1}>
+            {selectedUserTypeForFields && (
+              <UserTypeFieldsManager userTypeId={selectedUserTypeForFields.id} />
+            )}
+          </TabPanel>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog} disabled={loading}>

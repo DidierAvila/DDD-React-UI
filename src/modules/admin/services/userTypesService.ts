@@ -11,6 +11,15 @@ export interface UserType {
   name: string;
   description: string;
   status: boolean;
+  theme?: string;
+  defaultLandingPage?: string;
+  logoUrl?: string;
+  language?: string;
+  additionalConfig?: {
+    navigation?: any[];
+    dynamicFields?: any[]; // Aquí almacenaremos los campos dinámicos
+    [key: string]: any;
+  };
   createdAt: string;
   updatedAt?: string;
 }
@@ -57,8 +66,8 @@ export class UserTypesService {
    * Obtener un tipo de usuario por ID
    */
   async getById(id: string | number): Promise<UserType> {
-    const response = await backendApiService.get<{ data: UserType }>(`/Api/Auth/UserTypes/${id}`);
-    return response.data;
+    const response = await backendApiService.get<UserType>(`/Api/Auth/UserTypes/${id}`);
+    return response;
   }
 
   /**

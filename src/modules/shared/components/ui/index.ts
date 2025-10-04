@@ -7,3 +7,9 @@ export * from './LazyComponents';
 export * from './UserBanner';
 // export * from './NetworkStatus';
 // export * from './PWAInstallPrompt';
+
+// Dynamic fields components
+export * from './DynamicFieldRenderer';
+export * from './DynamicForm';
+export * from './UserDynamicFieldsForm';
+
