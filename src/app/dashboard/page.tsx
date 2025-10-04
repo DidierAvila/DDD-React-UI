@@ -3,14 +3,14 @@ import { useUser } from '@/modules/shared/contexts/UserContext';
 import { useAuth } from '@/modules/shared/hooks/useAuth';
 import { Assessment, Business, People, Warning } from '@mui/icons-material';
 import {
-  Alert,
-  Box,
-  Card,
-  CardContent,
-  Chip,
-  CircularProgress,
-  Paper,
-  Typography,
+    Alert,
+    Box,
+    Card,
+    CardContent,
+    Chip,
+    CircularProgress,
+    Paper,
+    Typography,
 } from '@mui/material';
 import React, { useEffect } from 'react';
 
