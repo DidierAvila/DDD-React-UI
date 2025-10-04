@@ -116,8 +116,8 @@ export function UserBanner({
     return (
       <Box className={className}>
         <Tooltip title={`${displayName} (${displayEmail})`}>
-          <IconButton 
-            onClick={showActions ? handleMenuClick : undefined} 
+          <IconButton
+            onClick={showActions ? handleMenuClick : undefined}
             size="small"
           >
             <Avatar

@@ -1,9 +1,9 @@
 'use client';
 
-import { usersService } from '@/modules/admin/services/usersService';
 import { UserFieldsService } from '@/modules/admin/services/UserFieldsService';
-import { AuthPermissionService } from '@/modules/shared/services/authService';
+import { usersService } from '@/modules/admin/services/usersService';
 import { useEnhancedUser } from '@/modules/shared/hooks/useEnhancedUser';
+import { AuthPermissionService } from '@/modules/shared/services/authService';
 import { UserField } from '@/modules/shared/types/dynamic-fields';
 import {
     AccountCircle as AccountCircleIcon,
