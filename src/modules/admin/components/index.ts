@@ -15,4 +15,3 @@ export * from './auth/permissions';
 
 // User Types components
 export * from './auth/user-types';
-

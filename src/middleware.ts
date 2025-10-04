@@ -1,5 +1,5 @@
 /**
- * Middleware de Autenticación - SignoSST Web
+ * Middleware de Autenticación - Platform Web
  * Protege rutas y maneja redirecciones automáticas
  */
 

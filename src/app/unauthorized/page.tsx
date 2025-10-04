@@ -1,11 +1,11 @@
 /**
- * Página de Usuario No Autorizado - SignoSST Web Frontend
+ * Página de Usuario No Autorizado - Platform Web Frontend
  */
 'use client';
 
+import { Home, Lock, Login } from '@mui/icons-material';
+import { Alert, Box, Button, CardContent, Container, Paper, Typography } from '@mui/material';
 import { useRouter } from 'next/navigation';
-import { Box, CardContent, Typography, Button, Container, Alert, Paper } from '@mui/material';
-import { Lock, Home, Login } from '@mui/icons-material';
 
 export default function UnauthorizedPage() {
   const router = useRouter();

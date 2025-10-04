@@ -33,11 +33,12 @@ export const userTypesService = {
 
       // Validar que cada elemento tenga la estructura esperada
       const validUserTypes = response.filter((userType: any) => {
-        const isValid = userType &&
-                       typeof userType.value === 'string' &&
-                       typeof userType.label === 'string' &&
-                       userType.value.trim() !== '' &&
-                       userType.label.trim() !== '';
+        const isValid =
+          userType &&
+          typeof userType.value === 'string' &&
+          typeof userType.label === 'string' &&
+          userType.value.trim() !== '' &&
+          userType.label.trim() !== '';
 
         if (!isValid) {
           console.warn('⚠️ Tipo de usuario con formato inválido filtrado:', userType);
@@ -48,7 +49,6 @@ export const userTypesService = {
 
       console.log(`✅ ${validUserTypes.length} tipos de usuario cargados exitosamente`);
       return validUserTypes;
-
     } catch (error) {
       console.error('❌ Error al cargar tipos de usuario:', error);
 
@@ -67,12 +67,13 @@ export const userTypesService = {
    * @param typeName - Nombre del tipo a buscar (ej: "Proveedor")
    * @returns Tipo de usuario encontrado o null
    */
-  findUserTypeByName: (userTypes: UserTypeDropdown[], typeName: string): UserTypeDropdown | null => {
+  findUserTypeByName: (
+    userTypes: UserTypeDropdown[],
+    typeName: string
+  ): UserTypeDropdown | null => {
     const searchTerm = typeName.toLowerCase().trim();
 
-    return userTypes.find(userType =>
-      userType.label.toLowerCase().includes(searchTerm)
-    ) || null;
+    return userTypes.find((userType) => userType.label.toLowerCase().includes(searchTerm)) || null;
   },
 
   /**
@@ -82,10 +83,8 @@ export const userTypesService = {
    * @returns Tipo de usuario encontrado o null
    */
   getUserTypeById: (userTypes: UserTypeDropdown[], userTypeId: string): UserTypeDropdown | null => {
-    return userTypes.find(userType => userType.value === userTypeId) || null;
+    return userTypes.find((userType) => userType.value === userTypeId) || null;
   },
-
-
 };
 
 export default userTypesService;

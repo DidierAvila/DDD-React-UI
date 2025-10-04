@@ -17,7 +17,7 @@ export class ServicesService {
   private async getHeaders(): Promise<Record<string, string>> {
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
-      'Accept': 'application/json',
+      Accept: 'application/json',
     };
 
     try {
@@ -25,7 +25,9 @@ export class ServicesService {
       console.log('🔑 Sesión obtenida:', {
         hasSession: !!session,
         hasAccessToken: !!session?.accessToken,
-        tokenPreview: session?.accessToken ? `${session.accessToken.substring(0, 20)}...` : 'No token'
+        tokenPreview: session?.accessToken
+          ? `${session.accessToken.substring(0, 20)}...`
+          : 'No token',
       });
 
       if (session?.accessToken) {
@@ -40,7 +42,9 @@ export class ServicesService {
 
     console.log('📤 Headers que se enviarán:', {
       ...headers,
-      Authorization: headers.Authorization ? `Bearer ${headers.Authorization.substring(7, 27)}...` : 'No Authorization header'
+      Authorization: headers.Authorization
+        ? `Bearer ${headers.Authorization.substring(7, 27)}...`
+        : 'No Authorization header',
     });
 
     return headers;
@@ -59,7 +63,7 @@ export class ServicesService {
       console.error('📋 Estado de la sesión:', {
         hasSession: !!session,
         hasAccessToken: !!session?.accessToken,
-        sessionKeys: session ? Object.keys(session) : 'No session'
+        sessionKeys: session ? Object.keys(session) : 'No session',
       });
     }
 
@@ -77,7 +81,7 @@ export class ServicesService {
     console.error('❌ Error en petición:', {
       status: response.status,
       statusText: response.statusText,
-      message: errorMessage
+      message: errorMessage,
     });
 
     const error = new Error(errorMessage);
@@ -119,7 +123,7 @@ export class ServicesService {
       console.log('📡 Realizando fetch con:', {
         method: 'GET',
         url,
-        hasAuthHeader: !!headers.Authorization
+        hasAuthHeader: !!headers.Authorization,
       });
 
       const response = await fetch(url, {
@@ -130,7 +134,7 @@ export class ServicesService {
       console.log('📬 Respuesta recibida:', {
         status: response.status,
         statusText: response.statusText,
-        ok: response.ok
+        ok: response.ok,
       });
 
       if (!response.ok) {
@@ -158,7 +162,7 @@ export class ServicesService {
         method: 'GET',
         url,
         serviceId: id,
-        hasAuthHeader: !!(headers as Record<string, string>).Authorization
+        hasAuthHeader: !!(headers as Record<string, string>).Authorization,
       });
 
       const response = await fetch(url, {
@@ -169,7 +173,7 @@ export class ServicesService {
       console.log('📬 Respuesta getById:', {
         status: response.status,
         statusText: response.statusText,
-        ok: response.ok
+        ok: response.ok,
       });
 
       if (!response.ok) {
@@ -224,7 +228,7 @@ export class ServicesService {
         url,
         serviceId: id,
         data: serviceData,
-        hasAuthHeader: !!(headers as Record<string, string>).Authorization
+        hasAuthHeader: !!(headers as Record<string, string>).Authorization,
       });
 
       const response = await fetch(url, {
@@ -236,7 +240,7 @@ export class ServicesService {
       console.log('📬 Respuesta de actualización:', {
         status: response.status,
         statusText: response.statusText,
-        ok: response.ok
+        ok: response.ok,
       });
 
       if (!response.ok) {

@@ -6,18 +6,13 @@
 'use client';
 
 import {
-    ToggleOn as ActiveIcon,
-    Delete as DeleteIcon,
-    Edit as EditIcon,
-    ToggleOff as InactiveIcon,
-    Visibility as ViewIcon,
+  ToggleOn as ActiveIcon,
+  Delete as DeleteIcon,
+  Edit as EditIcon,
+  ToggleOff as InactiveIcon,
+  Visibility as ViewIcon,
 } from '@mui/icons-material';
-import {
-    Box,
-    Chip,
-    Tooltip,
-    Typography
-} from '@mui/material';
+import { Box, Chip, Tooltip, Typography } from '@mui/material';
 import { DataGrid, GridActionsCellItem, GridColDef, GridPaginationModel } from '@mui/x-data-grid';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -38,12 +33,7 @@ interface ServicesListProps {
   };
 }
 
-export function ServicesList({
-  onEdit,
-  onView,
-  refreshTrigger,
-  filters,
-}: ServicesListProps) {
+export function ServicesList({ onEdit, onView, refreshTrigger, filters }: ServicesListProps) {
   const [services, setServices] = useState<ServiceGridRow[]>([]);
   const [loading, setLoading] = useState(false);
   const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
@@ -190,11 +180,7 @@ export function ServicesList({
       width: 120,
       renderCell: (params) => {
         const date = new Date(params.value);
-        return (
-          <Typography variant="body2">
-            {date.toLocaleDateString('es-CO')}
-          </Typography>
-        );
+        return <Typography variant="body2">{date.toLocaleDateString('es-CO')}</Typography>;
       },
     },
     {

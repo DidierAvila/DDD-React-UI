@@ -2,17 +2,17 @@
 
 import { UserTypeFieldsManager } from '@/modules/admin/components/auth/user-types';
 import {
-    Alert,
-    AlertTitle,
-    Box,
-    Container,
-    FormControl,
-    InputLabel,
-    MenuItem,
-    Paper,
-    Select,
-    SelectChangeEvent,
-    Typography,
+  Alert,
+  AlertTitle,
+  Box,
+  Container,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  SelectChangeEvent,
+  Typography,
 } from '@mui/material';
 import { useState } from 'react';
 
@@ -41,7 +41,7 @@ export default function DynamicFieldsPage() {
     { id: '22222222-2222-2222-2222-222222222222', name: 'Usuario Regular' },
     { id: '33333333-3333-3333-3333-333333333333', name: 'Moderador' },
     { id: '44444444-4444-4444-4444-444444444444', name: 'Cliente Premium' },
-    { id: '55555555-5555-5555-5555-555555555555', name: 'Proveedor' }
+    { id: '55555555-5555-5555-5555-555555555555', name: 'Proveedor' },
   ];
 
   return (
@@ -58,8 +58,9 @@ export default function DynamicFieldsPage() {
       <Paper elevation={2} sx={{ p: 3, mb: 3 }}>
         <Alert severity="info" sx={{ mb: 3 }}>
           <AlertTitle>Información sobre Campos Dinámicos</AlertTitle>
-          Los campos dinámicos permiten personalizar la información recopilada para cada tipo de usuario.
-          Los campos definidos aquí se aplicarán automáticamente a todos los usuarios del tipo correspondiente.
+          Los campos dinámicos permiten personalizar la información recopilada para cada tipo de
+          usuario. Los campos definidos aquí se aplicarán automáticamente a todos los usuarios del
+          tipo correspondiente.
         </Alert>
 
         <Box sx={{ mb: 3 }}>

@@ -1,61 +1,61 @@
 'use client';
 
 import {
-    User as ServiceUser,
-    UpdateUserData,
-    usersService,
+  User as ServiceUser,
+  UpdateUserData,
+  usersService,
 } from '@/modules/admin/services/usersService';
 import { useApiAuth } from '@/modules/shared/hooks/useApiAuth';
 import {
-    Cancel,
-    CheckCircle,
-    Delete,
-    Edit,
-    Email,
-    FilterList,
-    MoreVert,
-    PersonAdd,
-    Phone,
-    Search,
-    Visibility
+  Cancel,
+  CheckCircle,
+  Delete,
+  Edit,
+  Email,
+  FilterList,
+  MoreVert,
+  PersonAdd,
+  Phone,
+  Search,
+  Visibility,
 } from '@mui/icons-material';
 import {
-    Alert,
-    Avatar,
-    Box,
-    Button,
-    Card,
-    CardContent,
-    Chip,
-    CircularProgress,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    FormControl,
-    FormControlLabel,
-    FormHelperText,
-    Grid,
-    IconButton,
-    InputAdornment,
-    InputLabel,
-    Menu,
-    MenuItem,
-    Pagination,
-    Paper,
-    Select,
-    Switch,
-    Tab,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Tabs,
-    TextField,
-    Tooltip,
-    Typography,
+  Alert,
+  Avatar,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Chip,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  FormControl,
+  FormControlLabel,
+  FormHelperText,
+  Grid,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  Menu,
+  MenuItem,
+  Pagination,
+  Paper,
+  Select,
+  Switch,
+  Tab,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Tabs,
+  TextField,
+  Tooltip,
+  Typography,
 } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
@@ -160,8 +160,6 @@ const UsersManagement: React.FC = () => {
   const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
   const [userCreatedSuccessfully, setUserCreatedSuccessfully] = useState(false);
   const statuses = ['Activo', 'Inactivo'];
-
-
 
   // Cargar usuarios del backend
   useEffect(() => {
@@ -828,15 +826,14 @@ const UsersManagement: React.FC = () => {
         Gestiona los usuarios del sistema, sus roles y permisos de acceso.
       </Alert>
 
+      {/* Mostrar errores */}
+      {error && (
+        <Alert severity="error" sx={{ mb: 3 }} onClose={() => setError(null)}>
+          {error}
+        </Alert>
+      )}
 
-          {/* Mostrar errores */}
-          {error && (
-            <Alert severity="error" sx={{ mb: 3 }} onClose={() => setError(null)}>
-              {error}
-            </Alert>
-          )}
-
-          {/* Filtros y búsqueda */}
+      {/* Filtros y búsqueda */}
       <Card sx={{ mb: 3 }}>
         <CardContent>
           <Grid container spacing={2} alignItems="center">
@@ -1119,200 +1116,200 @@ const UsersManagement: React.FC = () => {
           </Box>
 
           <TabPanel value={dialogTab} index={0}>
-          <Grid container spacing={2} sx={{ mt: 1 }}>
-            <Grid size={{ xs: 12, md: 6 }}>
-              <TextField
-                fullWidth
-                label="Nombre completo"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                disabled={dialogMode === 'view'}
-                error={!!formErrors.name}
-                helperText={formErrors.name}
-              />
-            </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
-              <TextField
-                fullWidth
-                label="Email"
-                type="email"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                disabled={dialogMode === 'view'}
-                error={!!formErrors.email}
-                helperText={formErrors.email}
-                autoComplete="off"
-                inputProps={{
-                  autoComplete: 'new-password', // Truco para deshabilitar autocompletado
-                }}
-              />
-            </Grid>
-            {dialogMode === 'create' && (
+            <Grid container spacing={2} sx={{ mt: 1 }}>
               <Grid size={{ xs: 12, md: 6 }}>
                 <TextField
                   fullWidth
-                  label="Contraseña"
-                  type="password"
-                  value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  error={!!formErrors.password}
-                  helperText={formErrors.password || 'Mínimo 6 caracteres'}
-                  autoComplete="new-password"
+                  label="Nombre completo"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  disabled={dialogMode === 'view'}
+                  error={!!formErrors.name}
+                  helperText={formErrors.name}
+                />
+              </Grid>
+              <Grid size={{ xs: 12, md: 6 }}>
+                <TextField
+                  fullWidth
+                  label="Email"
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  disabled={dialogMode === 'view'}
+                  error={!!formErrors.email}
+                  helperText={formErrors.email}
+                  autoComplete="off"
                   inputProps={{
-                    autoComplete: 'new-password',
+                    autoComplete: 'new-password', // Truco para deshabilitar autocompletado
                   }}
                 />
               </Grid>
-            )}
-            <Grid size={{ xs: 12, md: 6 }}>
-              <TextField
-                fullWidth
-                label="Teléfono"
-                value={formData.phone}
-                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                disabled={dialogMode === 'view'}
-              />
-            </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
-              <TextField
-                fullWidth
-                label="URL de Imagen"
-                value={formData.image}
-                onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                disabled={dialogMode === 'view'}
-                placeholder="https://ejemplo.com/imagen.jpg"
-              />
-            </Grid>
-            <Grid size={12}>
-              <TextField
-                fullWidth
-                label="Dirección"
-                value={formData.address}
-                onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                disabled={dialogMode === 'view'}
-              />
-            </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
-              <FormControl
-                fullWidth
-                disabled={dialogMode === 'view'}
-                error={!!formErrors.userTypeId}
-              >
-                <InputLabel>Tipo de Usuario</InputLabel>
-                <Select
-                  value={formData.userTypeId}
-                  label="Tipo de Usuario"
-                  onChange={(e) => setFormData({ ...formData, userTypeId: e.target.value })}
+              {dialogMode === 'create' && (
+                <Grid size={{ xs: 12, md: 6 }}>
+                  <TextField
+                    fullWidth
+                    label="Contraseña"
+                    type="password"
+                    value={formData.password}
+                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    error={!!formErrors.password}
+                    helperText={formErrors.password || 'Mínimo 6 caracteres'}
+                    autoComplete="new-password"
+                    inputProps={{
+                      autoComplete: 'new-password',
+                    }}
+                  />
+                </Grid>
+              )}
+              <Grid size={{ xs: 12, md: 6 }}>
+                <TextField
+                  fullWidth
+                  label="Teléfono"
+                  value={formData.phone}
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  disabled={dialogMode === 'view'}
+                />
+              </Grid>
+              <Grid size={{ xs: 12, md: 6 }}>
+                <TextField
+                  fullWidth
+                  label="URL de Imagen"
+                  value={formData.image}
+                  onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                  disabled={dialogMode === 'view'}
+                  placeholder="https://ejemplo.com/imagen.jpg"
+                />
+              </Grid>
+              <Grid size={12}>
+                <TextField
+                  fullWidth
+                  label="Dirección"
+                  value={formData.address}
+                  onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                  disabled={dialogMode === 'view'}
+                />
+              </Grid>
+              <Grid size={{ xs: 12, md: 6 }}>
+                <FormControl
+                  fullWidth
+                  disabled={dialogMode === 'view'}
+                  error={!!formErrors.userTypeId}
                 >
-                  {userTypes.map((userType) => (
-                    <MenuItem key={userType.id} value={userType.id}>
-                      {userType.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-                {formErrors.userTypeId && <FormHelperText>{formErrors.userTypeId}</FormHelperText>}
-              </FormControl>
-            </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
-              {dialogMode === 'view' ? (
-                <Box>
-                  <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-                    Roles
-                  </Typography>
-                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                    {formData.roleIds.length > 0 ? (
-                      formData.roleIds.map((roleId) => {
-                        const role = roles.find((r) => r.id === roleId);
-                        return role ? (
-                          <Chip
-                            key={roleId}
-                            label={role.name}
-                            variant="outlined"
-                            size="small"
-                            color="primary"
-                          />
-                        ) : null;
-                      })
-                    ) : (
-                      <Typography variant="body2" color="text.secondary" fontStyle="italic">
-                        Sin roles asignados
-                      </Typography>
-                    )}
-                  </Box>
-                </Box>
-              ) : (
-                <FormControl fullWidth error={!!formErrors.roleIds}>
-                  <InputLabel>Roles</InputLabel>
+                  <InputLabel>Tipo de Usuario</InputLabel>
                   <Select
-                    multiple
-                    value={formData.roleIds}
-                    label="Roles"
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        roleIds:
-                          typeof e.target.value === 'string'
-                            ? e.target.value.split(',')
-                            : e.target.value,
-                      })
-                    }
+                    value={formData.userTypeId}
+                    label="Tipo de Usuario"
+                    onChange={(e) => setFormData({ ...formData, userTypeId: e.target.value })}
                   >
-                    {roles.map((role) => (
-                      <MenuItem key={role.id} value={role.id}>
-                        {role.name}
+                    {userTypes.map((userType) => (
+                      <MenuItem key={userType.id} value={userType.id}>
+                        {userType.name}
                       </MenuItem>
                     ))}
                   </Select>
-                  {formErrors.roleIds && <FormHelperText>{formErrors.roleIds}</FormHelperText>}
+                  {formErrors.userTypeId && (
+                    <FormHelperText>{formErrors.userTypeId}</FormHelperText>
+                  )}
                 </FormControl>
-              )}
-            </Grid>
-            <Grid size={{ xs: 12, md: 6 }}>
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                <Typography variant="body1" sx={{ fontWeight: 500, color: 'text.secondary' }}>
-                  Estado del Usuario
-                </Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                  <FormControlLabel
-                    control={
-                      <Switch
-                        checked={formData.status}
-                        onChange={(e) => {
-                          if (dialogMode !== 'view') {
-                            setFormData({ ...formData, status: e.target.checked });
-                          }
-                        }}
-                        disabled={dialogMode === 'view'}
-                        color="success"
-                      />
-                    }
-                    label=""
-                  />
-                  <Chip
-                    label={formData.status ? 'Activo' : 'Inactivo'}
-                    color={formData.status ? 'success' : 'error'}
-                    variant="filled"
-                    icon={formData.status ? <CheckCircle /> : <Cancel />}
-                    sx={{
-                      fontWeight: 'medium',
-                      opacity: dialogMode === 'view' ? 0.7 : 1,
-                    }}
-                  />
-                </Box>
-                {dialogMode !== 'view' && (
-                  <Typography variant="caption" sx={{ color: 'text.secondary', mt: 0.5 }}>
-                    Usa el interruptor para cambiar entre Activo e Inactivo
-                  </Typography>
+              </Grid>
+              <Grid size={{ xs: 12, md: 6 }}>
+                {dialogMode === 'view' ? (
+                  <Box>
+                    <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+                      Roles
+                    </Typography>
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                      {formData.roleIds.length > 0 ? (
+                        formData.roleIds.map((roleId) => {
+                          const role = roles.find((r) => r.id === roleId);
+                          return role ? (
+                            <Chip
+                              key={roleId}
+                              label={role.name}
+                              variant="outlined"
+                              size="small"
+                              color="primary"
+                            />
+                          ) : null;
+                        })
+                      ) : (
+                        <Typography variant="body2" color="text.secondary" fontStyle="italic">
+                          Sin roles asignados
+                        </Typography>
+                      )}
+                    </Box>
+                  </Box>
+                ) : (
+                  <FormControl fullWidth error={!!formErrors.roleIds}>
+                    <InputLabel>Roles</InputLabel>
+                    <Select
+                      multiple
+                      value={formData.roleIds}
+                      label="Roles"
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          roleIds:
+                            typeof e.target.value === 'string'
+                              ? e.target.value.split(',')
+                              : e.target.value,
+                        })
+                      }
+                    >
+                      {roles.map((role) => (
+                        <MenuItem key={role.id} value={role.id}>
+                          {role.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {formErrors.roleIds && <FormHelperText>{formErrors.roleIds}</FormHelperText>}
+                  </FormControl>
                 )}
-              </Box>
+              </Grid>
+              <Grid size={{ xs: 12, md: 6 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                  <Typography variant="body1" sx={{ fontWeight: 500, color: 'text.secondary' }}>
+                    Estado del Usuario
+                  </Typography>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          checked={formData.status}
+                          onChange={(e) => {
+                            if (dialogMode !== 'view') {
+                              setFormData({ ...formData, status: e.target.checked });
+                            }
+                          }}
+                          disabled={dialogMode === 'view'}
+                          color="success"
+                        />
+                      }
+                      label=""
+                    />
+                    <Chip
+                      label={formData.status ? 'Activo' : 'Inactivo'}
+                      color={formData.status ? 'success' : 'error'}
+                      variant="filled"
+                      icon={formData.status ? <CheckCircle /> : <Cancel />}
+                      sx={{
+                        fontWeight: 'medium',
+                        opacity: dialogMode === 'view' ? 0.7 : 1,
+                      }}
+                    />
+                  </Box>
+                  {dialogMode !== 'view' && (
+                    <Typography variant="caption" sx={{ color: 'text.secondary', mt: 0.5 }}>
+                      Usa el interruptor para cambiar entre Activo e Inactivo
+                    </Typography>
+                  )}
+                </Box>
+              </Grid>
             </Grid>
-          </Grid>
           </TabPanel>
 
           <TabPanel value={dialogTab} index={1}>
-            {selectedUser && (
-              <UserFieldsManager userId={selectedUser.id} />
-            )}
+            {selectedUser && <UserFieldsManager userId={selectedUser.id} />}
           </TabPanel>
         </DialogContent>
         <DialogActions>

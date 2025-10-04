@@ -1,12 +1,12 @@
 /**
  * OptimizedImage Component - Componente de imagen optimizada
- * SignoSST Web Frontend - Next.js TypeScript
+ * Platform Web Frontend - Next.js TypeScript
  */
 
 'use client';
+import { Box, Skeleton } from '@mui/material';
 import Image, { ImageProps } from 'next/image';
 import { useState } from 'react';
-import { Box, Skeleton } from '@mui/material';
 
 interface OptimizedImageProps extends Omit<ImageProps, 'onLoad' | 'onError'> {
   fallbackSrc?: string;

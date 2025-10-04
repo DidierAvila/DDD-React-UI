@@ -1,36 +1,36 @@
 /**
- * Página de Prueba de Autenticación - SignoSST Web Frontend
+ * Página de Prueba de Autenticación - Platform Web Frontend
  */
 'use client';
 
-import { useSession, signOut } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
-  Button,
-  Container,
-  Avatar,
-  Chip,
-  Paper,
-  Divider,
-  Alert,
-  CircularProgress,
-} from '@mui/material';
-import {
-  Person,
-  Email,
-  Work,
-  Business,
   AdminPanelSettings,
+  Business,
+  Email,
+  ExitToApp,
+  Group,
+  Person,
+  Refresh,
   SupervisorAccount,
   Support,
-  Group,
-  ExitToApp,
-  Refresh,
+  Work,
 } from '@mui/icons-material';
+import {
+  Alert,
+  Avatar,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Chip,
+  CircularProgress,
+  Container,
+  Divider,
+  Paper,
+  Typography,
+} from '@mui/material';
+import { signOut, useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 export default function AuthTestPage() {
   const { data: session, status } = useSession();

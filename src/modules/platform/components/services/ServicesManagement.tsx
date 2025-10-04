@@ -45,7 +45,7 @@ import {
   TableRow,
   TextField,
   Tooltip,
-  Typography
+  Typography,
 } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -112,7 +112,11 @@ export function ServicesManagement() {
 
       setServices(servicesData);
       setTotalServices(response.totalRecords || servicesData.length || 0);
-      setTotalPages(response.totalPages || Math.ceil((response.totalRecords || servicesData.length) / rowsPerPage) || 1);
+      setTotalPages(
+        response.totalPages ||
+          Math.ceil((response.totalRecords || servicesData.length) / rowsPerPage) ||
+          1
+      );
     } catch (error) {
       console.error('Error cargando servicios:', error);
       setError('Error al cargar los servicios');
@@ -127,8 +131,6 @@ export function ServicesManagement() {
   useEffect(() => {
     loadServices();
   }, [loadServices]);
-
-
 
   // Manejar éxito en formulario
   const handleFormSuccess = useCallback(() => {
@@ -262,8 +264,10 @@ export function ServicesManagement() {
     const matchesSearch =
       searchTerm === '' ||
       service.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (service.description && service.description.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (service.supplierName && service.supplierName.toLowerCase().includes(searchTerm.toLowerCase()));
+      (service.description &&
+        service.description.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (service.supplierName &&
+        service.supplierName.toLowerCase().includes(searchTerm.toLowerCase()));
 
     const matchesStatus =
       statusFilter === 'Todos' ||
@@ -272,7 +276,8 @@ export function ServicesManagement() {
 
     const matchesSupplier =
       supplierFilter === '' ||
-      (service.supplierName && service.supplierName.toLowerCase().includes(supplierFilter.toLowerCase())) ||
+      (service.supplierName &&
+        service.supplierName.toLowerCase().includes(supplierFilter.toLowerCase())) ||
       service.supplierId.toLowerCase().includes(supplierFilter.toLowerCase());
 
     return matchesSearch && matchesStatus && matchesSupplier;
@@ -283,11 +288,7 @@ export function ServicesManagement() {
       {/* Título principal */}
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
         <Typography variant="h4">Gestión de Servicios</Typography>
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          onClick={handleCreate}
-        >
+        <Button variant="contained" startIcon={<AddIcon />} onClick={handleCreate}>
           Nuevo Servicio
         </Button>
       </Box>
@@ -307,7 +308,14 @@ export function ServicesManagement() {
       {/* Filtros y búsqueda */}
       <Card sx={{ mb: 3 }}>
         <CardContent>
-          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 2, alignItems: { md: 'center' } }}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: { xs: 'column', md: 'row' },
+              gap: 2,
+              alignItems: { md: 'center' },
+            }}
+          >
             <TextField
               placeholder="Buscar servicios..."
               value={searchTerm}
@@ -421,7 +429,7 @@ export function ServicesManagement() {
                         sx={{
                           overflow: 'hidden',
                           textOverflow: 'ellipsis',
-                          whiteSpace: 'nowrap'
+                          whiteSpace: 'nowrap',
                         }}
                       >
                         {service.description || 'Sin descripción'}
@@ -519,7 +527,7 @@ export function ServicesManagement() {
         maxWidth="md"
         fullWidth
         PaperProps={{
-          sx: { borderRadius: 2 }
+          sx: { borderRadius: 2 },
         }}
       >
         <DialogTitle sx={{ pb: 1 }}>
@@ -553,7 +561,14 @@ export function ServicesManagement() {
                 </Typography>
                 <Divider sx={{ mb: 2 }} />
 
-                <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 3, mb: 2 }}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: { xs: 'column', md: 'row' },
+                    gap: 3,
+                    mb: 2,
+                  }}
+                >
                   <Box sx={{ flex: 1 }}>
                     <Typography variant="subtitle2" color="textSecondary" gutterBottom>
                       Nombre del Servicio
@@ -699,7 +714,7 @@ export function ServicesManagement() {
                         month: 'long',
                         day: 'numeric',
                         hour: '2-digit',
-                        minute: '2-digit'
+                        minute: '2-digit',
                       })}
                     </Typography>
                   </Box>
@@ -715,7 +730,7 @@ export function ServicesManagement() {
                           month: 'long',
                           day: 'numeric',
                           hour: '2-digit',
-                          minute: '2-digit'
+                          minute: '2-digit',
                         })}
                       </Typography>
                     </Box>
@@ -724,9 +739,7 @@ export function ServicesManagement() {
               </Box>
             </Box>
           ) : (
-            <Typography color="error">
-              Error al cargar los detalles del servicio
-            </Typography>
+            <Typography color="error">Error al cargar los detalles del servicio</Typography>
           )}
         </DialogContent>
 

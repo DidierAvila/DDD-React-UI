@@ -1,31 +1,31 @@
 'use client';
 
 import {
-    DynamicFieldDefinition,
-    DynamicFieldsRenderConfig,
-    FieldSection
+  DynamicFieldDefinition,
+  DynamicFieldsRenderConfig,
+  FieldSection,
 } from '@/modules/shared/types/dynamic-fields';
 import {
-    ExpandMore as ExpandMoreIcon,
-    Refresh as RefreshIcon,
-    Save as SaveIcon,
-    Visibility as VisibilityIcon,
-    VisibilityOff as VisibilityOffIcon
+  ExpandMore as ExpandMoreIcon,
+  Refresh as RefreshIcon,
+  Save as SaveIcon,
+  Visibility as VisibilityIcon,
+  VisibilityOff as VisibilityOffIcon,
 } from '@mui/icons-material';
 import {
-    Accordion,
-    AccordionDetails,
-    AccordionSummary,
-    Alert,
-    Box,
-    Button,
-    Chip,
-    Divider,
-    IconButton,
-    Paper,
-    Stack,
-    Tooltip,
-    Typography
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Alert,
+  Box,
+  Button,
+  Chip,
+  Divider,
+  IconButton,
+  Paper,
+  Stack,
+  Tooltip,
+  Typography,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { DynamicFieldRenderer } from './DynamicFieldRenderer';
@@ -72,7 +72,7 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
   disabled = false,
   readOnly = false,
   showFieldMetadata = false,
-  className
+  className,
 }) => {
   const [visibleSections, setVisibleSections] = useState<Record<string, boolean>>({});
   const [showInactiveFields, setShowInactiveFields] = useState(false);
@@ -84,13 +84,13 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
     readOnly: false,
     showFieldOrder: false,
     groupBySection: false,
-    ...config?.renderConfig
+    ...config?.renderConfig,
   };
 
   const theme = config?.theme || 'default';
 
   // Filtrar campos según configuración
-  const visibleFields = fields.filter(field => {
+  const visibleFields = fields.filter((field) => {
     // Mostrar solo campos activos por defecto
     if (!showInactiveFields && !field.isActive) return false;
     return true;
@@ -99,15 +99,17 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
   // Agrupar campos por secciones si está configurado
   const fieldSections = React.useMemo(() => {
     if (!renderConfig.groupBySection || !config?.sections) {
-      return [{
-        id: 'main',
-        title: 'Campos',
-        description: '',
-        order: 0,
-        isCollapsible: false,
-        isExpanded: true,
-        fields: visibleFields.map(f => f.id)
-      }];
+      return [
+        {
+          id: 'main',
+          title: 'Campos',
+          description: '',
+          order: 0,
+          isCollapsible: false,
+          isExpanded: true,
+          fields: visibleFields.map((f) => f.id),
+        },
+      ];
     }
 
     return config.sections.sort((a, b) => a.order - b.order);
@@ -117,16 +119,16 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
   const handleSectionToggle = (sectionId: string) => {
     if (!renderConfig.groupBySection) return;
 
-    setVisibleSections(prev => ({
+    setVisibleSections((prev) => ({
       ...prev,
-      [sectionId]: !prev[sectionId]
+      [sectionId]: !prev[sectionId],
     }));
   };
 
   // Inicializar estados de sección
   useEffect(() => {
     const initialStates: Record<string, boolean> = {};
-    fieldSections.forEach(section => {
+    fieldSections.forEach((section) => {
       initialStates[section.id] = section.isExpanded;
     });
     setVisibleSections(initialStates);
@@ -139,13 +141,7 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
 
     if (field.metadata?.isInherited) {
       metadata.push(
-        <Chip
-          key="inherited"
-          label="Heredado"
-          size="small"
-          color="info"
-          variant="outlined"
-        />
+        <Chip key="inherited" label="Heredado" size="small" color="info" variant="outlined" />
       );
     }
 
@@ -163,23 +159,13 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
 
     if (field.metadata?.isPersonalField) {
       metadata.push(
-        <Chip
-          key="personal"
-          label="Personal"
-          size="small"
-          color="success"
-          variant="outlined"
-        />
+        <Chip key="personal" label="Personal" size="small" color="success" variant="outlined" />
       );
     }
 
     if (metadata.length === 0) return null;
 
-    return (
-      <Box sx={{ mt: 0.5, display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
-        {metadata}
-      </Box>
-    );
+    return <Box sx={{ mt: 0.5, display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>{metadata}</Box>;
   };
 
   const renderField = (field: DynamicFieldDefinition) => {
@@ -217,9 +203,7 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
   };
 
   const renderSection = (section: FieldSection) => {
-    const sectionFields = visibleFields.filter(field =>
-      section.fields.includes(field.id)
-    );
+    const sectionFields = visibleFields.filter((field) => section.fields.includes(field.id));
 
     if (sectionFields.length === 0) return null;
 
@@ -247,12 +231,12 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
               gridTemplateColumns: {
                 xs: '1fr',
                 sm: 'repeat(2, 1fr)',
-                md: 'repeat(3, 1fr)'
+                md: 'repeat(3, 1fr)',
               },
-              gap: renderConfig.compactMode ? 1 : 2
+              gap: renderConfig.compactMode ? 1 : 2,
             }}
           >
-            {sectionFields.map(field => renderField(field))}
+            {sectionFields.map((field) => renderField(field))}
           </Box>
         </Box>
       );
@@ -268,12 +252,7 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <Typography variant="h6">{section.title}</Typography>
-            <Chip
-              label={sectionFields.length}
-              size="small"
-              color="primary"
-              variant="outlined"
-            />
+            <Chip label={sectionFields.length} size="small" color="primary" variant="outlined" />
           </Box>
         </AccordionSummary>
         <AccordionDetails>
@@ -289,23 +268,21 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
               gridTemplateColumns: {
                 xs: '1fr',
                 sm: 'repeat(2, 1fr)',
-                md: 'repeat(3, 1fr)'
+                md: 'repeat(3, 1fr)',
               },
-              gap: renderConfig.compactMode ? 1 : 2
+              gap: renderConfig.compactMode ? 1 : 2,
             }}
           >
-            {sectionFields.map(field => renderField(field))}
+            {sectionFields.map((field) => renderField(field))}
           </Box>
         </AccordionDetails>
       </Accordion>
     );
   };
 
-  const hasErrors = Object.keys(validationErrors).some(
-    key => validationErrors[key]?.length > 0
-  );
+  const hasErrors = Object.keys(validationErrors).some((key) => validationErrors[key]?.length > 0);
 
-  const inactiveFieldsCount = fields.filter(f => !f.isActive).length;
+  const inactiveFieldsCount = fields.filter((f) => !f.isActive).length;
 
   if (isLoading) {
     return (
@@ -345,11 +322,10 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
           </Typography>
 
           {inactiveFieldsCount > 0 && (
-            <Tooltip title={showInactiveFields ? 'Ocultar campos inactivos' : 'Mostrar campos inactivos'}>
-              <IconButton
-                size="small"
-                onClick={() => setShowInactiveFields(!showInactiveFields)}
-              >
+            <Tooltip
+              title={showInactiveFields ? 'Ocultar campos inactivos' : 'Mostrar campos inactivos'}
+            >
+              <IconButton size="small" onClick={() => setShowInactiveFields(!showInactiveFields)}>
                 {showInactiveFields ? <VisibilityOffIcon /> : <VisibilityIcon />}
               </IconButton>
             </Tooltip>
@@ -385,7 +361,7 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
           <ul style={{ margin: 0, paddingLeft: 20 }}>
             {Object.entries(validationErrors).map(([fieldName, errors]) => {
               if (!errors?.length) return null;
-              const field = fields.find(f => f.name === fieldName);
+              const field = fields.find((f) => f.name === fieldName);
               return (
                 <li key={fieldName}>
                   <strong>{field?.label || fieldName}:</strong> {errors.join(', ')}
@@ -398,11 +374,9 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
 
       {/* Fields */}
       {visibleFields.length === 0 ? (
-        <Alert severity="info">
-          No hay campos configurados para mostrar.
-        </Alert>
+        <Alert severity="info">No hay campos configurados para mostrar.</Alert>
       ) : (
-        fieldSections.map(section => renderSection(section))
+        fieldSections.map((section) => renderSection(section))
       )}
 
       {/* Actions */}

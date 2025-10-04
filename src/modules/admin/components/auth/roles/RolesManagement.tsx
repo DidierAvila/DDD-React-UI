@@ -490,9 +490,9 @@ const RolesManagement: React.FC = () => {
 
       await rolesService.delete(selectedRole.id);
       enqueueSnackbar('Rol eliminado exitosamente', { variant: 'success' });
-      
+
       // Recargar la lista
-      await loadRoles(); 
+      await loadRoles();
       handleCloseDeleteDialog(); // Cerrar el diálogo de confirmación
     } catch (err: any) {
       console.error('Error al eliminar rol:', err);

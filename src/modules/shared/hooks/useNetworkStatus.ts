@@ -25,7 +25,6 @@ export function useNetworkStatus(): UseNetworkStatusReturn {
 
   useEffect(() => {
     const handleOnline = () => {
-      console.log('🌐 Conexión a internet restablecida');
       setIsOnline(true);
 
       if (wasOffline) {
@@ -36,7 +35,6 @@ export function useNetworkStatus(): UseNetworkStatusReturn {
     };
 
     const handleOffline = () => {
-      console.log('📡 Conexión a internet perdida');
       setIsOnline(false);
       setWasOffline(true);
       setJustReconnected(false);
@@ -61,7 +59,7 @@ export function useNetworkStatus(): UseNetworkStatusReturn {
   return {
     isOnline,
     wasOffline,
-    justReconnected
+    justReconnected,
   };
 }
 

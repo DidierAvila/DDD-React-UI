@@ -1,9 +1,7 @@
 'use client';
 
 import { useDynamicFields } from '@/modules/shared/hooks';
-import {
-  DynamicFieldsRenderConfig
-} from '@/modules/shared/types/dynamic-fields';
+import { DynamicFieldsRenderConfig } from '@/modules/shared/types/dynamic-fields';
 import { Refresh as RefreshIcon } from '@mui/icons-material';
 import { Alert, Box, Button, CircularProgress, Typography } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -44,7 +42,7 @@ export const UserDynamicFieldsForm: React.FC<UserDynamicFieldsFormProps> = ({
   onError,
   readOnly = false,
   showFieldMetadata = false,
-  className
+  className,
 }) => {
   const [localValues, setLocalValues] = useState<Record<string, any>>({});
   const [hasChanges, setHasChanges] = useState(false);
@@ -60,8 +58,11 @@ export const UserDynamicFieldsForm: React.FC<UserDynamicFieldsFormProps> = ({
     saveValues,
     validateField,
     validateAll,
-    refresh
-  } = useDynamicFields(shouldLoadData ? userTypeId : undefined, shouldLoadData ? userId : undefined);
+    refresh,
+  } = useDynamicFields(
+    shouldLoadData ? userTypeId : undefined,
+    shouldLoadData ? userId : undefined
+  );
 
   // Sincronizar valores locales con los cargados
   useEffect(() => {
@@ -71,21 +72,24 @@ export const UserDynamicFieldsForm: React.FC<UserDynamicFieldsFormProps> = ({
   }, [fieldValues]);
 
   // Manejar cambios en campos
-  const handleFieldChange = useCallback((fieldName: string, value: any) => {
-    setLocalValues(prev => ({
-      ...prev,
-      [fieldName]: value
-    }));
-    setHasChanges(true);
+  const handleFieldChange = useCallback(
+    (fieldName: string, value: any) => {
+      setLocalValues((prev) => ({
+        ...prev,
+        [fieldName]: value,
+      }));
+      setHasChanges(true);
 
-    // Auto-save
-    if (autoSave && !readOnly) {
-      // Implementar debounce aquí si es necesario
-      setTimeout(() => {
-        saveValues({ [fieldName]: value });
-      }, autoSaveDelay);
-    }
-  }, [autoSave, autoSaveDelay, readOnly, saveValues]);
+      // Auto-save
+      if (autoSave && !readOnly) {
+        // Implementar debounce aquí si es necesario
+        setTimeout(() => {
+          saveValues({ [fieldName]: value });
+        }, autoSaveDelay);
+      }
+    },
+    [autoSave, autoSaveDelay, readOnly, saveValues]
+  );
 
   // Guardar todos los valores
   const handleSave = useCallback(async () => {
@@ -157,8 +161,7 @@ export const UserDynamicFieldsForm: React.FC<UserDynamicFieldsFormProps> = ({
           No se encontraron campos dinámicos para el tipo de usuario <strong>{userTypeId}</strong>.
           <br />
           • Verifica que el tipo de usuario exista en el sistema
-          <br />
-          • Configura campos dinámicos para este tipo desde la gestión de tipos de usuario
+          <br />• Configura campos dinámicos para este tipo desde la gestión de tipos de usuario
         </Typography>
         {showRefreshButton && (
           <Button onClick={handleRefresh} size="small" sx={{ mt: 1 }}>
@@ -200,11 +203,7 @@ export const UserDynamicFieldsForm: React.FC<UserDynamicFieldsFormProps> = ({
             </Button>
           )}
           {showSaveButton && (
-            <Button
-              onClick={handleSave}
-              variant="contained"
-              disabled={isLoading || !hasChanges}
-            >
+            <Button onClick={handleSave} variant="contained" disabled={isLoading || !hasChanges}>
               {isLoading ? 'Guardando...' : 'Guardar Cambios'}
             </Button>
           )}

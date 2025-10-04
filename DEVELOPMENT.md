@@ -1,4 +1,4 @@
-# Guía de Desarrollo - SIGNOSST Web
+# Guía de Desarrollo - Platform Web
 
 ## Herramientas de Calidad de Código
 

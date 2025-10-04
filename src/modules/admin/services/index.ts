@@ -6,4 +6,3 @@ export { UserFieldsService } from './UserFieldsService';
 export * from './usersService';
 export * from './userTypeFieldsService';
 export * from './userTypesService';
-

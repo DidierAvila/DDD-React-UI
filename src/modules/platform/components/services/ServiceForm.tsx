@@ -17,22 +17,22 @@ import { useApiError } from '@/modules/shared/hooks/useApiError';
 import { useEnhancedUser } from '@/modules/shared/hooks/useEnhancedUser';
 import { Search as SearchIcon } from '@mui/icons-material';
 import {
-    Autocomplete,
-    Box,
-    Button,
-    Checkbox,
-    CircularProgress,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    Divider,
-    FormControlLabel,
-    FormGroup,
-    InputAdornment,
-    Switch,
-    TextField,
-    Typography,
+  Autocomplete,
+  Box,
+  Button,
+  Checkbox,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Divider,
+  FormControlLabel,
+  FormGroup,
+  InputAdornment,
+  Switch,
+  TextField,
+  Typography,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -102,7 +102,7 @@ export function ServiceForm({ open, onClose, onSuccess, service }: ServiceFormPr
       if (isEditing && service) {
         // Convertir countries a countryCodes para el formulario
         const countryCodes = service.countries
-          ? service.countries.map(country => country.countryCode)
+          ? service.countries.map((country) => country.countryCode)
           : service.countryCodes || [];
 
         reset({
@@ -151,7 +151,6 @@ export function ServiceForm({ open, onClose, onSuccess, service }: ServiceFormPr
 
       setSuppliers(suppliersData);
       console.log(`✅ ${suppliersData.length} proveedores cargados exitosamente`);
-
     } catch (error) {
       console.error('❌ Error al cargar proveedores:', error);
       handleError(error);
@@ -162,7 +161,11 @@ export function ServiceForm({ open, onClose, onSuccess, service }: ServiceFormPr
   };
 
   // Manejar cambio de países seleccionados
-  const handleCountryChange = (countryCode: string, checked: boolean, currentCountries: string[]) => {
+  const handleCountryChange = (
+    countryCode: string,
+    checked: boolean,
+    currentCountries: string[]
+  ) => {
     if (checked) {
       return [...currentCountries, countryCode];
     } else {
@@ -171,9 +174,10 @@ export function ServiceForm({ open, onClose, onSuccess, service }: ServiceFormPr
   };
 
   // Filtrar países basado en el término de búsqueda
-  const filteredCountries = countries.filter((country) =>
-    country.label.toLowerCase().includes(countrySearchTerm.toLowerCase()) ||
-    country.value.toLowerCase().includes(countrySearchTerm.toLowerCase())
+  const filteredCountries = countries.filter(
+    (country) =>
+      country.label.toLowerCase().includes(countrySearchTerm.toLowerCase()) ||
+      country.value.toLowerCase().includes(countrySearchTerm.toLowerCase())
   );
 
   const onSubmit = async (data: FormData) => {
@@ -239,7 +243,7 @@ export function ServiceForm({ open, onClose, onSuccess, service }: ServiceFormPr
       maxWidth="md"
       fullWidth
       PaperProps={{
-        sx: { borderRadius: 2 }
+        sx: { borderRadius: 2 },
       }}
     >
       <DialogTitle>
@@ -247,17 +251,13 @@ export function ServiceForm({ open, onClose, onSuccess, service }: ServiceFormPr
           {isEditing ? 'Editar Servicio' : 'Crear Nuevo Servicio'}
         </Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-          {isEditing
-            ? 'Modifica los datos del servicio'
-            : 'Ingresa los datos del nuevo servicio'
-          }
+          {isEditing ? 'Modifica los datos del servicio' : 'Ingresa los datos del nuevo servicio'}
         </Typography>
       </DialogTitle>
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <DialogContent dividers>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-
             {/* Información básica */}
             <Box>
               <Typography variant="subtitle2" color="primary" gutterBottom>
@@ -271,7 +271,7 @@ export function ServiceForm({ open, onClose, onSuccess, service }: ServiceFormPr
                   rules={{
                     required: 'El nombre es obligatorio',
                     minLength: { value: 2, message: 'El nombre debe tener al menos 2 caracteres' },
-                    maxLength: { value: 100, message: 'El nombre no puede exceder 100 caracteres' }
+                    maxLength: { value: 100, message: 'El nombre no puede exceder 100 caracteres' },
                   }}
                   render={({ field }) => (
                     <TextField
@@ -289,7 +289,10 @@ export function ServiceForm({ open, onClose, onSuccess, service }: ServiceFormPr
                   name="description"
                   control={control}
                   rules={{
-                    maxLength: { value: 500, message: 'La descripción no puede exceder 500 caracteres' }
+                    maxLength: {
+                      value: 500,
+                      message: 'La descripción no puede exceder 500 caracteres',
+                    },
                   }}
                   render={({ field }) => (
                     <TextField
@@ -321,7 +324,7 @@ export function ServiceForm({ open, onClose, onSuccess, service }: ServiceFormPr
                   rules={{
                     required: 'El valor por hora es obligatorio',
                     min: { value: 0.01, message: 'El valor debe ser mayor a 0' },
-                    max: { value: 999999999, message: 'El valor es demasiado alto' }
+                    max: { value: 999999999, message: 'El valor es demasiado alto' },
                   }}
                   render={({ field: { onChange, value, ...field } }) => (
                     <TextField
@@ -331,12 +334,15 @@ export function ServiceForm({ open, onClose, onSuccess, service }: ServiceFormPr
                       value={value || ''}
                       onChange={(e) => onChange(parseFloat(e.target.value) || 0)}
                       error={!!errors.hourlyValue}
-                      helperText={errors.hourlyValue?.message || (value > 0 && `Equivale a ${formatCurrency(value)}`)}
+                      helperText={
+                        errors.hourlyValue?.message ||
+                        (value > 0 && `Equivale a ${formatCurrency(value)}`)
+                      }
                       fullWidth
                       required
                       InputProps={{
                         startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                        inputProps: { min: 0, step: 'any' }
+                        inputProps: { min: 0, step: 'any' },
                       }}
                     />
                   )}
@@ -351,10 +357,13 @@ export function ServiceForm({ open, onClose, onSuccess, service }: ServiceFormPr
                       if (!value) return 'Debe seleccionar un proveedor';
                       const isValid = suppliersService.isValidSupplierId(suppliers, value);
                       return isValid || 'Proveedor seleccionado no válido';
-                    }
+                    },
                   }}
                   render={({ field: { onChange, value, ...field } }) => {
-                    const selectedSupplier = suppliersService.getSupplierById(suppliers, value || '');
+                    const selectedSupplier = suppliersService.getSupplierById(
+                      suppliers,
+                      value || ''
+                    );
 
                     return (
                       <Autocomplete
@@ -371,20 +380,26 @@ export function ServiceForm({ open, onClose, onSuccess, service }: ServiceFormPr
                           <TextField
                             {...params}
                             label="Proveedor"
-                            placeholder={loadingSuppliers ? "Cargando proveedores..." : "Selecciona un proveedor"}
+                            placeholder={
+                              loadingSuppliers
+                                ? 'Cargando proveedores...'
+                                : 'Selecciona un proveedor'
+                            }
                             error={!!errors.supplierId}
                             helperText={
                               errors.supplierId?.message ||
-                              (suppliers.length === 0 && !loadingSuppliers ?
-                                'No hay proveedores disponibles para tu tipo de usuario' :
-                                `${suppliers.length} proveedor${suppliers.length !== 1 ? 'es' : ''} disponible${suppliers.length !== 1 ? 's' : ''}`)
+                              (suppliers.length === 0 && !loadingSuppliers
+                                ? 'No hay proveedores disponibles para tu tipo de usuario'
+                                : `${suppliers.length} proveedor${suppliers.length !== 1 ? 'es' : ''} disponible${suppliers.length !== 1 ? 's' : ''}`)
                             }
                             required
                             InputProps={{
                               ...params.InputProps,
                               endAdornment: (
                                 <>
-                                  {loadingSuppliers ? <CircularProgress color="inherit" size={20} /> : null}
+                                  {loadingSuppliers ? (
+                                    <CircularProgress color="inherit" size={20} />
+                                  ) : null}
                                   {params.InputProps.endAdornment}
                                 </>
                               ),
@@ -407,8 +422,7 @@ export function ServiceForm({ open, onClose, onSuccess, service }: ServiceFormPr
                           );
                         }}
                         noOptionsText={
-                          loadingSuppliers ? "Cargando..." :
-                          "No hay proveedores disponibles"
+                          loadingSuppliers ? 'Cargando...' : 'No hay proveedores disponibles'
                         }
                         filterOptions={(options, { inputValue }) => {
                           return suppliersService.searchSuppliers(options, inputValue);
@@ -493,7 +507,11 @@ export function ServiceForm({ open, onClose, onSuccess, service }: ServiceFormPr
                             ))}
                           </FormGroup>
                         ) : (
-                          <Typography variant="body2" color="text.secondary" sx={{ py: 2, textAlign: 'center' }}>
+                          <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            sx={{ py: 2, textAlign: 'center' }}
+                          >
                             No se encontraron países que coincidan con "{countrySearchTerm}"
                           </Typography>
                         )}
@@ -532,11 +550,11 @@ export function ServiceForm({ open, onClose, onSuccess, service }: ServiceFormPr
                     }
                     label={
                       <Box>
-                        <Typography variant="body2">
-                          Estado del Servicio
-                        </Typography>
+                        <Typography variant="body2">Estado del Servicio</Typography>
                         <Typography variant="caption" color="text.secondary">
-                          {value ? 'El servicio estará disponible' : 'El servicio no estará disponible'}
+                          {value
+                            ? 'El servicio estará disponible'
+                            : 'El servicio no estará disponible'}
                         </Typography>
                       </Box>
                     }
@@ -548,11 +566,7 @@ export function ServiceForm({ open, onClose, onSuccess, service }: ServiceFormPr
         </DialogContent>
 
         <DialogActions sx={{ px: 3, py: 2 }}>
-          <Button
-            onClick={handleClose}
-            disabled={loading}
-            color="inherit"
-          >
+          <Button onClick={handleClose} disabled={loading} color="inherit">
             Cancelar
           </Button>
           <Button
@@ -561,7 +575,7 @@ export function ServiceForm({ open, onClose, onSuccess, service }: ServiceFormPr
             disabled={loading || !isDirty}
             sx={{ minWidth: 120 }}
           >
-            {loading ? 'Guardando...' : (isEditing ? 'Actualizar' : 'Crear')}
+            {loading ? 'Guardando...' : isEditing ? 'Actualizar' : 'Crear'}
           </Button>
         </DialogActions>
       </form>

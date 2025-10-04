@@ -3,14 +3,14 @@ import { useUser } from '@/modules/shared/contexts/UserContext';
 import { useAuth } from '@/modules/shared/hooks/useAuth';
 import { Assessment, Business, People, Warning } from '@mui/icons-material';
 import {
-  Alert,
-  Box,
-  Card,
-  CardContent,
-  Chip,
-  CircularProgress,
-  Paper,
-  Typography,
+    Alert,
+    Box,
+    Card,
+    CardContent,
+    Chip,
+    CircularProgress,
+    Paper,
+    Typography,
 } from '@mui/material';
 import React, { useEffect } from 'react';
 
@@ -52,15 +52,6 @@ export default function DashboardPage() {
   const { user, isLoading, error } = useUser();
 
   useEffect(() => {}, []);
-
-  // Debug logs cuando cambian los estados
-  useEffect(() => {
-    console.log('🔄 Dashboard: Cambio en autenticación:', { isAuthenticated, authUser });
-  }, [isAuthenticated, authUser]);
-
-  useEffect(() => {
-    console.log('🔄 Dashboard: Cambio en UserContext:', { user, isLoading, error });
-  }, [user, isLoading, error]);
 
   const stats = [
     {

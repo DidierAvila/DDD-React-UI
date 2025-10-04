@@ -1,19 +1,18 @@
 /**
  * DeleteConfirmDialog - Diálogo de confirmación para eliminar elementos
- * SignoSST Web Frontend - Next.js TypeScript
+ * Platform Web Frontend - Next.js TypeScript
  */
 
 'use client';
-import React from 'react';
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  DialogContentText,
-  Button,
-} from '@mui/material';
 import { Warning as WarningIcon } from '@mui/icons-material';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from '@mui/material';
 
 interface DeleteConfirmDialogProps {
   open: boolean;

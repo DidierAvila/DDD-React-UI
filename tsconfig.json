@@ -24,6 +24,7 @@
       "@/modules/admin/*": ["./src/modules/admin/*"],
       "@/modules/platform/*": ["./src/modules/platform/*"],
       "@/modules/shared/*": ["./src/modules/shared/*"],
+      "@/modules/reports/*": ["./src/modules/reports/*"],
       "@/lib/*": ["./src/lib/*"]
     },
     "forceConsistentCasingInFileNames": true

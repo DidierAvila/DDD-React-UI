@@ -105,7 +105,9 @@ export function useEnhancedUser(): UseEnhancedUserReturn {
 
     // ❌ NO es error de red si tiene status HTTP válido (incluyendo 401, 403, etc.)
     if (error.status && error.status >= 400 && error.status < 600) {
-      console.log(`🔍 Error HTTP ${error.status} - NO es error de red, es error del servidor/permisos`);
+      console.log(
+        `🔍 Error HTTP ${error.status} - NO es error de red, es error del servidor/permisos`
+      );
       return false;
     }
 
@@ -194,8 +196,7 @@ export function useEnhancedUser(): UseEnhancedUserReturn {
         setConnectionFailed(false);
         setMeAttempted(true); // ✅ Marcar como intentado para evitar bucles
         // NO incrementar retryCount, NO activar circuit breaker
-      }
-      else if (error?.status === 403) {
+      } else if (error?.status === 403) {
         console.info('🚫 Acceso denegado al endpoint /me (403) - continuando con datos del token');
         setMeError(null); // No mostrar como error, es comportamiento esperado
         setConnectionFailed(false);
@@ -211,7 +212,9 @@ export function useEnhancedUser(): UseEnhancedUserReturn {
         setRetryCount(newRetryCount);
 
         if (newRetryCount >= MAX_RETRY_ATTEMPTS) {
-          console.warn(`🚨 Máximo de reintentos alcanzado (${MAX_RETRY_ATTEMPTS}). Activando circuit breaker.`);
+          console.warn(
+            `🚨 Máximo de reintentos alcanzado (${MAX_RETRY_ATTEMPTS}). Activando circuit breaker.`
+          );
           setCircuitBreakerOpen(true);
           setMeError('Sin conexión a internet. La aplicación funcionará con datos básicos.');
         } else {
@@ -220,7 +223,9 @@ export function useEnhancedUser(): UseEnhancedUserReturn {
       }
       // 🔧 OTROS ERRORES DEL SERVIDOR (4xx, 5xx) - No reintentar
       else {
-        console.warn(`⚠️ Error del servidor (${error?.status || 'desconocido'}) - no se reintentará`);
+        console.warn(
+          `⚠️ Error del servidor (${error?.status || 'desconocido'}) - no se reintentará`
+        );
         setMeError('Error del servidor al cargar configuración adicional');
         setConnectionFailed(false);
         // NO incrementar retryCount, NO activar circuit breaker
@@ -244,11 +249,7 @@ export function useEnhancedUser(): UseEnhancedUserReturn {
     }
 
     // Condiciones para intentar cargar datos /me
-    const shouldLoadMeData = isAuthenticated &&
-                            tokenData &&
-                            !meData &&
-                            !meLoading &&
-                            !meAttempted;
+    const shouldLoadMeData = isAuthenticated && tokenData && !meData && !meLoading && !meAttempted;
 
     if (shouldLoadMeData) {
       console.log('🚀 Iniciando carga de datos adicionales del usuario...');
@@ -271,7 +272,9 @@ export function useEnhancedUser(): UseEnhancedUserReturn {
 
         try {
           console.log('🔄 Cargando configuración del usuario desde /me...');
-          const data = await AuthPermissionService.getCurrentUserConfiguration(session?.accessToken);
+          const data = await AuthPermissionService.getCurrentUserConfiguration(
+            session?.accessToken
+          );
           setMeData(data);
           setConnectionFailed(false);
           setRetryCount(0);
@@ -282,14 +285,17 @@ export function useEnhancedUser(): UseEnhancedUserReturn {
 
           // 🔐 ERRORES DE AUTORIZACIÓN/PERMISOS (401, 403) - No reintentar
           if (error?.status === 401) {
-            console.info('🔒 Sin permisos para endpoint /me (401) - continuando con datos del token');
+            console.info(
+              '🔒 Sin permisos para endpoint /me (401) - continuando con datos del token'
+            );
             setMeError(null); // No mostrar como error, es comportamiento esperado
             setConnectionFailed(false);
             setMeAttempted(true); // ✅ Marcar como intentado para evitar bucles
             // NO incrementar retryCount, NO activar circuit breaker
-          }
-          else if (error?.status === 403) {
-            console.info('🚫 Acceso denegado al endpoint /me (403) - continuando con datos del token');
+          } else if (error?.status === 403) {
+            console.info(
+              '🚫 Acceso denegado al endpoint /me (403) - continuando con datos del token'
+            );
             setMeError(null); // No mostrar como error, es comportamiento esperado
             setConnectionFailed(false);
             setMeAttempted(true); // ✅ Marcar como intentado para evitar bucles
@@ -304,7 +310,9 @@ export function useEnhancedUser(): UseEnhancedUserReturn {
             setRetryCount(newRetryCount);
 
             if (newRetryCount >= MAX_RETRY_ATTEMPTS) {
-              console.warn(`🚨 Máximo de reintentos alcanzado (${MAX_RETRY_ATTEMPTS}). Activando circuit breaker.`);
+              console.warn(
+                `🚨 Máximo de reintentos alcanzado (${MAX_RETRY_ATTEMPTS}). Activando circuit breaker.`
+              );
               setCircuitBreakerOpen(true);
               setMeError('Sin conexión a internet. La aplicación funcionará con datos básicos.');
             } else {
@@ -313,7 +321,9 @@ export function useEnhancedUser(): UseEnhancedUserReturn {
           }
           // 🔧 OTROS ERRORES DEL SERVIDOR (4xx, 5xx) - No reintentar
           else {
-            console.warn(`⚠️ Error del servidor (${error?.status || 'desconocido'}) - no se reintentará`);
+            console.warn(
+              `⚠️ Error del servidor (${error?.status || 'desconocido'}) - no se reintentará`
+            );
             setMeError('Error del servidor al cargar configuración adicional');
             setConnectionFailed(false);
             // NO incrementar retryCount, NO activar circuit breaker
@@ -327,7 +337,16 @@ export function useEnhancedUser(): UseEnhancedUserReturn {
 
       loadData();
     }
-  }, [isAuthenticated, tokenData, meData, meLoading, meAttempted, circuitBreakerOpen, session?.accessToken, retryCount]);
+  }, [
+    isAuthenticated,
+    tokenData,
+    meData,
+    meLoading,
+    meAttempted,
+    circuitBreakerOpen,
+    session?.accessToken,
+    retryCount,
+  ]);
 
   /**
    * Función para refrescar datos del usuario
@@ -357,31 +376,35 @@ export function useEnhancedUser(): UseEnhancedUserReturn {
   /**
    * Crear objeto usuario combinado
    */
-  const user: EnhancedUser | null = session?.user ? {
-    // Datos básicos de NextAuth
-    id: session.user.id,
-    email: session.user.email,
-    name: session.user.name,
+  const user: EnhancedUser | null = session?.user
+    ? {
+        // Datos básicos de NextAuth
+        id: session.user.id,
+        email: session.user.email,
+        name: session.user.name,
 
-    // Datos del token (prioritarios)
-    userId: tokenData?.userId || session.user.id,
-    userName: tokenData?.userName || session.user.name,
-    userEmail: tokenData?.userEmail || session.user.email,
-    userTypeId: tokenData?.userTypeId || '',
-    userTypeName: tokenData?.userTypeName || session.user.role || '',
+        // Datos del token (prioritarios)
+        userId: tokenData?.userId || session.user.id,
+        userName: tokenData?.userName || session.user.name,
+        userEmail: tokenData?.userEmail || session.user.email,
+        userTypeId: tokenData?.userTypeId || '',
+        userTypeName: tokenData?.userTypeName || session.user.role || '',
 
-    // Datos del endpoint /me
-    avatar: meData?.user?.avatar || session.user.avatar,
-    portalConfiguration: meData?.portalConfiguration,
-    roles: meData?.roles,
-    navigation: meData?.portalConfiguration?.additionalConfig?.navigation,
+        // Datos del endpoint /me
+        avatar: meData?.user?.avatar || session.user.avatar,
+        portalConfiguration: meData?.portalConfiguration,
+        roles: meData?.roles,
+        navigation: meData?.portalConfiguration?.additionalConfig?.navigation,
 
-    // Datos computados (priorizando token > /me > session)
-    displayName: tokenData?.userName || meData?.user?.name || session.user.name || 'Usuario',
-    displayEmail: tokenData?.userEmail || meData?.user?.email || session.user.email || '',
-    displayUserType: tokenData?.userTypeName || session.user.role || 'Usuario',
-    initials: getInitials(tokenData?.userName || meData?.user?.name || session.user.name || 'U'),
-  } : null;
+        // Datos computados (priorizando token > /me > session)
+        displayName: tokenData?.userName || meData?.user?.name || session.user.name || 'Usuario',
+        displayEmail: tokenData?.userEmail || meData?.user?.email || session.user.email || '',
+        displayUserType: tokenData?.userTypeName || session.user.role || 'Usuario',
+        initials: getInitials(
+          tokenData?.userName || meData?.user?.name || session.user.name || 'U'
+        ),
+      }
+    : null;
 
   /**
    * Funciones utilitarias

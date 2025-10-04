@@ -1,8 +1,8 @@
 import { UserPersonalFieldsService } from '@/modules/shared/services';
 import {
-    CreateUserPersonalFieldDto,
-    UpdateUserPersonalFieldDto,
-    UserPersonalField,
+  CreateUserPersonalFieldDto,
+  UpdateUserPersonalFieldDto,
+  UserPersonalField,
 } from '@/modules/shared/types/dynamic-fields';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -18,7 +18,7 @@ export function useUserPersonalFields(userId: string) {
   // Cargar campos personales
   const loadPersonalFields = useCallback(async () => {
     if (!userId) return;
-    
+
     setIsLoading(true);
     setError(null);
 
@@ -39,7 +39,7 @@ export function useUserPersonalFields(userId: string) {
     try {
       const response = await UserPersonalFieldsService.createPersonalField(fieldData);
       if (response.success && response.data) {
-        setPersonalFields(prev => [...prev, response.data!]);
+        setPersonalFields((prev) => [...prev, response.data!]);
         return response.data;
       }
       throw new Error(response.message);
@@ -49,29 +49,30 @@ export function useUserPersonalFields(userId: string) {
   }, []);
 
   // Actualizar campo personal
-  const updatePersonalField = useCallback(async (fieldId: string, fieldData: UpdateUserPersonalFieldDto) => {
-    try {
-      const response = await UserPersonalFieldsService.updatePersonalField(fieldId, fieldData);
-      if (response.success && response.data) {
-        setPersonalFields(prev =>
-          prev.map((field) =>
-            field.id === fieldId ? response.data! : field
-          )
-        );
-        return response.data;
+  const updatePersonalField = useCallback(
+    async (fieldId: string, fieldData: UpdateUserPersonalFieldDto) => {
+      try {
+        const response = await UserPersonalFieldsService.updatePersonalField(fieldId, fieldData);
+        if (response.success && response.data) {
+          setPersonalFields((prev) =>
+            prev.map((field) => (field.id === fieldId ? response.data! : field))
+          );
+          return response.data;
+        }
+        throw new Error(response.message);
+      } catch (error) {
+        throw error;
       }
-      throw new Error(response.message);
-    } catch (error) {
-      throw error;
-    }
-  }, []);
+    },
+    []
+  );
 
   // Eliminar campo personal
   const deletePersonalField = useCallback(async (fieldId: string) => {
     try {
       const response = await UserPersonalFieldsService.deletePersonalField(fieldId);
       if (response.success) {
-        setPersonalFields(prev => prev.filter(field => field.id !== fieldId));
+        setPersonalFields((prev) => prev.filter((field) => field.id !== fieldId));
       }
       return response.success;
     } catch (error) {
@@ -80,14 +81,17 @@ export function useUserPersonalFields(userId: string) {
   }, []);
 
   // Guardar valor de campo
-  const saveFieldValue = useCallback(async (fieldName: string, value: any) => {
-    try {
-      const response = await UserPersonalFieldsService.saveFieldValue(userId, fieldName, value);
-      return response.success;
-    } catch (error) {
-      throw error;
-    }
-  }, [userId]);
+  const saveFieldValue = useCallback(
+    async (fieldName: string, value: any) => {
+      try {
+        const response = await UserPersonalFieldsService.saveFieldValue(userId, fieldName, value);
+        return response.success;
+      } catch (error) {
+        throw error;
+      }
+    },
+    [userId]
+  );
 
   // Cargar valores de campos
   const loadFieldValues = useCallback(async () => {

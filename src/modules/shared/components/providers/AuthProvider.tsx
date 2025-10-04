@@ -1,6 +1,6 @@
 /**
  * Session Provider - Proveedor de contexto de sesión
- * SignoSST Web Frontend - Next.js TypeScript
+ * Platform Web Frontend - Next.js TypeScript
  */
 
 'use client';

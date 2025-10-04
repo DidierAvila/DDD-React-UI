@@ -1,6 +1,6 @@
 /**
  * UsersList Component - Lista de usuarios del sistema
- * SignoSST Web Frontend - Next.js TypeScript
+ * Platform Web Frontend - Next.js TypeScript
  */
 
 'use client';
@@ -164,7 +164,9 @@ const TableRowMenu: React.FC<TableRowMenuProps> = ({
             <CheckCircleIcon fontSize="small" />
           )}
         </ListItemIcon>
-        <ListItemText>{toStatusKey(user.status) === 'active' ? 'Desactivar' : 'Activar'}</ListItemText>
+        <ListItemText>
+          {toStatusKey(user.status) === 'active' ? 'Desactivar' : 'Activar'}
+        </ListItemText>
       </MenuItem>
 
       <MenuItem
@@ -431,7 +433,7 @@ const UsersList: React.FC<UsersListProps> = ({
   return (
     <PageContainer
       title="Gestión de Usuarios"
-      subtitle="Administra los usuarios del sistema SignoSST"
+      subtitle="Administra los usuarios del sistema Platform"
     >
       {/* Barra de herramientas */}
       <Box sx={{ mb: 3, display: 'flex', gap: 2, flexWrap: 'wrap', alignItems: 'center' }}>

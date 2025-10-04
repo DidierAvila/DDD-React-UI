@@ -1,6 +1,6 @@
 /**
  * Hook para manejo de autenticación en las llamadas a la API
- * SignoSST Web Frontend - Next.js TypeScript
+ * Platform Web Frontend - Next.js TypeScript
  */
 
 import { useSession } from 'next-auth/react';

@@ -1,10 +1,10 @@
 import { UserFieldsService } from '@/modules/admin/services';
 import {
-    CreateUserFieldDto,
-    DynamicFieldsState,
-    UpdateUserFieldDto,
-    UserField,
-    UserFieldsConfig
+  CreateUserFieldDto,
+  DynamicFieldsState,
+  UpdateUserFieldDto,
+  UserField,
+  UserFieldsConfig,
 } from '@/modules/shared/types/dynamic-fields';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -16,7 +16,7 @@ export function useUserFields(userId: string) {
     isLoading: true,
     isUpdating: false,
     error: null,
-    lastSync: null
+    lastSync: null,
   });
 
   const [fields, setFields] = useState<UserField[]>([]);
@@ -28,21 +28,21 @@ export function useUserFields(userId: string) {
   const loadFields = useCallback(async () => {
     if (!userId) return;
 
-    setState(prev => ({ ...prev, isLoading: true, error: null }));
+    setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
     try {
       const fieldsData = await UserFieldsService.getUserFields(userId);
       setFields(fieldsData);
-      setState(prev => ({
+      setState((prev) => ({
         ...prev,
         isLoading: false,
-        lastSync: new Date()
+        lastSync: new Date(),
       }));
     } catch (error) {
-      setState(prev => ({
+      setState((prev) => ({
         ...prev,
         isLoading: false,
-        error: error instanceof Error ? error.message : 'Error al cargar campos'
+        error: error instanceof Error ? error.message : 'Error al cargar campos',
       }));
     }
   }, [userId]);
@@ -53,22 +53,22 @@ export function useUserFields(userId: string) {
   const loadConfig = useCallback(async () => {
     if (!userId) return;
 
-    setState(prev => ({ ...prev, isLoading: true, error: null }));
+    setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
     try {
       const configData = await UserFieldsService.getUserFieldsConfig(userId);
       setConfig(configData);
       setFields(configData.fields);
-      setState(prev => ({
+      setState((prev) => ({
         ...prev,
         isLoading: false,
-        lastSync: new Date()
+        lastSync: new Date(),
       }));
     } catch (error) {
-      setState(prev => ({
+      setState((prev) => ({
         ...prev,
         isLoading: false,
-        error: error instanceof Error ? error.message : 'Error al cargar configuración'
+        error: error instanceof Error ? error.message : 'Error al cargar configuración',
       }));
     }
   }, [userId]);
@@ -77,29 +77,29 @@ export function useUserFields(userId: string) {
    * Crea un nuevo campo
    */
   const createField = useCallback(async (fieldData: CreateUserFieldDto) => {
-    setState(prev => ({ ...prev, isUpdating: true, error: null }));
+    setState((prev) => ({ ...prev, isUpdating: true, error: null }));
 
     try {
       const response = await UserFieldsService.createUserField(fieldData);
 
       if (response.success) {
         if (response.data) {
-          setFields(prev => [...prev, response.data]);
+          setFields((prev) => [...prev, response.data]);
         }
-        setState(prev => ({
+        setState((prev) => ({
           ...prev,
           isUpdating: false,
-          lastSync: new Date()
+          lastSync: new Date(),
         }));
         return response.data;
       } else {
         throw new Error(response.message || 'Error al crear campo');
       }
     } catch (error) {
-      setState(prev => ({
+      setState((prev) => ({
         ...prev,
         isUpdating: false,
-        error: error instanceof Error ? error.message : 'Error al crear campo'
+        error: error instanceof Error ? error.message : 'Error al crear campo',
       }));
       throw error;
     }
@@ -108,185 +108,177 @@ export function useUserFields(userId: string) {
   /**
    * Actualiza un campo existente
    */
-  const updateField = useCallback(async (fieldData: UpdateUserFieldDto) => {
-    setState(prev => ({ ...prev, isUpdating: true, error: null }));
+  const updateField = useCallback(
+    async (fieldData: UpdateUserFieldDto) => {
+      setState((prev) => ({ ...prev, isUpdating: true, error: null }));
 
-    try {
-      const response = await UserFieldsService.updateUserField(
-        userId,
-        fieldData
-      );
+      try {
+        const response = await UserFieldsService.updateUserField(userId, fieldData);
 
-      if (response.success) {
-        if (response.data) {
-          setFields(prev =>
-            prev.map(field =>
-              field.id === fieldData.id ? response.data : field
-            )
-          );
+        if (response.success) {
+          if (response.data) {
+            setFields((prev) =>
+              prev.map((field) => (field.id === fieldData.id ? response.data : field))
+            );
+          }
+          setState((prev) => ({
+            ...prev,
+            isUpdating: false,
+            lastSync: new Date(),
+          }));
+          return response.data;
+        } else {
+          throw new Error(response.message || 'Error al actualizar campo');
         }
-        setState(prev => ({
+      } catch (error) {
+        setState((prev) => ({
           ...prev,
           isUpdating: false,
-          lastSync: new Date()
+          error: error instanceof Error ? error.message : 'Error al actualizar campo',
         }));
-        return response.data;
-      } else {
-        throw new Error(response.message || 'Error al actualizar campo');
+        throw error;
       }
-    } catch (error) {
-      setState(prev => ({
-        ...prev,
-        isUpdating: false,
-        error: error instanceof Error ? error.message : 'Error al actualizar campo'
-      }));
-      throw error;
-    }
-  }, [userId]);
+    },
+    [userId]
+  );
 
   /**
    * Elimina un campo
    */
-  const deleteField = useCallback(async (fieldId: string) => {
-    setState(prev => ({ ...prev, isUpdating: true, error: null }));
+  const deleteField = useCallback(
+    async (fieldId: string) => {
+      setState((prev) => ({ ...prev, isUpdating: true, error: null }));
 
-    try {
-      const response = await UserFieldsService.deleteUserField(
-        userId,
-        fieldId
-      );
+      try {
+        const response = await UserFieldsService.deleteUserField(userId, fieldId);
 
-      if (response.success) {
-        setFields(prev => prev.filter(field => field.id !== fieldId));
-        setState(prev => ({
+        if (response.success) {
+          setFields((prev) => prev.filter((field) => field.id !== fieldId));
+          setState((prev) => ({
+            ...prev,
+            isUpdating: false,
+            lastSync: new Date(),
+          }));
+          return true;
+        } else {
+          throw new Error(response.message || 'Error al eliminar campo');
+        }
+      } catch (error) {
+        setState((prev) => ({
           ...prev,
           isUpdating: false,
-          lastSync: new Date()
+          error: error instanceof Error ? error.message : 'Error al eliminar campo',
         }));
-        return true;
-      } else {
-        throw new Error(response.message || 'Error al eliminar campo');
+        throw error;
       }
-    } catch (error) {
-      setState(prev => ({
-        ...prev,
-        isUpdating: false,
-        error: error instanceof Error ? error.message : 'Error al eliminar campo'
-      }));
-      throw error;
-    }
-  }, [userId]);
+    },
+    [userId]
+  );
 
   /**
    * Reordena campos
    */
-  const reorderFields = useCallback(async (fieldIds: string[]) => {
-    setState(prev => ({ ...prev, isUpdating: true, error: null }));
+  const reorderFields = useCallback(
+    async (fieldIds: string[]) => {
+      setState((prev) => ({ ...prev, isUpdating: true, error: null }));
 
-    try {
-      const response = await UserFieldsService.reorderUserFields(
-        userId,
-        fieldIds
-      );
+      try {
+        const response = await UserFieldsService.reorderUserFields(userId, fieldIds);
 
-      if (response.success && response.data) {
-        setFields(response.data);
-        setState(prev => ({
+        if (response.success && response.data) {
+          setFields(response.data);
+          setState((prev) => ({
+            ...prev,
+            isUpdating: false,
+            lastSync: new Date(),
+          }));
+          return response.data;
+        } else {
+          throw new Error(response.message || 'Error al reordenar campos');
+        }
+      } catch (error) {
+        setState((prev) => ({
           ...prev,
           isUpdating: false,
-          lastSync: new Date()
+          error: error instanceof Error ? error.message : 'Error al reordenar campos',
         }));
-        return response.data;
-      } else {
-        throw new Error(response.message || 'Error al reordenar campos');
+        throw error;
       }
-    } catch (error) {
-      setState(prev => ({
-        ...prev,
-        isUpdating: false,
-        error: error instanceof Error ? error.message : 'Error al reordenar campos'
-      }));
-      throw error;
-    }
-  }, [userId]);
+    },
+    [userId]
+  );
 
   /**
    * Activa/desactiva un campo
    */
-  const toggleFieldStatus = useCallback(async (fieldId: string, isActive: boolean) => {
-    setState(prev => ({ ...prev, isUpdating: true, error: null }));
+  const toggleFieldStatus = useCallback(
+    async (fieldId: string, isActive: boolean) => {
+      setState((prev) => ({ ...prev, isUpdating: true, error: null }));
 
-    try {
-      const response = await UserFieldsService.toggleUserFieldStatus(
-        userId,
-        fieldId,
-        isActive
-      );
+      try {
+        const response = await UserFieldsService.toggleUserFieldStatus(userId, fieldId, isActive);
 
-      if (response.success && response.data) {
-        setFields(prev =>
-          prev.map(field =>
-            field.id === fieldId ? response.data : field
-          )
-        );
-        setState(prev => ({
+        if (response.success && response.data) {
+          setFields((prev) => prev.map((field) => (field.id === fieldId ? response.data : field)));
+          setState((prev) => ({
+            ...prev,
+            isUpdating: false,
+            lastSync: new Date(),
+          }));
+          return response.data;
+        } else {
+          throw new Error(response.message || 'Error al cambiar estado del campo');
+        }
+      } catch (error) {
+        setState((prev) => ({
           ...prev,
           isUpdating: false,
-          lastSync: new Date()
+          error: error instanceof Error ? error.message : 'Error al cambiar estado del campo',
         }));
-        return response.data;
-      } else {
-        throw new Error(response.message || 'Error al cambiar estado del campo');
+        throw error;
       }
-    } catch (error) {
-      setState(prev => ({
-        ...prev,
-        isUpdating: false,
-        error: error instanceof Error ? error.message : 'Error al cambiar estado del campo'
-      }));
-      throw error;
-    }
-  }, [userId]);
+    },
+    [userId]
+  );
 
   /**
    * Duplica un campo existente
    */
-  const duplicateField = useCallback(async (fieldId: string, newName?: string) => {
-    setState(prev => ({ ...prev, isUpdating: true, error: null }));
+  const duplicateField = useCallback(
+    async (fieldId: string, newName?: string) => {
+      setState((prev) => ({ ...prev, isUpdating: true, error: null }));
 
-    try {
-      const response = await UserFieldsService.duplicateUserField(
-        userId,
-        fieldId,
-        newName
-      );
+      try {
+        const response = await UserFieldsService.duplicateUserField(userId, fieldId, newName);
 
-      if (response.success && response.data) {
-        setFields(prev => [...prev, response.data]);
-        setState(prev => ({
+        if (response.success && response.data) {
+          setFields((prev) => [...prev, response.data]);
+          setState((prev) => ({
+            ...prev,
+            isUpdating: false,
+            lastSync: new Date(),
+          }));
+          return response.data;
+        } else {
+          throw new Error(response.message || 'Error al duplicar campo');
+        }
+      } catch (error) {
+        setState((prev) => ({
           ...prev,
           isUpdating: false,
-          lastSync: new Date()
+          error: error instanceof Error ? error.message : 'Error al duplicar campo',
         }));
-        return response.data;
-      } else {
-        throw new Error(response.message || 'Error al duplicar campo');
+        throw error;
       }
-    } catch (error) {
-      setState(prev => ({
-        ...prev,
-        isUpdating: false,
-        error: error instanceof Error ? error.message : 'Error al duplicar campo'
-      }));
-      throw error;
-    }
-  }, [userId]);
+    },
+    [userId]
+  );
 
   /**
    * Limpia errores
    */
   const clearError = useCallback(() => {
-    setState(prev => ({ ...prev, error: null }));
+    setState((prev) => ({ ...prev, error: null }));
   }, []);
 
   /**
@@ -307,15 +299,15 @@ export function useUserFields(userId: string) {
   const sortedFields = fields.sort((a, b) => a.order - b.order);
 
   // Campos activos
-  const activeFields = sortedFields.filter(field => field.isActive);
+  const activeFields = sortedFields.filter((field) => field.isActive);
 
   // Estadísticas
   const stats = {
     total: fields.length,
     active: activeFields.length,
     inactive: fields.length - activeFields.length,
-    required: fields.filter(field => field.validation?.required).length,
-    optional: fields.filter(field => !field.validation?.required).length
+    required: fields.filter((field) => field.validation?.required).length,
+    optional: fields.filter((field) => !field.validation?.required).length,
   };
 
   return {
@@ -338,6 +330,6 @@ export function useUserFields(userId: string) {
     toggleFieldStatus,
     duplicateField,
     clearError,
-    refresh
+    refresh,
   };
 }

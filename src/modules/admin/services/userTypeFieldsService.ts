@@ -1,9 +1,9 @@
 import { ApiResponse, backendApiService } from '@/modules/shared/services/api';
 import {
-    CreateUserTypeFieldDto,
-    UpdateUserTypeFieldDto,
-    UserTypeField,
-    UserTypeFieldsConfig
+  CreateUserTypeFieldDto,
+  UpdateUserTypeFieldDto,
+  UserTypeField,
+  UserTypeFieldsConfig,
 } from '../../shared/types/dynamic-fields';
 import { userTypesService } from './userTypesService';
 
@@ -24,7 +24,7 @@ export class UserTypeFieldsService {
 
     const updatedConfig = {
       ...userType.additionalConfig,
-      dynamicFields: updatedFields
+      dynamicFields: updatedFields,
     };
 
     // Incluir todos los campos requeridos por el backend
@@ -36,7 +36,7 @@ export class UserTypeFieldsService {
       defaultLandingPage: userType.defaultLandingPage,
       logoUrl: userType.logoUrl,
       language: userType.language,
-      additionalConfig: updatedConfig
+      additionalConfig: updatedConfig,
     });
   }
 
@@ -67,7 +67,7 @@ export class UserTypeFieldsService {
         fields: fields,
         isActive: userType.status,
         totalFields: fields.length,
-        lastUpdated: new Date(userType.updatedAt || userType.createdAt)
+        lastUpdated: new Date(userType.updatedAt || userType.createdAt),
       };
     } catch (error) {
       console.error('Error loading UserType fields config:', error);
@@ -79,9 +79,7 @@ export class UserTypeFieldsService {
    * Obtiene todos los UserTypes con sus campos configurados
    */
   static async getAllUserTypesFieldsConfig(): Promise<UserTypeFieldsConfig[]> {
-    return backendApiService.get<UserTypeFieldsConfig[]>(
-      '/Api/Admin/UserTypes/fields-config'
-    );
+    return backendApiService.get<UserTypeFieldsConfig[]>('/Api/Admin/UserTypes/fields-config');
   }
 
   /**
@@ -109,7 +107,7 @@ export class UserTypeFieldsService {
         isInheritable: fieldData.isInheritable ?? true,
         createdAt: new Date(),
         updatedAt: new Date(),
-        createdBy: 'system' // TODO: obtener del usuario logueado
+        createdBy: 'system', // TODO: obtener del usuario logueado
       };
 
       // Obtener campos existentes y agregar el nuevo
@@ -122,14 +120,14 @@ export class UserTypeFieldsService {
       return {
         success: true,
         data: newField,
-        message: 'Campo creado exitosamente'
+        message: 'Campo creado exitosamente',
       };
     } catch (error) {
       console.error('Error creating UserType field:', error);
       return {
         success: false,
         data: {} as UserTypeField,
-        message: error instanceof Error ? error.message : 'Error al crear campo'
+        message: error instanceof Error ? error.message : 'Error al crear campo',
       };
     }
   }
@@ -146,14 +144,12 @@ export class UserTypeFieldsService {
       const existingFields = userType.additionalConfig?.dynamicFields || [];
 
       // Encontrar y actualizar el campo
-      const updatedFields = existingFields.map(field =>
-        field.id === fieldData.id
-          ? { ...field, ...fieldData, updatedAt: new Date() }
-          : field
+      const updatedFields = existingFields.map((field) =>
+        field.id === fieldData.id ? { ...field, ...fieldData, updatedAt: new Date() } : field
       );
 
       // Verificar que el campo existe
-      const updatedField = updatedFields.find(field => field.id === fieldData.id);
+      const updatedField = updatedFields.find((field) => field.id === fieldData.id);
       if (!updatedField) {
         throw new Error(`Campo con ID ${fieldData.id} no encontrado`);
       }
@@ -164,14 +160,14 @@ export class UserTypeFieldsService {
       return {
         success: true,
         data: updatedField,
-        message: 'Campo actualizado exitosamente'
+        message: 'Campo actualizado exitosamente',
       };
     } catch (error) {
       console.error('Error updating UserType field:', error);
       return {
         success: false,
         data: {} as UserTypeField,
-        message: error instanceof Error ? error.message : 'Error al actualizar campo'
+        message: error instanceof Error ? error.message : 'Error al actualizar campo',
       };
     }
   }
@@ -188,7 +184,7 @@ export class UserTypeFieldsService {
       const existingFields = userType.additionalConfig?.dynamicFields || [];
 
       // Filtrar el campo a eliminar
-      const updatedFields = existingFields.filter(field => field.id !== fieldId);
+      const updatedFields = existingFields.filter((field) => field.id !== fieldId);
 
       // Actualizar el UserType
       await this.updateUserTypeWithRequiredFields(userTypeId, updatedFields);
@@ -196,14 +192,14 @@ export class UserTypeFieldsService {
       return {
         success: true,
         data: true,
-        message: 'Campo eliminado exitosamente'
+        message: 'Campo eliminado exitosamente',
       };
     } catch (error) {
       console.error('Error deleting UserType field:', error);
       return {
         success: false,
         data: false,
-        message: error instanceof Error ? error.message : 'Error al eliminar campo'
+        message: error instanceof Error ? error.message : 'Error al eliminar campo',
       };
     }
   }
@@ -220,8 +216,8 @@ export class UserTypeFieldsService {
       const existingFields = userType.additionalConfig?.dynamicFields || [];
 
       // Actualizar el orden de los campos
-      const updatedFields = existingFields.map(field => {
-        const newOrder = fieldOrders.find(order => order.fieldId === field.id);
+      const updatedFields = existingFields.map((field) => {
+        const newOrder = fieldOrders.find((order) => order.fieldId === field.id);
         return newOrder ? { ...field, order: newOrder.order, updatedAt: new Date() } : field;
       });
 
@@ -234,14 +230,14 @@ export class UserTypeFieldsService {
       return {
         success: true,
         data: true,
-        message: 'Campos reordenados exitosamente'
+        message: 'Campos reordenados exitosamente',
       };
     } catch (error) {
       console.error('Error reordering UserType fields:', error);
       return {
         success: false,
         data: false,
-        message: error instanceof Error ? error.message : 'Error al reordenar campos'
+        message: error instanceof Error ? error.message : 'Error al reordenar campos',
       };
     }
   }

@@ -1,9 +1,9 @@
 import { ApiResponse } from '@/modules/shared/services/api';
 import {
-    CreateUserFieldDto,
-    UpdateUserFieldDto,
-    UserField,
-    UserFieldsConfig
+  CreateUserFieldDto,
+  UpdateUserFieldDto,
+  UserField,
+  UserFieldsConfig,
 } from '../../shared/types/dynamic-fields';
 import { usersService } from './usersService';
 
@@ -30,7 +30,7 @@ export class UserFieldsService {
 
     const updatedAdditionalData = {
       ...user.additionalData,
-      dynamicFields: updatedFields
+      dynamicFields: updatedFields,
     };
 
     // Incluir todos los campos requeridos por el backend
@@ -41,8 +41,8 @@ export class UserFieldsService {
       address: user.address,
       image: user.image,
       userTypeId: user.userTypeId,
-      roleIds: user.roles?.map(role => role.id) || [],
-      additionalData: updatedAdditionalData
+      roleIds: user.roles?.map((role) => role.id) || [],
+      additionalData: updatedAdditionalData,
     });
   }
 
@@ -90,7 +90,7 @@ export class UserFieldsService {
         fields: fields,
         isActive: user.status,
         totalFields: fields.length,
-        lastUpdated: new Date(user.updatedAt || user.createdAt)
+        lastUpdated: new Date(user.updatedAt || user.createdAt),
       };
     } catch (error) {
       console.error('Error loading User fields config:', error);
@@ -106,7 +106,7 @@ export class UserFieldsService {
       const response = await usersService.getAll();
       const users = Array.isArray(response) ? response : response.data || [];
 
-      return users.map(user => ({
+      return users.map((user) => ({
         userId: user.id,
         userName: user.name,
         userEmail: user.email,
@@ -115,7 +115,7 @@ export class UserFieldsService {
         fields: user.additionalData?.dynamicFields || [],
         isActive: user.status,
         totalFields: user.additionalData?.dynamicFields?.length || 0,
-        lastUpdated: new Date(user.updatedAt || user.createdAt)
+        lastUpdated: new Date(user.updatedAt || user.createdAt),
       }));
     } catch (error) {
       console.error('Error loading all users with fields:', error);
@@ -154,7 +154,7 @@ export class UserFieldsService {
         isInheritable: fieldData.isInheritable ?? true,
         createdAt: new Date(),
         updatedAt: new Date(),
-        createdBy: 'system' // TODO: obtener del usuario logueado
+        createdBy: 'system', // TODO: obtener del usuario logueado
       };
 
       // Obtener campos existentes y agregar el nuevo
@@ -167,14 +167,14 @@ export class UserFieldsService {
       return {
         success: true,
         data: newField,
-        message: 'Campo creado exitosamente'
+        message: 'Campo creado exitosamente',
       };
     } catch (error) {
       console.error('Error creating User field:', error);
       return {
         success: false,
         data: {} as UserField,
-        message: error instanceof Error ? error.message : 'Error al crear campo'
+        message: error instanceof Error ? error.message : 'Error al crear campo',
       };
     }
   }
@@ -199,9 +199,7 @@ export class UserFieldsService {
 
       // Encontrar y actualizar el campo
       const updatedFields = existingFields.map((field: UserField) =>
-        field.id === fieldData.id
-          ? { ...field, ...fieldData, updatedAt: new Date() }
-          : field
+        field.id === fieldData.id ? { ...field, ...fieldData, updatedAt: new Date() } : field
       );
 
       // Verificar que el campo existe
@@ -216,14 +214,14 @@ export class UserFieldsService {
       return {
         success: true,
         data: updatedField,
-        message: 'Campo actualizado exitosamente'
+        message: 'Campo actualizado exitosamente',
       };
     } catch (error) {
       console.error('Error updating User field:', error);
       return {
         success: false,
         data: {} as UserField,
-        message: error instanceof Error ? error.message : 'Error al actualizar campo'
+        message: error instanceof Error ? error.message : 'Error al actualizar campo',
       };
     }
   }
@@ -231,10 +229,7 @@ export class UserFieldsService {
   /**
    * Elimina un campo de un Usuario
    */
-  static async deleteUserField(
-    userId: string,
-    fieldId: string
-  ): Promise<ApiResponse<boolean>> {
+  static async deleteUserField(userId: string, fieldId: string): Promise<ApiResponse<boolean>> {
     try {
       const response = await usersService.getById(userId);
       // El backend puede devolver los datos directamente o con wrapper data
@@ -255,14 +250,14 @@ export class UserFieldsService {
       return {
         success: true,
         data: true,
-        message: 'Campo eliminado exitosamente'
+        message: 'Campo eliminado exitosamente',
       };
     } catch (error) {
       console.error('Error deleting User field:', error);
       return {
         success: false,
         data: false,
-        message: error instanceof Error ? error.message : 'Error al eliminar campo'
+        message: error instanceof Error ? error.message : 'Error al eliminar campo',
       };
     }
   }
@@ -286,13 +281,15 @@ export class UserFieldsService {
       const existingFields: UserField[] = user.additionalData?.dynamicFields || [];
 
       // Reordenar campos según el nuevo orden
-      const reorderedFields = fieldIds.map((fieldId, index) => {
-        const field = existingFields.find((f: UserField) => f.id === fieldId);
-        if (field) {
-          return { ...field, order: index, updatedAt: new Date() };
-        }
-        return null;
-      }).filter(Boolean) as UserField[];
+      const reorderedFields = fieldIds
+        .map((fieldId, index) => {
+          const field = existingFields.find((f: UserField) => f.id === fieldId);
+          if (field) {
+            return { ...field, order: index, updatedAt: new Date() };
+          }
+          return null;
+        })
+        .filter(Boolean) as UserField[];
 
       // Actualizar el Usuario
       await this.updateUserWithRequiredFields(userId, reorderedFields);
@@ -300,14 +297,14 @@ export class UserFieldsService {
       return {
         success: true,
         data: reorderedFields,
-        message: 'Campos reordenados exitosamente'
+        message: 'Campos reordenados exitosamente',
       };
     } catch (error) {
       console.error('Error reordering User fields:', error);
       return {
         success: false,
         data: [],
-        message: error instanceof Error ? error.message : 'Error al reordenar campos'
+        message: error instanceof Error ? error.message : 'Error al reordenar campos',
       };
     }
   }
@@ -333,9 +330,7 @@ export class UserFieldsService {
 
       // Actualizar el estado del campo
       const updatedFields = existingFields.map((field: UserField) =>
-        field.id === fieldId
-          ? { ...field, isActive, updatedAt: new Date() }
-          : field
+        field.id === fieldId ? { ...field, isActive, updatedAt: new Date() } : field
       );
 
       const updatedField = updatedFields.find((field: UserField) => field.id === fieldId);
@@ -349,14 +344,14 @@ export class UserFieldsService {
       return {
         success: true,
         data: updatedField,
-        message: `Campo ${isActive ? 'activado' : 'desactivado'} exitosamente`
+        message: `Campo ${isActive ? 'activado' : 'desactivado'} exitosamente`,
       };
     } catch (error) {
       console.error('Error toggling User field status:', error);
       return {
         success: false,
         data: {} as UserField,
-        message: error instanceof Error ? error.message : 'Error al cambiar estado del campo'
+        message: error instanceof Error ? error.message : 'Error al cambiar estado del campo',
       };
     }
   }
@@ -399,7 +394,7 @@ export class UserFieldsService {
         order: existingFields.length,
         createdAt: new Date(),
         updatedAt: new Date(),
-        createdBy: 'system' // TODO: obtener del usuario logueado
+        createdBy: 'system', // TODO: obtener del usuario logueado
       };
 
       // Agregar el campo duplicado
@@ -411,14 +406,14 @@ export class UserFieldsService {
       return {
         success: true,
         data: duplicatedField,
-        message: 'Campo duplicado exitosamente'
+        message: 'Campo duplicado exitosamente',
       };
     } catch (error) {
       console.error('Error duplicating User field:', error);
       return {
         success: false,
         data: {} as UserField,
-        message: error instanceof Error ? error.message : 'Error al duplicar campo'
+        message: error instanceof Error ? error.message : 'Error al duplicar campo',
       };
     }
   }

@@ -38,18 +38,18 @@ export default function AuthDebugPage() {
 
     try {
       console.log('🔍 Iniciando prueba de autenticación con:', { email, password });
-      
+
       // Llamar directamente al servicio de autenticación
       const loginResponse = await authService.login({ email, password });
       console.log('🔍 Respuesta completa:', loginResponse);
-      
+
       setResponse(loginResponse);
-      
+
       // Si hay un token en la respuesta, intentar decodificarlo
       if (loginResponse.success && loginResponse.data) {
         // El token ahora viene directamente en data
         const token = loginResponse.data;
-        
+
         if (typeof token === 'string' && token.startsWith('eyJ')) {
           const decoded = decodeJWT(token);
           setParsedToken(decoded);
@@ -69,12 +69,12 @@ export default function AuthDebugPage() {
       <Typography variant="h4" gutterBottom>
         Depuración de Autenticación
       </Typography>
-      
+
       <Paper sx={{ p: 3, mb: 3 }}>
         <Typography variant="h6" gutterBottom>
           Credenciales de Prueba
         </Typography>
-        
+
         <TextField
           label="Email"
           value={email}
@@ -82,7 +82,7 @@ export default function AuthDebugPage() {
           fullWidth
           margin="normal"
         />
-        
+
         <TextField
           label="Contraseña"
           type="password"
@@ -91,54 +91,53 @@ export default function AuthDebugPage() {
           fullWidth
           margin="normal"
         />
-        
-        <Button 
-          variant="contained" 
-          onClick={handleTest} 
-          disabled={loading}
-          sx={{ mt: 2 }}
-        >
+
+        <Button variant="contained" onClick={handleTest} disabled={loading} sx={{ mt: 2 }}>
           {loading ? <CircularProgress size={24} /> : 'Probar Autenticación'}
         </Button>
       </Paper>
-      
+
       {error && (
         <Alert severity="error" sx={{ mb: 3 }}>
           {error}
         </Alert>
       )}
-      
+
       {response && (
         <Paper sx={{ p: 3, mb: 3 }}>
           <Typography variant="h6" gutterBottom>
             Respuesta del Servidor
           </Typography>
-          
-          <Box sx={{ 
-            p: 2, 
-            bgcolor: 'background.default', 
-            borderRadius: 1,
-            maxHeight: 300,
-            overflow: 'auto'
-          }}>
+
+          <Box
+            sx={{
+              p: 2,
+              bgcolor: 'background.default',
+              borderRadius: 1,
+              maxHeight: 300,
+              overflow: 'auto',
+            }}
+          >
             <pre>{JSON.stringify(response, null, 2)}</pre>
           </Box>
         </Paper>
       )}
-      
+
       {parsedToken && (
         <Paper sx={{ p: 3 }}>
           <Typography variant="h6" gutterBottom>
             Token JWT Decodificado
           </Typography>
-          
-          <Box sx={{ 
-            p: 2, 
-            bgcolor: 'background.default', 
-            borderRadius: 1,
-            maxHeight: 300,
-            overflow: 'auto'
-          }}>
+
+          <Box
+            sx={{
+              p: 2,
+              bgcolor: 'background.default',
+              borderRadius: 1,
+              maxHeight: 300,
+              overflow: 'auto',
+            }}
+          >
             <pre>{JSON.stringify(parsedToken, null, 2)}</pre>
           </Box>
         </Paper>

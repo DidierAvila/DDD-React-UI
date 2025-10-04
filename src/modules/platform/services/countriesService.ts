@@ -44,7 +44,7 @@ class CountriesService {
       console.error('📋 Estado de la sesión:', {
         hasSession: !!session,
         hasAccessToken: !!session?.accessToken,
-        sessionKeys: session ? Object.keys(session) : 'No session'
+        sessionKeys: session ? Object.keys(session) : 'No session',
       });
     }
 
@@ -62,7 +62,7 @@ class CountriesService {
     console.error('❌ Error en petición:', {
       status: response.status,
       statusText: response.statusText,
-      message: errorMessage
+      message: errorMessage,
     });
 
     const error = new Error(errorMessage);
@@ -82,7 +82,7 @@ class CountriesService {
       console.log('🌍 Cargando países desde:', {
         method: 'GET',
         url,
-        hasAuthHeader: !!(headers as Record<string, string>).Authorization
+        hasAuthHeader: !!(headers as Record<string, string>).Authorization,
       });
 
       const response = await fetch(url, {
@@ -93,7 +93,7 @@ class CountriesService {
       console.log('📬 Respuesta recibida:', {
         status: response.status,
         statusText: response.statusText,
-        ok: response.ok
+        ok: response.ok,
       });
 
       if (!response.ok) {
@@ -105,12 +105,13 @@ class CountriesService {
       console.log('📋 Estructura de países recibida:', countries.slice(0, 3)); // Mostrar primeros 3 para debug
 
       // Filtrar países válidos para evitar errores de keys
-      const validCountries = countries.filter((country: any) =>
-        country &&
-        typeof country.value === 'string' &&
-        country.value.trim() !== '' &&
-        typeof country.label === 'string' &&
-        country.label.trim() !== ''
+      const validCountries = countries.filter(
+        (country: any) =>
+          country &&
+          typeof country.value === 'string' &&
+          country.value.trim() !== '' &&
+          typeof country.label === 'string' &&
+          country.label.trim() !== ''
       );
 
       console.log('✅ Países válidos después del filtro:', validCountries.length);

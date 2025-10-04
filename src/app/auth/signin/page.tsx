@@ -1,6 +1,6 @@
 /**
  * Sign In Page - Página de inicio de sesión OAuth Multi-Provider
- * SignoSST Web Frontend - Next.js TypeScript
+ * Platform Web Frontend - Next.js TypeScript
  */
 
 'use client';
@@ -26,8 +26,8 @@ import { getSession, signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
 
-// Componente de icono personalizado SignoSST (escudo con 4 cuadrantes alternados)
-const SignoSSTIcon = ({ size = 28 }: { size?: number }) => (
+// Componente de icono personalizado Platform (escudo con 4 cuadrantes alternados)
+const PlatformIcon = ({ size = 28 }: { size?: number }) => (
   <svg
     width={size}
     height={size}
@@ -374,7 +374,7 @@ function SignInContent() {
               backgroundColor: '#fff',
             }}
           >
-            {/* Logo SignoSST estilo oficial */}
+            {/* Logo Platform estilo oficial */}
             <Box
               sx={{
                 display: 'flex',
@@ -396,7 +396,7 @@ function SignInContent() {
                   transform: 'translateY(8px)',
                 }}
               >
-                <SignoSSTIcon size={56} />
+                <PlatformIcon size={56} />
               </Box>
 
               {/* Texto Platform */}

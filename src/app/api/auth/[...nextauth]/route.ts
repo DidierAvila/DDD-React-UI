@@ -1,10 +1,10 @@
 /**
  * NextAuth.js API Route Handler
- * SignoSST Web Frontend - Next.js TypeScript
+ * Platform Web Frontend - Next.js TypeScript
  */
 
-import NextAuth from 'next-auth';
 import { authOptions } from '@/lib/auth';
+import NextAuth from 'next-auth';
 
 const handler = NextAuth(authOptions);
 

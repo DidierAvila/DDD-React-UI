@@ -12,7 +12,7 @@ import {
   Logout as LogoutIcon,
   Person as PersonIcon,
   Refresh as RefreshIcon,
-  Settings as SettingsIcon
+  Settings as SettingsIcon,
 } from '@mui/icons-material';
 import {
   Avatar,
@@ -85,7 +85,7 @@ export function UserBanner({
   const handleProfile = () => {
     handleMenuClose();
     router.push('/profile');
-  };  // Helper para validar URLs de avatar
+  }; // Helper para validar URLs de avatar
   const getValidAvatarSrc = (avatarUrl: string | undefined) => {
     if (!avatarUrl) return undefined;
     if (avatarUrl.includes('default.jpg')) return undefined;
@@ -116,10 +116,7 @@ export function UserBanner({
     return (
       <Box className={className}>
         <Tooltip title={`${displayName} (${displayEmail})`}>
-          <IconButton
-            onClick={showActions ? handleMenuClick : undefined}
-            size="small"
-          >
+          <IconButton onClick={showActions ? handleMenuClick : undefined} size="small">
             <Avatar
               src={getValidAvatarSrc(user.avatar)}
               sx={{ width: 32, height: 32, fontSize: '0.875rem' }}
@@ -155,7 +152,7 @@ export function UserBanner({
           flexDirection: 'column',
           alignItems: 'center',
           gap: 1,
-          p: 2
+          p: 2,
         }}
       >
         <Avatar
@@ -165,7 +162,7 @@ export function UserBanner({
             width: 64,
             height: 64,
             cursor: showActions ? 'pointer' : 'default',
-            fontSize: '1.5rem'
+            fontSize: '1.5rem',
           }}
         >
           {initials}
@@ -183,12 +180,7 @@ export function UserBanner({
           )}
 
           {showUserType && user.displayUserType && (
-            <Chip
-              label={user.displayUserType}
-              size="small"
-              variant="outlined"
-              sx={{ mt: 0.5 }}
-            />
+            <Chip label={user.displayUserType} size="small" variant="outlined" sx={{ mt: 0.5 }} />
           )}
         </Box>
 
@@ -200,9 +192,9 @@ export function UserBanner({
                 color: 'text.secondary',
                 '@keyframes spin': {
                   '0%': { transform: 'rotate(0deg)' },
-                  '100%': { transform: 'rotate(360deg)' }
+                  '100%': { transform: 'rotate(360deg)' },
                 },
-                animation: 'spin 1s linear infinite'
+                animation: 'spin 1s linear infinite',
               }}
             />
           </Tooltip>
@@ -231,7 +223,7 @@ export function UserBanner({
       sx={{
         display: 'flex',
         alignItems: 'center',
-        gap: 2
+        gap: 2,
       }}
     >
       <Avatar
@@ -240,7 +232,7 @@ export function UserBanner({
         sx={{
           width: 40,
           height: 40,
-          cursor: showActions ? 'pointer' : 'default'
+          cursor: showActions ? 'pointer' : 'default',
         }}
       >
         {initials}
@@ -257,9 +249,9 @@ export function UserBanner({
                 color: 'text.secondary',
                 '@keyframes spin': {
                   '0%': { transform: 'rotate(0deg)' },
-                  '100%': { transform: 'rotate(360deg)' }
+                  '100%': { transform: 'rotate(360deg)' },
                 },
-                animation: 'spin 1s linear infinite'
+                animation: 'spin 1s linear infinite',
               }}
             />
           )}
@@ -273,11 +265,7 @@ export function UserBanner({
       </Box>
 
       {showUserType && user.displayUserType && (
-        <Chip
-          label={user.displayUserType}
-          size="small"
-          variant="outlined"
-        />
+        <Chip label={user.displayUserType} size="small" variant="outlined" />
       )}
 
       {meError && (
@@ -371,10 +359,7 @@ function UserBannerMenu({
         <ListItemIcon>
           <PersonIcon fontSize="small" />
         </ListItemIcon>
-        <ListItemText
-          primary={user.displayName}
-          secondary={user.displayUserType}
-        />
+        <ListItemText primary={user.displayName} secondary={user.displayUserType} />
       </MenuItem>
 
       <MenuItem disabled sx={{ opacity: 1 }}>
@@ -406,7 +391,7 @@ function UserBannerMenu({
             <RefreshIcon
               fontSize="small"
               sx={{
-                animation: meLoading ? 'spin 1s linear infinite' : 'none'
+                animation: meLoading ? 'spin 1s linear infinite' : 'none',
               }}
             />
           </ListItemIcon>

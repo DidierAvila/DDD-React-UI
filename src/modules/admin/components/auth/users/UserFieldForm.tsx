@@ -1,38 +1,38 @@
 'use client';
 
 import {
-    CreateUserFieldDto,
-    FieldOption,
-    FieldType,
-    UpdateUserFieldDto,
-    UserField
+  CreateUserFieldDto,
+  FieldOption,
+  FieldType,
+  UpdateUserFieldDto,
+  UserField,
 } from '@/modules/shared/types/dynamic-fields';
 import {
-    Add as AddIcon,
-    ExpandMore as ExpandMoreIcon,
-    Remove as RemoveIcon
+  Add as AddIcon,
+  ExpandMore as ExpandMoreIcon,
+  Remove as RemoveIcon,
 } from '@mui/icons-material';
 import {
-    Accordion,
-    AccordionDetails,
-    AccordionSummary,
-    Alert,
-    Box,
-    Button,
-    Chip,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    FormControl,
-    FormControlLabel,
-    IconButton,
-    MenuItem,
-    Select,
-    Stack,
-    Switch,
-    TextField,
-    Typography
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Alert,
+  Box,
+  Button,
+  Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  FormControl,
+  FormControlLabel,
+  IconButton,
+  MenuItem,
+  Select,
+  Stack,
+  Switch,
+  TextField,
+  Typography,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
@@ -45,20 +45,60 @@ interface UserFieldFormProps {
   isLoading?: boolean;
 }
 
-const FIELD_TYPES: { value: FieldType; label: string; description: string; needsOptions: boolean }[] = [
+const FIELD_TYPES: {
+  value: FieldType;
+  label: string;
+  description: string;
+  needsOptions: boolean;
+}[] = [
   { value: 'text', label: 'Texto', description: 'Campo de texto simple', needsOptions: false },
-  { value: 'textarea', label: 'Área de texto', description: 'Campo de texto multilínea', needsOptions: false },
+  {
+    value: 'textarea',
+    label: 'Área de texto',
+    description: 'Campo de texto multilínea',
+    needsOptions: false,
+  },
   { value: 'number', label: 'Número', description: 'Campo numérico', needsOptions: false },
-  { value: 'email', label: 'Email', description: 'Dirección de correo electrónico', needsOptions: false },
+  {
+    value: 'email',
+    label: 'Email',
+    description: 'Dirección de correo electrónico',
+    needsOptions: false,
+  },
   { value: 'phone', label: 'Teléfono', description: 'Número telefónico', needsOptions: false },
   { value: 'url', label: 'URL', description: 'Dirección web', needsOptions: false },
   { value: 'date', label: 'Fecha', description: 'Selector de fecha', needsOptions: false },
-  { value: 'datetime', label: 'Fecha y Hora', description: 'Selector de fecha y hora', needsOptions: false },
-  { value: 'select', label: 'Selección única', description: 'Lista desplegable', needsOptions: true },
-  { value: 'multiselect', label: 'Selección múltiple', description: 'Lista de opciones múltiples', needsOptions: true },
-  { value: 'radio', label: 'Botones de opción', description: 'Selección única con botones', needsOptions: true },
-  { value: 'checkbox', label: 'Casilla de verificación', description: 'Verdadero/Falso', needsOptions: false },
-  { value: 'file', label: 'Archivo', description: 'Carga de archivos', needsOptions: false }
+  {
+    value: 'datetime',
+    label: 'Fecha y Hora',
+    description: 'Selector de fecha y hora',
+    needsOptions: false,
+  },
+  {
+    value: 'select',
+    label: 'Selección única',
+    description: 'Lista desplegable',
+    needsOptions: true,
+  },
+  {
+    value: 'multiselect',
+    label: 'Selección múltiple',
+    description: 'Lista de opciones múltiples',
+    needsOptions: true,
+  },
+  {
+    value: 'radio',
+    label: 'Botones de opción',
+    description: 'Selección única con botones',
+    needsOptions: true,
+  },
+  {
+    value: 'checkbox',
+    label: 'Casilla de verificación',
+    description: 'Verdadero/Falso',
+    needsOptions: false,
+  },
+  { value: 'file', label: 'Archivo', description: 'Carga de archivos', needsOptions: false },
 ];
 
 export const UserFieldForm: React.FC<UserFieldFormProps> = ({
@@ -67,7 +107,7 @@ export const UserFieldForm: React.FC<UserFieldFormProps> = ({
   onSave,
   field,
   mode,
-  isLoading = false
+  isLoading = false,
 }) => {
   const [formData, setFormData] = useState<CreateUserFieldDto | UpdateUserFieldDto>(() => ({
     ...(mode === 'edit' && field ? { id: field.id } : {}),
@@ -78,7 +118,7 @@ export const UserFieldForm: React.FC<UserFieldFormProps> = ({
     type: field?.type || 'text',
     validation: {
       required: false,
-      ...field?.validation
+      ...field?.validation,
     },
     options: field?.options || [],
     defaultValue: field?.defaultValue || '',
@@ -86,7 +126,7 @@ export const UserFieldForm: React.FC<UserFieldFormProps> = ({
     isInheritable: field?.isInheritable ?? true,
     order: field?.order || 0,
     metadata: field?.metadata || {},
-    isActive: field?.isActive ?? true
+    isActive: field?.isActive ?? true,
   }));
 
   const [isSaving, setIsSaving] = useState(false);
@@ -104,7 +144,7 @@ export const UserFieldForm: React.FC<UserFieldFormProps> = ({
         type: field?.type || 'text',
         validation: {
           required: false,
-          ...field?.validation
+          ...field?.validation,
         },
         options: field?.options || [],
         defaultValue: field?.defaultValue || '',
@@ -112,13 +152,13 @@ export const UserFieldForm: React.FC<UserFieldFormProps> = ({
         isInheritable: field?.isInheritable ?? true,
         order: field?.order || 0,
         metadata: field?.metadata || {},
-        isActive: field?.isActive ?? true
+        isActive: field?.isActive ?? true,
       });
       setErrors({});
     }
   }, [field, mode, open]);
 
-  const selectedFieldType = FIELD_TYPES.find(ft => ft.value === formData.type);
+  const selectedFieldType = FIELD_TYPES.find((ft) => ft.value === formData.type);
 
   // Validar formulario
   const validateForm = (): boolean => {
@@ -127,7 +167,8 @@ export const UserFieldForm: React.FC<UserFieldFormProps> = ({
     if (!formData.name?.trim()) {
       newErrors.name = 'El nombre del campo es requerido';
     } else if (!/^[a-zA-Z][a-zA-Z0-9_]*$/.test(formData.name)) {
-      newErrors.name = 'El nombre debe comenzar con una letra y contener solo letras, números y guiones bajos';
+      newErrors.name =
+        'El nombre debe comenzar con una letra y contener solo letras, números y guiones bajos';
     }
 
     if (!formData.label?.trim()) {
@@ -168,9 +209,9 @@ export const UserFieldForm: React.FC<UserFieldFormProps> = ({
     field: K,
     value: (CreateUserFieldDto | UpdateUserFieldDto)[K]
   ) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
     if (errors[field as string]) {
-      setErrors(prev => ({ ...prev, [field as string]: '' }));
+      setErrors((prev) => ({ ...prev, [field as string]: '' }));
     }
   };
 
@@ -179,7 +220,7 @@ export const UserFieldForm: React.FC<UserFieldFormProps> = ({
     const newFormData = { ...formData, type: newType };
 
     // Limpiar opciones si el nuevo tipo no las necesita
-    const newFieldType = FIELD_TYPES.find(ft => ft.value === newType);
+    const newFieldType = FIELD_TYPES.find((ft) => ft.value === newType);
     if (!newFieldType?.needsOptions) {
       newFormData.options = [];
     }
@@ -215,7 +256,7 @@ export const UserFieldForm: React.FC<UserFieldFormProps> = ({
       maxWidth="md"
       fullWidth
       PaperProps={{
-        sx: { minHeight: '600px' }
+        sx: { minHeight: '600px' },
       }}
     >
       <DialogTitle>
@@ -223,13 +264,7 @@ export const UserFieldForm: React.FC<UserFieldFormProps> = ({
           <Typography variant="h6">
             {mode === 'create' ? 'Crear Nuevo Campo' : 'Editar Campo'}
           </Typography>
-          {field && (
-            <Chip
-              label={field.type}
-              size="small"
-              variant="outlined"
-            />
-          )}
+          {field && <Chip label={field.type} size="small" variant="outlined" />}
         </Box>
       </DialogTitle>
 
@@ -302,10 +337,12 @@ export const UserFieldForm: React.FC<UserFieldFormProps> = ({
                   control={
                     <Switch
                       checked={formData.validation?.required || false}
-                      onChange={(e) => updateField('validation', {
-                        ...formData.validation,
-                        required: e.target.checked
-                      })}
+                      onChange={(e) =>
+                        updateField('validation', {
+                          ...formData.validation,
+                          required: e.target.checked,
+                        })
+                      }
                     />
                   }
                   label="Campo requerido"
@@ -340,11 +377,7 @@ export const UserFieldForm: React.FC<UserFieldFormProps> = ({
                         size="small"
                         sx={{ flex: 1 }}
                       />
-                      <IconButton
-                        onClick={() => removeOption(index)}
-                        color="error"
-                        size="small"
-                      >
+                      <IconButton onClick={() => removeOption(index)} color="error" size="small">
                         <RemoveIcon />
                       </IconButton>
                     </Box>
@@ -359,9 +392,7 @@ export const UserFieldForm: React.FC<UserFieldFormProps> = ({
                     Agregar Opción
                   </Button>
 
-                  {errors.options && (
-                    <Alert severity="error">{errors.options}</Alert>
-                  )}
+                  {errors.options && <Alert severity="error">{errors.options}</Alert>}
                 </Stack>
               </AccordionDetails>
             </Accordion>
@@ -430,11 +461,7 @@ export const UserFieldForm: React.FC<UserFieldFormProps> = ({
         <Button onClick={handleClose} disabled={isSaving || isLoading}>
           Cancelar
         </Button>
-        <Button
-          onClick={handleSave}
-          variant="contained"
-          disabled={isSaving || isLoading}
-        >
+        <Button onClick={handleSave} variant="contained" disabled={isSaving || isLoading}>
           {isSaving ? 'Guardando...' : mode === 'create' ? 'Crear Campo' : 'Actualizar Campo'}
         </Button>
       </DialogActions>

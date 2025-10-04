@@ -1,16 +1,16 @@
 /**
  * PWAInstallPrompt Component - Prompt de instalación PWA
- * SignoSST Web Frontend - Next.js TypeScript
+ * Platform Web Frontend - Next.js TypeScript
  */
 
 'use client';
-import { Snackbar, Alert, Button, Box, Typography, IconButton } from '@mui/material';
+import { usePWA } from '@/modules/shared/hooks/usePWA';
 import {
-  GetApp as InstallIcon,
   Close as CloseIcon,
+  GetApp as InstallIcon,
   PhoneAndroid as MobileIcon,
 } from '@mui/icons-material';
-import { usePWA } from '@/modules/shared/hooks/usePWA';
+import { Alert, Box, Button, IconButton, Snackbar, Typography } from '@mui/material';
 
 export default function PWAInstallPrompt() {
   const { showInstallPrompt, isInstalled, installPWA, dismissInstallPrompt } = usePWA();

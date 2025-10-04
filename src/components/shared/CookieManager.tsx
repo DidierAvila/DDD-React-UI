@@ -1,12 +1,12 @@
 /**
  * CookieManager - Componente para gestión automática de cookies
- * SignoSST Web Frontend - Next.js TypeScript
+ * Platform Web Frontend - Next.js TypeScript
  */
 
 'use client';
-import { useEffect } from 'react';
-import { useSession } from 'next-auth/react';
 import { clearAllAuthData, clearProblematicData } from '@/lib/cookieUtils';
+import { useSession } from 'next-auth/react';
+import { useEffect } from 'react';
 
 interface CookieManagerProps {
   /** Si debe limpiar cookies al montar el componente */

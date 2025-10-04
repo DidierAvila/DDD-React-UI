@@ -1,6 +1,6 @@
 /**
  * useAuth Hook - Hook personalizado para manejo de autenticación
- * SignoSST Web Frontend - Next.js TypeScript
+ * Platform Web Frontend - Next.js TypeScript
  */
 
 'use client';
